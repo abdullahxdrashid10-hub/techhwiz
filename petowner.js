@@ -13,20 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
     Other: 'assets/avatar-dog.jpg'
   };
 
-  // ── Product data ──
+  // ── Product data (Studio Photography) ──
   const products = [
-    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, img:'assets/product-kibble.jpg',     desc:'High-protein formula with real chicken and brown rice for adult dogs.' },
-    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, img:'assets/product-kibble.jpg',     desc:'Grain-free wild salmon recipe packed with omega-3 for healthy coats.' },
-    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, img:'assets/product-supplement.jpg', desc:'Vet-recommended dental sticks that reduce plaque and freshen breath.' },
-    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, img:'assets/product-toy.jpg',        desc:'Treat-dispensing puzzle ball that keeps pets mentally stimulated.' },
-    { name:'Feather Teaser Wand',        cat:'Toys',                price:8.99,  img:'assets/product-toy.jpg',        desc:'Irresistible feather wand with bell for hours of interactive play.' },
-    { name:'Tough Chew Rope',            cat:'Toys',                price:11.99, img:'assets/product-toy.jpg',        desc:'Durable braided rope toy perfect for tug-of-war and chewing.' },
-    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, img:'assets/product-brush.jpg',      desc:'Eco-friendly bamboo brush that removes loose fur without irritation.' },
-    { name:'Oatmeal Soothing Shampoo',   cat:'Grooming Essentials', price:14.99, img:'assets/product-supplement.jpg', desc:'Gentle pH-balanced shampoo with colloidal oatmeal for sensitive skin.' },
-    { name:'Pet Nail Clipper Pro',       cat:'Grooming Essentials', price:12.99, img:'assets/product-brush.jpg',      desc:'Safety-guard clippers with LED light for precise, stress-free trims.' },
-    { name:'Orthopedic Memory Foam Bed', cat:'Bedding and Apparel', price:49.99, img:'assets/product-bed.jpg',        desc:'Premium memory foam bed with washable cover for joint support.' },
-    { name:'Waterproof Winter Jacket',   cat:'Bedding and Apparel', price:32.99, img:'assets/product-bed.jpg',        desc:'Reflective, insulated jacket for cold weather walks and adventures.' },
-    { name:'Daily Multivitamin Chews',   cat:'Health Supplements',  price:22.99, img:'assets/product-supplement.jpg', desc:'Vet-formulated soft chews with vitamins A, D, E and glucosamine.' },
+    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, img:'assets/product-real-kibble.jpg',  desc:'High-protein formula with real roasted chicken and brown rice for adult dogs.' },
+    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, img:'assets/product-real-salmon.jpg',  desc:'Grain-free wild salmon recipe packed with omega-3 fatty acids for healthy coats.' },
+    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, img:'assets/product-real-dental.jpg',  desc:'Vet-recommended dental sticks that reduce tartar, plaque and freshen breath.' },
+    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, img:'assets/product-real-puzzle.jpg',  desc:'Treat-dispensing interactive puzzle ball that keeps pets mentally stimulated.' },
+    { name:'Feather Teaser Wand',        cat:'Toys',                price:8.99,  img:'assets/product-real-wand.jpg',    desc:'Irresistible feather teaser wand with bell for active indoor feline play.' },
+    { name:'Tough Braided Chew Rope',    cat:'Toys',                price:11.99, img:'assets/product-real-rope.jpg',    desc:'Durable cotton braided rope toy perfect for tug-of-war and gentle chewing.' },
+    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, img:'assets/product-real-brush.jpg',   desc:'Eco-friendly bamboo brush that removes loose undercoat fur without skin irritation.' },
+    { name:'Oatmeal Soothing Shampoo',   cat:'Grooming Essentials', price:14.99, img:'assets/product-real-shampoo.jpg', desc:'Gentle pH-balanced shampoo with natural colloidal oatmeal for sensitive skin.' },
   ];
 
   // ── DOM refs ──
