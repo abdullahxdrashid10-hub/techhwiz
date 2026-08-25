@@ -13,16 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
     Other: 'assets/avatar-dog.jpg'
   };
 
-  // ── Product data (Cohesive & Accurate Product Visuals) ──
+  // ── Product data (Accurate Showcase) ──
   const products = [
-    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, badge:'Best Seller',  img:'assets/product-kibble.jpg',     desc:'High-protein formula with real roasted chicken and brown rice for adult dogs.' },
-    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, badge:'Organic',      img:'assets/product-kibble.jpg',     desc:'Grain-free wild salmon recipe packed with omega-3 fatty acids for healthy coats.' },
-    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, badge:'Vet Approved', img:'assets/product-supplement.jpg', desc:'Vet-recommended dental sticks that reduce tartar, plaque and freshen breath.' },
-    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, badge:'Top Rated',    img:'assets/product-toy.jpg',        desc:'Treat-dispensing interactive puzzle ball that keeps pets mentally stimulated.' },
-    { name:'Tough Braided Chew Rope',    cat:'Toys',                price:11.99, badge:'Durable',      img:'assets/product-toy.jpg',        desc:'Durable cotton braided rope toy perfect for tug-of-war and gentle chewing.' },
-    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, badge:'Eco-Friendly', img:'assets/product-brush.jpg',      desc:'Eco-friendly bamboo brush that removes loose undercoat fur without skin irritation.' },
-    { name:'Orthopedic Memory Foam Bed', cat:'Bedding and Apparel', price:49.99, badge:'Top Comfort',  img:'assets/product-bed.jpg',        desc:'Premium memory foam donut bed with ultra-soft cushion for joint support.' },
-    { name:'Daily Multivitamin Chews',   cat:'Health Supplements',  price:22.99, badge:'Vet Approved', img:'assets/product-supplement.jpg', desc:'Vet-formulated daily wellness drops and chewables with vitamins A, D, and E.' },
+    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, badge:'Best Seller',  img:'assets/Chiken kibble.png',          desc:'High-protein formula with real roasted chicken and brown rice for adult dogs.' },
+    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, badge:'Organic',      img:'assets/Salmon cat food.png',        desc:'Grain-free wild salmon recipe packed with omega-3 fatty acids for healthy coats.' },
+    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, badge:'Vet Approved', img:'assets/Crunchy dental treats.png',  desc:'Vet-recommended dental sticks that reduce tartar, plaque and freshen breath.' },
+    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, badge:'Top Rated',    img:'assets/product-toy.jpg',            desc:'Treat-dispensing interactive puzzle ball that keeps pets mentally stimulated.' },
+    { name:'Tough Braided Chew Rope',    cat:'Toys',                price:11.99, badge:'Durable',      img:'assets/product-toy.jpg',            desc:'Durable cotton braided rope toy perfect for tug-of-war and gentle chewing.' },
+    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, badge:'Eco-Friendly', img:'assets/product-brush.jpg',          desc:'Eco-friendly bamboo brush that removes loose undercoat fur without skin irritation.' },
+    { name:'Orthopedic Memory Foam Bed', cat:'Bedding and Apparel', price:49.99, badge:'Top Comfort',  img:'assets/product-bed.jpg',            desc:'Premium memory foam donut bed with ultra-soft cushion for joint support.' },
+    { name:'Daily Multivitamin Chews',   cat:'Health Supplements',  price:22.99, badge:'Vet Approved', img:'assets/product-supplement.jpg',     desc:'Vet-formulated daily wellness drops and chewables with vitamins A, D, and E.' },
   ];
 
   // ── DOM refs ──
