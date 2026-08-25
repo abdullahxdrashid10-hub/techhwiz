@@ -68,8 +68,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  ctaBtn.addEventListener('click', () => {
+  function createRipple(e, btn) {
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+    ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+
+  function spawnParticleBurst(x, y) {
+    const symbols = ['🐾', '✨', '💛', '🌸'];
+    for (let i = 0; i < 14; i++) {
+      const p = document.createElement('div');
+      p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      p.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        font-size: ${14 + Math.random() * 12}px;
+        pointer-events: none;
+        z-index: 9999;
+        transition: all 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+      `;
+      document.body.appendChild(p);
+
+      const angle = (Math.PI * 2 * i) / 14 + (Math.random() - 0.5) * 0.5;
+      const distance = 40 + Math.random() * 65;
+      const targetX = Math.cos(angle) * distance;
+      const targetY = Math.sin(angle) * distance - 20;
+
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(calc(-50% + ${targetX}px), calc(-50% + ${targetY}px)) scale(1.1)`;
+        p.style.opacity = '0';
+      });
+
+      setTimeout(() => p.remove(), 800);
+    }
+  }
+
+  ctaBtn.addEventListener('click', e => {
     if (!state.name || !state.category) return;
+    createRipple(e, ctaBtn);
+    spawnParticleBurst(e.clientX, e.clientY);
 
     btnLabel.classList.add('hidden');
     btnSpinner.classList.remove('hidden');
@@ -94,6 +140,39 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 500);
     }, 900);
   });
+
+  // Magnetic button & 3D Card Tilt
+  const canHover = window.matchMedia('(hover: hover)').matches;
+  if (canHover) {
+    [ctaBtn].forEach(btn => {
+      if (!btn) return;
+      btn.addEventListener('mousemove', e => {
+        if (btn.disabled) return;
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = '';
+      });
+    });
+
+    const tiltElements = document.querySelectorAll('.profile-card, #onboarding-card');
+    tiltElements.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+        card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  }
 
   syncBtn();
 

@@ -44,25 +44,46 @@
     .animate-hero{animation:heroEntrance 0.8s cubic-bezier(0.22,1,0.36,1) both}
     .animate-card-in{animation:cardIn 0.45s cubic-bezier(0.22,1,0.36,1) both}
 
-    .tab-panel{display:none}
-    .tab-panel.active{display:block;animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1)}
-    .sub-panel{display:none}
-    .sub-panel.active{display:block;animation:fadeUp 0.35s ease}
+    /* Sliding pill navigation */
+    .nav-pill-track { position:relative; background:#f1f5f9; padding:0.25rem; border-radius:9999px; display:flex; align-items:center; }
+    #nav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:var(--oceanteal); transition:transform 0.32s cubic-bezier(0.22,1,0.36,1), width 0.32s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; }
+    .nav-tab { position:relative; z-index:10; padding:0.45rem 1.1rem; border-radius:9999px; font-weight:700; font-size:0.85rem; transition:color 0.25s; color:#64748b; background:transparent; border:none; outline:none; }
+    .nav-tab:hover { color:var(--oceanteal); }
+    .nav-tab.active { color:#fff; }
 
-    .nav-tab{padding:0.5rem 1rem;border-radius:9999px;font-weight:700;font-size:0.85rem;transition:all 0.25s;color:#64748b;border:2px solid transparent}
-    .nav-tab:hover{color:var(--oceanteal);background:rgba(44,110,107,0.06)}
-    .nav-tab.active{color:#fff;background:var(--oceanteal);border-color:var(--oceanteal)}
+    /* Sub-nav sliding pill */
+    .sub-pill-track { position:relative; background:#f8fafc; padding:0.25rem; border-radius:9999px; border:1.5px solid #e2e8f0; display:inline-flex; align-items:center; }
+    #subnav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:var(--softcoral); transition:transform 0.28s cubic-bezier(0.22,1,0.36,1), width 0.28s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; }
+    .sub-tab { position:relative; z-index:10; padding:0.35rem 0.95rem; border-radius:9999px; font-weight:600; font-size:0.8rem; transition:color 0.22s; color:#64748b; background:transparent; border:none; outline:none; }
+    .sub-tab:hover { color:var(--softcoral); }
+    .sub-tab.active { color:#fff; }
 
-    .sub-tab{padding:0.35rem 0.85rem;border-radius:9999px;font-weight:600;font-size:0.8rem;transition:all 0.22s;color:#94a3b8;border:1.5px solid #e2e8f0}
-    .sub-tab:hover{color:var(--softcoral);border-color:var(--softcoral)}
-    .sub-tab.active{color:#fff;background:var(--softcoral);border-color:var(--softcoral)}
+    /* Tab cross-fade and stagger */
+    .tab-panel { display:none; opacity:0; transform:translateY(12px); transition:opacity 0.35s ease, transform 0.35s ease; }
+    .tab-panel.active { display:block; opacity:1; transform:translateY(0); animation:tabFadeIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .tab-panel.active > * { animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes tabFadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
 
-    .cat-btn{padding:0.4rem 1rem;border-radius:9999px;font-weight:700;font-size:0.78rem;border:2px solid #e2e8f0;color:#64748b;transition:all 0.22s}
-    .cat-btn:hover{border-color:var(--softcoral);color:var(--softcoral)}
-    .cat-btn.active{background:var(--softcoral);border-color:var(--softcoral);color:#fff}
+    .sub-panel { display:none; }
+    .sub-panel.active { display:block; animation:fadeUp 0.35s ease; }
 
-    .product-card{border-radius:1.25rem;background:#fff;border:2px solid #f1f5f9;overflow:hidden;transition:all 0.28s cubic-bezier(0.22,1,0.36,1);box-shadow:0 4px 14px rgba(0,0,0,0.05)}
-    .product-card:hover{transform:translateY(-4px) scale(1.015);box-shadow:0 12px 28px rgba(44,110,107,0.14);border-color:var(--sageaccent)}
+    .cat-btn { padding:0.4rem 1rem; border-radius:9999px; font-weight:700; font-size:0.78rem; border:2px solid #e2e8f0; color:#64748b; transition:all 0.22s; }
+    .cat-btn:hover { border-color:var(--softcoral); color:var(--softcoral); }
+    .cat-btn.active { background:var(--softcoral); border-color:var(--softcoral); color:#fff; }
+
+    /* 3D Tilt Card & Shimmer */
+    .tilt-card { transform-style:preserve-3d; transition:transform 0.15s ease-out; will-change:transform; }
+    .product-card { border-radius:1.25rem; background:#fff; border:2px solid #f1f5f9; overflow:hidden; transition:box-shadow 0.28s, border-color 0.28s; box-shadow:0 4px 14px rgba(0,0,0,0.05); }
+    .product-card:hover { box-shadow:0 14px 30px rgba(44,110,107,0.16); border-color:var(--sageaccent); }
+
+    .badge-shimmer { position:relative; overflow:hidden; }
+    .badge-shimmer::after { content:''; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent); transition:transform 0.65s ease; }
+    .product-card:hover .badge-shimmer::after, .badge-shimmer:hover::after { transform:translateX(100%); }
+
+    /* Magnetic Buttons & Ripple */
+    .btn-magnetic { position:relative; overflow:hidden; transition:transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s; }
+    .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.45); transform:scale(0); animation:rippleEffect 0.6s linear; pointer-events:none; }
+    @keyframes rippleEffect { to{transform:scale(4);opacity:0;} }
 
     .ticker-wrap{overflow:hidden;white-space:nowrap}
     .ticker-track{display:inline-flex;animation:ticker 35s linear infinite}
@@ -77,10 +98,9 @@
     .toast{position:fixed;bottom:2rem;right:2rem;z-index:999;animation:toastIn 0.35s ease forwards}
     .toast.leaving{animation:toastOut 0.3s ease forwards}
 
-    .vid-card{position:relative;border-radius:1.25rem;overflow:hidden;aspect-ratio:16/9;cursor:pointer;background:linear-gradient(135deg,rgba(44,110,107,0.08),rgba(168,195,160,0.12))}
+    .vid-card{position:relative;border-radius:1.25rem;overflow:hidden;cursor:pointer;}
     .vid-card:hover .vid-overlay{opacity:1}
-    .vid-card:hover .vid-emoji{transform:scale(1.1)}
-    .vid-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.18);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.28s}
+    .vid-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.22);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.28s}
 
     .audio-bar{height:0.35rem;border-radius:9999px;background:#e2e8f0;overflow:hidden;flex:1}
     .audio-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,var(--softcoral),var(--oceanteal))}
@@ -173,8 +193,9 @@
             </div>
           </div>
 
-          <!-- Desktop nav -->
-          <nav class="hidden md:flex items-center gap-1.5" id="desktop-nav">
+          <!-- Desktop nav with sliding pill -->
+          <nav class="hidden md:flex items-center nav-pill-track" id="desktop-nav">
+            <div id="nav-pill"></div>
             <button class="nav-tab active" data-tab="about">About Us</button>
             <button class="nav-tab" data-tab="petcare">Pet Care</button>
             <button class="nav-tab" data-tab="products">Products</button>
@@ -212,17 +233,17 @@
       <div id="tab-about" class="tab-panel active">
         <h2 class="text-3xl font-black text-slate-800 mb-6">About <span class="text-oceanteal">FurEver Care</span></h2>
         <div class="grid md:grid-cols-3 gap-5">
-          <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-50 hover:shadow-lg transition-shadow">
+          <div class="tilt-card bg-white rounded-2xl p-6 shadow-md border border-slate-50 hover:shadow-lg transition-shadow">
             <div class="text-3xl mb-3">💛</div>
             <h3 class="font-bold text-lg text-slate-800 mb-2">Our Mission</h3>
             <p class="text-slate-500 text-sm leading-relaxed">FurEver Care was born from a simple belief: every pet deserves the best care possible. We bridge the gap between pet owners, veterinarians, and shelters by providing a unified platform that makes pet care effortless and accessible to everyone, everywhere.</p>
           </div>
-          <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-50 hover:shadow-lg transition-shadow">
+          <div class="tilt-card bg-white rounded-2xl p-6 shadow-md border border-slate-50 hover:shadow-lg transition-shadow">
             <div class="text-3xl mb-3">🌍</div>
             <h3 class="font-bold text-lg text-slate-800 mb-2">Why We Exist</h3>
             <p class="text-slate-500 text-sm leading-relaxed">Managing pet health records, finding the right products, and connecting with vets shouldn't be scattered across dozens of websites. Our platform centralizes everything — from feeding charts to emergency helplines — so you can focus on what matters: loving your pet.</p>
           </div>
-          <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-50 hover:shadow-lg transition-shadow">
+          <div class="tilt-card bg-white rounded-2xl p-6 shadow-md border border-slate-50 hover:shadow-lg transition-shadow">
             <div class="text-3xl mb-3">👥</div>
             <h3 class="font-bold text-lg text-slate-800 mb-2">Our Team</h3>
             <p class="text-slate-500 text-sm leading-relaxed">We're a passionate group of developers, designers, and animal lovers who believe technology can make the world kinder for animals. Built with care during our Aptech coursework, FurEver Care represents our commitment to creating meaningful digital experiences.</p>
@@ -234,7 +255,8 @@
       <div id="tab-petcare" class="tab-panel">
         <h2 class="text-3xl font-black text-slate-800 mb-5">Pet Care <span class="text-softcoral">Center</span></h2>
 
-        <div class="flex flex-wrap gap-2 mb-6" id="petcare-sub-nav">
+        <div class="sub-pill-track mb-6" id="petcare-sub-nav">
+          <div id="subnav-pill"></div>
           <button class="sub-tab active" data-sub="profile">Pet Profile</button>
           <button class="sub-tab" data-sub="feeding">Feeding Guide</button>
           <button class="sub-tab" data-sub="grooming">Grooming Videos</button>
