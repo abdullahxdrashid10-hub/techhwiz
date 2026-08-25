@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FurEver Care — They Deserve Forever Love</title>
+  <meta name="description" content="FurEver Care is your all-in-one pet care platform for pet owners, veterinarians, and animal shelters." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            oceanteal:  '#2C6E6B',
+            softcoral:  '#F4A896',
+            creambg:    '#FBF3E8',
+            sageaccent: '#A8C3A0'
+          },
+          fontFamily: { nunito: ['Nunito', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Nunito', sans-serif; background-color: #FBF3E8; overflow-x: hidden; }
+    :root { --oceanteal:#2C6E6B; --softcoral:#F4A896; --creambg:#FBF3E8; --sageaccent:#A8C3A0; }
+
+    @keyframes heroEntrance { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes blobDrift1 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-30px) scale(1.06)} 66%{transform:translate(-20px,20px) scale(0.96)} 100%{transform:translate(0,0) scale(1)} }
+    @keyframes blobDrift2 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(-50px,30px) scale(1.08)} 66%{transform:translate(30px,-25px) scale(0.94)} 100%{transform:translate(0,0) scale(1)} }
+    @keyframes blobDrift3 { 0%{transform:translate(0,0) scale(1)} 50%{transform:translate(25px,40px) scale(1.05)} 100%{transform:translate(0,0) scale(1)} }
+    @keyframes pawFloat { 0%{transform:translateY(0) rotate(0deg);opacity:0.07} 50%{transform:translateY(-14px) rotate(6deg);opacity:0.13} 100%{transform:translateY(0) rotate(0deg);opacity:0.07} }
+    @keyframes checkPop { 0%{transform:scale(0) rotate(-30deg);opacity:0} 60%{transform:scale(1.2) rotate(5deg);opacity:1} 100%{transform:scale(1) rotate(0deg);opacity:1} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    @keyframes fadeOut { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(0.97)} }
+    @keyframes welcomeIn { from{opacity:0;transform:scale(0.94) translateY(16px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    @keyframes softPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+
+    .animate-hero-entrance { animation:heroEntrance 0.9s cubic-bezier(0.22,1,0.36,1) both; }
+    .animate-fade-up { opacity:0; animation:fadeUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .animate-blob-1 { animation:blobDrift1 18s ease-in-out infinite; }
+    .animate-blob-2 { animation:blobDrift2 22s ease-in-out infinite; }
+    .animate-blob-3 { animation:blobDrift3 26s ease-in-out infinite; }
+    .animate-paw { animation:pawFloat 6s ease-in-out infinite; }
+    .animate-spin-btn { animation:spin 0.8s linear infinite; }
+    .animate-page-out { animation:fadeOut 0.55s ease forwards; }
+    .animate-welcome-in { animation:welcomeIn 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .animate-soft-pulse { animation:softPulse 2.5s ease-in-out infinite; }
+
+    .blob { position:fixed; border-radius:9999px; filter:blur(80px); pointer-events:none; z-index:0; }
+    .blob-1 { width:500px;height:500px; background:radial-gradient(circle,rgba(44,110,107,0.22),transparent 70%); top:-120px;left:-100px; }
+    .blob-2 { width:420px;height:420px; background:radial-gradient(circle,rgba(244,168,150,0.28),transparent 70%); bottom:-80px;right:-60px; }
+    .blob-3 { width:340px;height:340px; background:radial-gradient(circle,rgba(168,195,160,0.25),transparent 70%); top:40%;left:55%; }
+
+    .paw-deco { position:fixed; font-size:2.4rem; opacity:0.08; pointer-events:none; z-index:0; user-select:none; }
+
+    /* Floating label */
+    .float-label-wrapper { position:relative; }
+    .float-label-wrapper input { display:block;width:100%;padding:1.1rem 1.25rem 0.45rem 1.25rem;border-radius:1rem;border:2px solid #d1d5db;background:#fff;font-family:'Nunito',sans-serif;font-size:1rem;color:#1e293b;outline:none;transition:border-color 0.25s,box-shadow 0.25s; }
+    .float-label-wrapper input:focus { border-color:var(--softcoral);box-shadow:0 0 0 4px rgba(244,168,150,0.20); }
+    .float-label-wrapper label { position:absolute;left:1.25rem;top:50%;transform:translateY(-50%);font-size:1rem;color:#94a3b8;pointer-events:none;transition:all 0.22s cubic-bezier(0.22,1,0.36,1);background:transparent;padding:0 0.15rem; }
+    .float-label-wrapper input:focus + label,
+    .float-label-wrapper input:not(:placeholder-shown) + label { top:0.6rem;transform:translateY(0);font-size:0.7rem;font-weight:700;color:var(--oceanteal);letter-spacing:0.04em;text-transform:uppercase; }
+
+    /* Profile cards */
+    .profile-card { position:relative;cursor:pointer;border:2px solid #e2e8f0;border-radius:1.25rem;background:#fff;padding:1.6rem 1rem;display:flex;flex-direction:column;align-items:center;gap:0.65rem;transition:all 0.28s cubic-bezier(0.22,1,0.36,1);box-shadow:0 4px 14px rgba(0,0,0,0.06);user-select:none; }
+    .profile-card:hover { transform:scale(1.05);box-shadow:0 12px 30px rgba(44,110,107,0.16);border-color:var(--sageaccent); }
+    .profile-card.selected { border-color:var(--oceanteal);background:linear-gradient(135deg,rgba(44,110,107,0.07),rgba(244,168,150,0.07));box-shadow:0 8px 28px rgba(44,110,107,0.22); }
+    .profile-card .check-badge { position:absolute;top:0.65rem;right:0.65rem;width:1.5rem;height:1.5rem;background:var(--oceanteal);border-radius:9999px;display:flex;align-items:center;justify-content:center;transform:scale(0);opacity:0;transition:none; }
+    .profile-card.selected .check-badge { animation:checkPop 0.38s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .profile-card .card-icon { font-size:2.8rem;line-height:1;transition:transform 0.28s; }
+    .profile-card:hover .card-icon { transform:scale(1.12) rotate(-4deg); }
+
+    /* CTA */
+    #cta-btn { transition:all 0.3s cubic-bezier(0.22,1,0.36,1); }
+    #cta-btn.btn-active:hover { transform:scale(1.03);box-shadow:0 10px 28px rgba(244,168,150,0.45); }
+    #cta-btn.btn-active:active { transform:scale(0.98); }
+
+    /* Welcome */
+    #welcome-screen { display:none; }
+    #welcome-screen.visible { display:flex; }
+
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:var(--creambg); }
+    ::-webkit-scrollbar-thumb { background:var(--sageaccent);border-radius:99px; }
+  </style>
+</head>
+<body class="min-h-screen bg-creambg font-nunito">
+
+  <!-- ── Atmospheric Background ── -->
+  <div class="blob blob-1 animate-blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2 animate-blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3 animate-blob-3" aria-hidden="true"></div>
+
+  <!-- Paw Prints -->
+  <div class="paw-deco animate-paw" style="top:12%;left:6%;animation-delay:0s;font-size:2rem;" aria-hidden="true">🐾</div>
+  <div class="paw-deco animate-paw" style="top:70%;left:3%;animation-delay:1.8s;font-size:1.5rem;" aria-hidden="true">🐾</div>
+  <div class="paw-deco animate-paw" style="top:20%;right:5%;animation-delay:0.9s;font-size:2.5rem;" aria-hidden="true">🐾</div>
+  <div class="paw-deco animate-paw" style="top:55%;right:4%;animation-delay:2.4s;font-size:1.7rem;" aria-hidden="true">🐾</div>
+  <div class="paw-deco animate-paw" style="top:85%;left:50%;animation-delay:3.1s;font-size:2.1rem;" aria-hidden="true">🐾</div>
+
+  <!-- ════════════════════════════════════ LANDING SCREEN ════════════════════════════════════ -->
+  <main id="landing-screen" class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
+
+    <!-- Hero -->
+    <section id="hero-section" class="text-center max-w-2xl animate-hero-entrance" aria-labelledby="hero-heading">
+      <div class="animate-fade-up inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-sageaccent/40 rounded-full px-4 py-1.5 mb-6 shadow-sm" style="animation-delay:0.05s">
+        <span class="text-lg">🐾</span>
+        <span class="text-xs tracking-widest text-oceanteal uppercase font-bold">Est. 2025</span>
+      </div>
+
+      <h1 id="hero-heading" class="animate-fade-up text-6xl sm:text-7xl font-black tracking-tight leading-none mb-3" style="animation-delay:0.12s">
+        <span class="text-oceanteal">Fur</span><span class="text-softcoral">Ever</span>
+        <span class="block sm:inline text-slate-800"> Care</span>
+      </h1>
+
+      <h2 class="animate-fade-up text-xl sm:text-2xl font-semibold text-slate-500 mb-4 italic" style="animation-delay:0.22s">
+        "They Deserve Forever Love"
+      </h2>
+
+      <p class="animate-fade-up text-slate-500 text-base sm:text-lg leading-relaxed max-w-lg mx-auto" style="animation-delay:0.32s">
+        Your all-in-one companion for managing pet profiles, discovering products,
+        connecting with vets, and finding furry friends waiting for a loving home.
+      </p>
+    </section>
+
+    <!-- Onboarding Card -->
+    <section id="onboarding-card" class="animate-fade-up relative w-full max-w-lg mt-10 bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/60 px-6 sm:px-10 py-8" style="animation-delay:0.45s" aria-label="Onboarding form">
+      <div class="absolute top-0 left-8 right-8 h-1 rounded-b-full bg-gradient-to-r from-softcoral via-sageaccent to-oceanteal opacity-70"></div>
+
+      <p class="text-center text-slate-600 font-semibold text-sm mb-6 tracking-wide uppercase">Let's get you started ✨</p>
+
+      <!-- Floating Label Input -->
+      <div class="animate-fade-up mb-7" style="animation-delay:0.55s">
+        <div class="float-label-wrapper">
+          <input type="text" id="user-name-input" name="user-name" placeholder=" " autocomplete="given-name" aria-label="Your first name" maxlength="40" />
+          <label for="user-name-input">Your First Name</label>
+        </div>
+      </div>
+
+      <!-- Profile Cards -->
+      <div class="animate-fade-up mb-8" style="animation-delay:0.65s">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">I am a…</p>
+        <div class="grid grid-cols-3 gap-3" role="radiogroup" aria-label="Select your profile type">
+
+          <!-- Pet Owner -->
+          <div class="profile-card" id="card-pet-owner" role="radio" aria-checked="false" aria-label="Pet Owner" tabindex="0" data-category="Pet Owner">
+            <div class="check-badge" aria-hidden="true">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="card-icon" aria-hidden="true">🐶</span>
+            <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Pet Owner</span>
+            <span class="text-xs text-slate-400 text-center hidden sm:block">Manage your pets</span>
+          </div>
+
+          <!-- Veterinarian -->
+          <div class="profile-card" id="card-vet" role="radio" aria-checked="false" aria-label="Veterinarian" tabindex="0" data-category="Veterinarian">
+            <div class="check-badge" aria-hidden="true">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="card-icon" aria-hidden="true">🩺</span>
+            <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Veterinarian</span>
+            <span class="text-xs text-slate-400 text-center hidden sm:block">Manage appointments</span>
+          </div>
+
+          <!-- Animal Shelter -->
+          <div class="profile-card" id="card-shelter" role="radio" aria-checked="false" aria-label="Animal Shelter / Rescue Volunteer" tabindex="0" data-category="Animal Shelter">
+            <div class="check-badge" aria-hidden="true">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="card-icon" aria-hidden="true">🏠</span>
+            <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Shelter</span>
+            <span class="text-xs text-slate-400 text-center hidden sm:block">Rescue volunteer</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CTA Button -->
+      <div class="animate-fade-up" style="animation-delay:0.78s">
+        <button id="cta-btn" class="w-full py-3.5 rounded-2xl font-bold text-base tracking-wide bg-slate-200 text-slate-400 cursor-not-allowed shadow-none" disabled aria-disabled="true" aria-label="Get Started — complete the form to activate">
+          <span id="btn-label">Get Started →</span>
+          <span id="btn-spinner" class="hidden items-center justify-center gap-2">
+            <svg class="animate-spin-btn w-5 h-5" viewBox="0 0 24 24" fill="none">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+            </svg>
+            Setting up…
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="animate-fade-up mt-8 text-center text-xs text-slate-400" style="animation-delay:0.9s">
+      <p>© 2025 FurEver Care · Built with 💛 for pets everywhere</p>
+    </footer>
+  </main>
+
+  <!--WELCOME SCREEN-->
+  <div id="welcome-screen" class="fixed inset-0 z-50 flex-col items-center justify-center bg-creambg px-6" aria-live="polite" role="status">
+    <div class="blob blob-1 animate-blob-1" aria-hidden="true"></div>
+    <div class="blob blob-2 animate-blob-2" aria-hidden="true"></div>
+
+    <div id="welcome-card" class="relative z-10 max-w-md w-full text-center bg-white/85 backdrop-blur-md rounded-3xl shadow-2xl border border-white/70 px-8 py-12 animate-welcome-in">
+      <div class="absolute top-0 left-8 right-8 h-1.5 rounded-b-full bg-gradient-to-r from-softcoral via-sageaccent to-oceanteal"></div>
+
+      <div class="animate-soft-pulse text-7xl mb-5" aria-hidden="true">🐾</div>
+
+      <h1 id="welcome-heading" class="text-4xl sm:text-5xl font-black text-slate-800 mb-2 leading-tight">
+        Welcome,<br />
+        <span id="welcome-name" class="text-oceanteal"></span>!
+      </h1>
+
+      <div class="inline-flex items-center gap-2 bg-sageaccent/20 border border-sageaccent/40 rounded-full px-4 py-1.5 mt-3 mb-5">
+        <span id="welcome-icon" class="text-lg"></span>
+        <span id="welcome-category" class="text-sm font-bold text-oceanteal"></span>
+      </div>
+
+      <p class="text-slate-500 text-base leading-relaxed mb-8">
+        Your personalised FurEver Care experience is loading. Get ready to explore everything your pet deserves!
+      </p>
+
+      <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+        <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-softcoral to-oceanteal" style="width:0%;transition:width 1.8s ease-out;"></div>
+      </div>
+      <p class="text-xs text-slate-400 mt-2 font-medium">Loading your dashboard…</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
