@@ -246,7 +246,7 @@
         <div id="sub-profile" class="sub-panel active">
           <div class="bg-white rounded-2xl shadow-md border border-slate-50 p-6 sm:p-8 max-w-xl">
             <div class="flex items-center gap-4 mb-5">
-              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-sageaccent/30 to-oceanteal/20 flex items-center justify-center text-3xl" id="profile-emoji">🐶</div>
+              <img id="profile-img" src="assets/avatar-dog.jpg" alt="Pet Avatar" class="w-16 h-16 rounded-2xl object-cover border-2 border-sageaccent/40 shadow-sm" />
               <div>
                 <h3 class="text-xl font-black text-slate-800" id="profile-name"></h3>
                 <p class="text-sm text-slate-400" id="profile-sub"></p>
@@ -321,32 +321,43 @@
         <!-- Grooming Videos -->
         <div id="sub-grooming" class="sub-panel">
           <div class="grid md:grid-cols-3 gap-5">
-            <div class="vid-card">
-              <div class="absolute inset-0 flex items-center justify-center"><span class="vid-emoji text-6xl transition-transform">✨</span></div>
+            <div class="vid-card group relative rounded-2xl overflow-hidden shadow-md border border-slate-100 bg-white">
+              <img src="assets/grooming-brushing.jpg" alt="Brushing Techniques" class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" />
               <div class="vid-overlay">
-                <div class="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                  <svg class="w-6 h-6 text-oceanteal ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <div class="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                  <svg class="w-5 h-5 text-oceanteal ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
               </div>
-              <span class="absolute bottom-3 left-3 text-xs font-bold text-oceanteal bg-white/85 px-3 py-1 rounded-full shadow-sm">Brushing Techniques</span>
+              <div class="p-3 bg-white flex items-center justify-between border-t border-slate-50">
+                <span class="text-xs font-bold text-slate-800">Brushing Techniques</span>
+                <span class="text-[11px] font-bold text-softcoral bg-softcoral/10 px-2 py-0.5 rounded-full">4:15 min</span>
+              </div>
             </div>
-            <div class="vid-card">
-              <div class="absolute inset-0 flex items-center justify-center"><span class="vid-emoji text-6xl transition-transform">🛁</span></div>
+
+            <div class="vid-card group relative rounded-2xl overflow-hidden shadow-md border border-slate-100 bg-white">
+              <img src="assets/grooming-bathing.jpg" alt="Bathing Guide" class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" />
               <div class="vid-overlay">
-                <div class="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                  <svg class="w-6 h-6 text-oceanteal ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <div class="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                  <svg class="w-5 h-5 text-oceanteal ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
               </div>
-              <span class="absolute bottom-3 left-3 text-xs font-bold text-oceanteal bg-white/85 px-3 py-1 rounded-full shadow-sm">Bathing Guide</span>
+              <div class="p-3 bg-white flex items-center justify-between border-t border-slate-50">
+                <span class="text-xs font-bold text-slate-800">Bathing & Bubble Care</span>
+                <span class="text-[11px] font-bold text-softcoral bg-softcoral/10 px-2 py-0.5 rounded-full">6:30 min</span>
+              </div>
             </div>
-            <div class="vid-card">
-              <div class="absolute inset-0 flex items-center justify-center"><span class="vid-emoji text-6xl transition-transform">✂️</span></div>
+
+            <div class="vid-card group relative rounded-2xl overflow-hidden shadow-md border border-slate-100 bg-white">
+              <img src="assets/grooming-trimming.jpg" alt="Trimming & Clipping" class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300" />
               <div class="vid-overlay">
-                <div class="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
-                  <svg class="w-6 h-6 text-oceanteal ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <div class="w-12 h-12 rounded-full bg-white/95 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                  <svg class="w-5 h-5 text-oceanteal ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 </div>
               </div>
-              <span class="absolute bottom-3 left-3 text-xs font-bold text-oceanteal bg-white/85 px-3 py-1 rounded-full shadow-sm">Trimming & Clipping</span>
+              <div class="p-3 bg-white flex items-center justify-between border-t border-slate-50">
+                <span class="text-xs font-bold text-slate-800">Trimming & Coat Styling</span>
+                <span class="text-[11px] font-bold text-softcoral bg-softcoral/10 px-2 py-0.5 rounded-full">5:45 min</span>
+              </div>
             </div>
           </div>
         </div>

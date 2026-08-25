@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -108,35 +108,43 @@
   <main id="landing-screen" class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
 
     <!-- Hero -->
-    <section id="hero-section" class="text-center max-w-2xl animate-hero-entrance" aria-labelledby="hero-heading">
-      <div class="animate-fade-up inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm border border-sageaccent/40 rounded-full px-4 py-1.5 mb-6 shadow-sm" style="animation-delay:0.05s">
+    <section id="hero-section" class="text-center max-w-3xl animate-hero-entrance" aria-labelledby="hero-heading">
+      <div class="animate-fade-up inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-sageaccent/50 rounded-full px-4 py-1.5 mb-6 shadow-sm" style="animation-delay:0.05s">
         <span class="text-lg">🐾</span>
-        <span class="text-xs tracking-widest text-oceanteal uppercase font-bold">Est. 2025</span>
+        <span class="text-xs tracking-widest text-oceanteal uppercase font-bold">Est. 2025 · The Modern Pet Platform</span>
       </div>
 
-      <h1 id="hero-heading" class="animate-fade-up text-6xl sm:text-7xl font-black tracking-tight leading-none mb-3" style="animation-delay:0.12s">
+      <!-- Hero Illustration Banner -->
+      <div class="animate-fade-up max-w-lg mx-auto mb-6 relative group" style="animation-delay:0.1s">
+        <div class="absolute -inset-2 bg-gradient-to-r from-softcoral/40 via-sageaccent/30 to-oceanteal/40 rounded-3xl blur-lg opacity-70 group-hover:opacity-100 transition duration-500"></div>
+        <div class="relative bg-white/90 backdrop-blur-md rounded-2xl p-2 shadow-lg border border-white">
+          <img src="assets/hero-pets.jpg" alt="FurEver Care Happy Golden Retriever and Tabby Cat" class="w-full h-auto rounded-xl object-cover" />
+        </div>
+      </div>
+
+      <h1 id="hero-heading" class="animate-fade-up text-5xl sm:text-6xl font-black tracking-tight leading-none mb-3" style="animation-delay:0.15s">
         <span class="text-oceanteal">Fur</span><span class="text-softcoral">Ever</span>
         <span class="block sm:inline text-slate-800"> Care</span>
       </h1>
 
-      <h2 class="animate-fade-up text-xl sm:text-2xl font-semibold text-slate-500 mb-4 italic" style="animation-delay:0.22s">
+      <h2 class="animate-fade-up text-lg sm:text-xl font-semibold text-slate-500 mb-3 italic" style="animation-delay:0.22s">
         "They Deserve Forever Love"
       </h2>
 
-      <p class="animate-fade-up text-slate-500 text-base sm:text-lg leading-relaxed max-w-lg mx-auto" style="animation-delay:0.32s">
+      <p class="animate-fade-up text-slate-500 text-sm sm:text-base leading-relaxed max-w-lg mx-auto" style="animation-delay:0.3s">
         Your all-in-one companion for managing pet profiles, discovering products,
         connecting with vets, and finding furry friends waiting for a loving home.
       </p>
     </section>
 
     <!-- Onboarding Card -->
-    <section id="onboarding-card" class="animate-fade-up relative w-full max-w-lg mt-10 bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-white/60 px-6 sm:px-10 py-8" style="animation-delay:0.45s" aria-label="Onboarding form">
+    <section id="onboarding-card" class="animate-fade-up relative w-full max-w-lg mt-8 bg-white/85 backdrop-blur-md rounded-3xl shadow-xl border border-white/60 px-6 sm:px-10 py-8" style="animation-delay:0.4s" aria-label="Onboarding form">
       <div class="absolute top-0 left-8 right-8 h-1 rounded-b-full bg-gradient-to-r from-softcoral via-sageaccent to-oceanteal opacity-70"></div>
 
       <p class="text-center text-slate-600 font-semibold text-sm mb-6 tracking-wide uppercase">Let's get you started ✨</p>
 
       <!-- Floating Label Input -->
-      <div class="animate-fade-up mb-7" style="animation-delay:0.55s">
+      <div class="animate-fade-up mb-7" style="animation-delay:0.5s">
         <div class="float-label-wrapper">
           <input type="text" id="user-name-input" name="user-name" placeholder=" " autocomplete="given-name" aria-label="Your first name" maxlength="40" />
           <label for="user-name-input">Your First Name</label>
@@ -144,7 +152,7 @@
       </div>
 
       <!-- Profile Cards -->
-      <div class="animate-fade-up mb-8" style="animation-delay:0.65s">
+      <div class="animate-fade-up mb-8" style="animation-delay:0.6s">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">I am a…</p>
         <div class="grid grid-cols-3 gap-3" role="radiogroup" aria-label="Select your profile type">
 
@@ -153,9 +161,9 @@
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <span class="card-icon" aria-hidden="true">🐶</span>
+            <img src="assets/avatar-dog.jpg" alt="Pet Owner" class="w-12 h-12 rounded-full object-cover shadow-sm card-icon border-2 border-sageaccent/30" />
             <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Pet Owner</span>
-            <span class="text-xs text-slate-400 text-center hidden sm:block">Manage your pets</span>
+            <span class="text-[11px] text-slate-400 text-center hidden sm:block">Manage your pets</span>
           </div>
 
           <!-- Veterinarian -->
@@ -163,9 +171,9 @@
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <span class="card-icon" aria-hidden="true">🩺</span>
+            <div class="w-12 h-12 rounded-full bg-oceanteal/10 border-2 border-oceanteal/30 flex items-center justify-center text-2xl card-icon">🩺</div>
             <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Veterinarian</span>
-            <span class="text-xs text-slate-400 text-center hidden sm:block">Manage appointments</span>
+            <span class="text-[11px] text-slate-400 text-center hidden sm:block">Manage slots</span>
           </div>
 
           <!-- Animal Shelter -->
@@ -173,9 +181,9 @@
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <span class="card-icon" aria-hidden="true">🏠</span>
+            <img src="assets/avatar-cat.jpg" alt="Animal Shelter" class="w-12 h-12 rounded-full object-cover shadow-sm card-icon border-2 border-softcoral/30" />
             <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Shelter</span>
-            <span class="text-xs text-slate-400 text-center hidden sm:block">Rescue volunteer</span>
+            <span class="text-[11px] text-slate-400 text-center hidden sm:block">Rescue volunteer</span>
           </div>
 
         </div>

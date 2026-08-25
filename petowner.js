@@ -6,21 +6,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const user = JSON.parse(userRaw);
 
   const speciesEmoji = { Dog: '🐶', Cat: '🐱', Bird: '🐦', Other: '🐾' };
+  const speciesAvatar = {
+    Dog: 'assets/avatar-dog.jpg',
+    Cat: 'assets/avatar-cat.jpg',
+    Bird: 'assets/avatar-bird.jpg',
+    Other: 'assets/avatar-dog.jpg'
+  };
 
   // ── Product data ──
   const products = [
-    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, emoji:'🍗', gradient:'from-amber-50 to-orange-50',  desc:'High-protein formula with real chicken and brown rice for adult dogs.' },
-    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, emoji:'🐟', gradient:'from-sky-50 to-cyan-50',      desc:'Grain-free wild salmon recipe packed with omega-3 for healthy coats.' },
-    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, emoji:'🦴', gradient:'from-yellow-50 to-amber-50',  desc:'Vet-recommended dental sticks that reduce plaque and freshen breath.' },
-    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, emoji:'⚾', gradient:'from-violet-50 to-purple-50', desc:'Treat-dispensing puzzle ball that keeps pets mentally stimulated.' },
-    { name:'Feather Teaser Wand',        cat:'Toys',                price:8.99,  emoji:'🪶', gradient:'from-pink-50 to-rose-50',     desc:'Irresistible feather wand with bell for hours of interactive play.' },
-    { name:'Tough Chew Rope',            cat:'Toys',                price:11.99, emoji:'🧶', gradient:'from-teal-50 to-emerald-50',  desc:'Durable braided rope toy perfect for tug-of-war and chewing.' },
-    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, emoji:'🪮', gradient:'from-lime-50 to-green-50',    desc:'Eco-friendly bamboo brush that removes loose fur without irritation.' },
-    { name:'Oatmeal Soothing Shampoo',   cat:'Grooming Essentials', price:14.99, emoji:'🧴', gradient:'from-stone-50 to-neutral-50', desc:'Gentle pH-balanced shampoo with colloidal oatmeal for sensitive skin.' },
-    { name:'Pet Nail Clipper Pro',       cat:'Grooming Essentials', price:12.99, emoji:'✂️', gradient:'from-slate-50 to-gray-50',    desc:'Safety-guard clippers with LED light for precise, stress-free trims.' },
-    { name:'Orthopedic Memory Foam Bed', cat:'Bedding and Apparel', price:49.99, emoji:'🛏️', gradient:'from-indigo-50 to-blue-50',   desc:'Premium memory foam bed with washable cover for joint support.' },
-    { name:'Waterproof Winter Jacket',   cat:'Bedding and Apparel', price:32.99, emoji:'🧥', gradient:'from-sky-50 to-blue-50',      desc:'Reflective, insulated jacket for cold weather walks and adventures.' },
-    { name:'Daily Multivitamin Chews',   cat:'Health Supplements',  price:22.99, emoji:'💊', gradient:'from-emerald-50 to-teal-50',  desc:'Vet-formulated soft chews with vitamins A, D, E and glucosamine.' },
+    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, img:'assets/product-kibble.jpg',     desc:'High-protein formula with real chicken and brown rice for adult dogs.' },
+    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, img:'assets/product-kibble.jpg',     desc:'Grain-free wild salmon recipe packed with omega-3 for healthy coats.' },
+    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, img:'assets/product-supplement.jpg', desc:'Vet-recommended dental sticks that reduce plaque and freshen breath.' },
+    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, img:'assets/product-toy.jpg',        desc:'Treat-dispensing puzzle ball that keeps pets mentally stimulated.' },
+    { name:'Feather Teaser Wand',        cat:'Toys',                price:8.99,  img:'assets/product-toy.jpg',        desc:'Irresistible feather wand with bell for hours of interactive play.' },
+    { name:'Tough Chew Rope',            cat:'Toys',                price:11.99, img:'assets/product-toy.jpg',        desc:'Durable braided rope toy perfect for tug-of-war and chewing.' },
+    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, img:'assets/product-brush.jpg',      desc:'Eco-friendly bamboo brush that removes loose fur without irritation.' },
+    { name:'Oatmeal Soothing Shampoo',   cat:'Grooming Essentials', price:14.99, img:'assets/product-supplement.jpg', desc:'Gentle pH-balanced shampoo with colloidal oatmeal for sensitive skin.' },
+    { name:'Pet Nail Clipper Pro',       cat:'Grooming Essentials', price:12.99, img:'assets/product-brush.jpg',      desc:'Safety-guard clippers with LED light for precise, stress-free trims.' },
+    { name:'Orthopedic Memory Foam Bed', cat:'Bedding and Apparel', price:49.99, img:'assets/product-bed.jpg',        desc:'Premium memory foam bed with washable cover for joint support.' },
+    { name:'Waterproof Winter Jacket',   cat:'Bedding and Apparel', price:32.99, img:'assets/product-bed.jpg',        desc:'Reflective, insulated jacket for cold weather walks and adventures.' },
+    { name:'Daily Multivitamin Chews',   cat:'Health Supplements',  price:22.99, img:'assets/product-supplement.jpg', desc:'Vet-formulated soft chews with vitamins A, D, E and glucosamine.' },
   ];
 
   // ── DOM refs ──
@@ -59,7 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('header-pet-name').textContent = pet.name;
     document.getElementById('header-pet-icon').textContent = speciesEmoji[pet.species] ?? '🐾';
 
-    document.getElementById('profile-emoji').textContent = speciesEmoji[pet.species] ?? '🐾';
+    const profileImg = document.getElementById('profile-img');
+    if (profileImg) {
+      profileImg.src = speciesAvatar[pet.species] ?? 'assets/avatar-dog.jpg';
+    }
     document.getElementById('profile-name').textContent = pet.name;
     document.getElementById('profile-sub').textContent = `${pet.breed} · ${pet.age} year${pet.age == 1 ? '' : 's'} old`;
     document.getElementById('profile-species').textContent = pet.species;
@@ -151,17 +160,17 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'product-card animate-card-in';
       card.style.animationDelay = `${i * 0.06}s`;
       card.innerHTML = `
-        <div class="h-40 bg-gradient-to-br ${p.gradient} flex items-center justify-center">
-          <span class="text-5xl">${p.emoji}</span>
+        <div class="h-44 bg-creambg/40 overflow-hidden relative group">
+          <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <span class="absolute top-2.5 right-2.5 text-xs font-bold text-softcoral bg-white/90 backdrop-blur-sm px-2.5 py-0.5 rounded-full shadow-sm">${p.cat}</span>
         </div>
         <div class="p-4">
           <div class="flex items-center justify-between mb-1.5">
-            <span class="text-xs font-bold text-softcoral bg-softcoral/10 px-2 py-0.5 rounded-full">${p.cat}</span>
-            <span class="text-lg font-black text-oceanteal">$${p.price.toFixed(2)}</span>
+            <h3 class="font-bold text-slate-800 text-sm">${p.name}</h3>
+            <span class="text-base font-black text-oceanteal">$${p.price.toFixed(2)}</span>
           </div>
-          <h3 class="font-bold text-slate-800 text-sm mb-1">${p.name}</h3>
-          <p class="text-xs text-slate-400 leading-relaxed mb-3">${p.desc}</p>
-          <button class="buy-btn w-full py-2 rounded-xl font-bold text-xs tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.97] transition-all duration-200">
+          <p class="text-xs text-slate-400 leading-relaxed mb-3 line-clamp-2">${p.desc}</p>
+          <button class="buy-btn w-full py-2.5 rounded-xl font-bold text-xs tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.97] transition-all duration-200">
             Buy Now 🛒
           </button>
         </div>`;
