@@ -39,11 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.remove('selected');
       card.setAttribute('aria-checked', 'false');
       const badge = card.querySelector('.check-badge');
-      // Kill animation so checkPop re-triggers cleanly on next selection
       badge.style.animation = 'none';
       badge.style.transform = 'scale(0)';
       badge.style.opacity   = '0';
-      void badge.offsetWidth; // force reflow
+      void badge.offsetWidth;
       badge.style.animation = '';
     });
   }
@@ -141,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 900);
   });
 
-  // Magnetic button & 3D Card Tilt
   const canHover = window.matchMedia('(hover: hover)').matches;
   if (canHover) {
     [ctaBtn].forEach(btn => {
@@ -176,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   syncBtn();
 
-  // Pre-fill returning user
   try {
     const stored = JSON.parse(localStorage.getItem('fureverUser') ?? 'null');
     if (stored?.name) {
@@ -186,10 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch (_) {}
 
-  // ═══════════════════════════════════════════════════════════
-  //  INTERACTIVE DYNAMIC CANVAS & CURSOR GLOW
-  // ═══════════════════════════════════════════════════════════
-
   const cursorGlow = document.getElementById('cursor-glow');
   let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, targetX: window.innerWidth / 2, targetY: window.innerHeight / 2 };
 
@@ -198,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mouse.targetY = e.clientY;
   });
 
-  // Smooth lerp cursor glow
   function updateCursorGlow() {
     mouse.x += (mouse.targetX - mouse.x) * 0.08;
     mouse.y += (mouse.targetY - mouse.y) * 0.08;
@@ -210,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   requestAnimationFrame(updateCursorGlow);
 
-  // Background Particles Canvas
   const canvas = document.getElementById('bg-canvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
@@ -249,7 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
         this.y += this.vy;
         this.angle += this.spin;
 
-        // Subtle repulsion from mouse
         const dx = this.x - mouse.x;
         const dy = this.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -302,4 +292,3 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
-

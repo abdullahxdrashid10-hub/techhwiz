@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── Auth guard: redirect if no user session ──
   const userRaw = localStorage.getItem('fureverUser');
   if (!userRaw) { window.location.href = 'index.html'; return; }
   const user = JSON.parse(userRaw);
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     Other: 'assets/avatar-dog.jpg'
   };
 
-  // ── Product data (Accurate Showcase) ──
   const products = [
     { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, badge:'Best Seller',  img:'assets/Chiken kibble.png',                desc:'High-protein formula with real roasted chicken and brown rice for adult dogs.' },
     { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, badge:'Organic',      img:'assets/Salmon cat food.png',              desc:'Grain-free wild salmon recipe packed with omega-3 fatty acids for healthy coats.' },
@@ -25,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
     { name:'Daily Multivitamin Chews',   cat:'Health Supplements',  price:22.99, badge:'Vet Approved', img:'assets/Daily Multivitamin Chews.png',     desc:'Vet-formulated daily wellness drops and chewables with vitamins A, D, and E.' },
   ];
 
-  // ── DOM refs ──
   const petFormSection = document.getElementById('pet-form-section');
   const petForm        = document.getElementById('pet-form');
   const dashboard      = document.getElementById('dashboard');
@@ -45,10 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const visitorCount   = document.getElementById('visitor-count');
 
   let activeCat = 'All';
-
-  // ═══════════════════════════════════
-  //  INTERACTIVE ANIMATIONS & UTILS
-  // ═══════════════════════════════════
 
   function spawnParticles(x, y) {
     const symbols = ['🐾', '✨', '💛', '🌸'];
@@ -139,10 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
     subnavPill.style.width = `${activeBtn.offsetWidth}px`;
   }
 
-  // ═══════════════════════════════════
-  //  PET FORM
-  // ═══════════════════════════════════
-
   const speciesSelect = document.getElementById('pet-species');
   speciesSelect.addEventListener('change', () => {
     speciesSelect.classList.toggle('has-value', speciesSelect.value !== '');
@@ -200,10 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => showDashboard(pet), 400);
   });
 
-  // ═══════════════════════════════════
-  //  TAB SWITCHING
-  // ═══════════════════════════════════
-
   function switchTab(tabId, clickedBtn) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.getElementById('tab-' + tabId)?.classList.add('active');
@@ -246,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburgerIcon.style.transform = open ? 'rotate(90deg)' : '';
   });
 
-  // ── Sub-tabs (Pet Care) ──
   const subNav = document.getElementById('petcare-sub-nav');
   subNav.addEventListener('click', e => {
     const btn = e.target.closest('[data-sub]');
@@ -256,10 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
     subNav.querySelectorAll('.sub-tab').forEach(b => b.classList.toggle('active', b === btn));
     updateSubNavPill(btn);
   });
-
-  // ═══════════════════════════════════
-  //  PRODUCT RENDERING
-  // ═══════════════════════════════════
 
   function renderProducts() {
     const query = (productSearch?.value ?? '').toLowerCase().trim();
@@ -309,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
   });
 
-  // Buy Now toast & ripple
   document.addEventListener('click', e => {
     const buyBtn = e.target.closest('.buy-btn');
     if (!buyBtn) return;
@@ -325,10 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('toast-container').appendChild(el);
     setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 300); }, 2800);
   }
-
-  // ═══════════════════════════════════
-  //  TICKER
-  // ═══════════════════════════════════
 
   function initTicker() {
     let locationText = '📍 Detecting location…';
@@ -359,20 +334,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ═══════════════════════════════════
-  //  VISITOR COUNTER
-  // ═══════════════════════════════════
-
   function initVisitorCounter() {
     let count = parseInt(localStorage.getItem('fureverVisitors') ?? '0', 10);
     count++;
     localStorage.setItem('fureverVisitors', String(count));
     visitorCount.textContent = count.toLocaleString();
   }
-
-  // ═══════════════════════════════════
-  //  FEEDBACK FORM
-  // ═══════════════════════════════════
 
   feedbackForm?.addEventListener('submit', e => {
     e.preventDefault();

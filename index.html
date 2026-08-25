@@ -57,13 +57,11 @@
     .animate-welcome-in { animation:welcomeIn 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
     .animate-soft-pulse { animation:softPulse 2.5s ease-in-out infinite; }
 
-    /* Aurora Glow Orbs */
     .blob { position:fixed; border-radius:9999px; filter:blur(90px); pointer-events:none; z-index:0; }
     .blob-1 { width:600px; height:600px; background:radial-gradient(circle, rgba(44,110,107,0.28) 0%, rgba(168,195,160,0.18) 60%, transparent 80%); top:-150px; left:-120px; }
     .blob-2 { width:520px; height:520px; background:radial-gradient(circle, rgba(244,168,150,0.35) 0%, rgba(244,168,150,0.1) 60%, transparent 80%); bottom:-100px; right:-80px; }
     .blob-3 { width:450px; height:450px; background:radial-gradient(circle, rgba(168,195,160,0.28) 0%, rgba(44,110,107,0.12) 60%, transparent 80%); top:35%; left:60%; }
 
-    /* Dot Grid Texture */
     .dot-grid-pattern {
       position: fixed;
       inset: 0;
@@ -74,7 +72,6 @@
       background-size: 28px 28px;
     }
 
-    /* Floating label */
     .float-label-wrapper { position:relative; }
     .float-label-wrapper input { display:block;width:100%;padding:1.1rem 1.25rem 0.45rem 1.25rem;border-radius:1rem;border:2px solid #e2e8f0;background:rgba(255,255,255,0.9);font-family:'Nunito',sans-serif;font-size:1rem;color:#1e293b;outline:none;transition:border-color 0.25s,box-shadow 0.25s,background 0.25s; }
     .float-label-wrapper input:focus { border-color:var(--softcoral);background:#fff;box-shadow:0 0 0 4px rgba(244,168,150,0.25); }
@@ -82,7 +79,6 @@
     .float-label-wrapper input:focus + label,
     .float-label-wrapper input:not(:placeholder-shown) + label { top:0.6rem;transform:translateY(0);font-size:0.7rem;font-weight:700;color:var(--oceanteal);letter-spacing:0.04em;text-transform:uppercase; }
 
-    /* Profile cards */
     .profile-card { position:relative;cursor:pointer;border:2px solid #e2e8f0;border-radius:1.25rem;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);padding:1.4rem 0.85rem;display:flex;flex-direction:column;align-items:center;gap:0.65rem;transition:all 0.28s cubic-bezier(0.22,1,0.36,1);box-shadow:0 4px 16px rgba(44,110,107,0.06);user-select:none; }
     .profile-card:hover { transform:translateY(-4px) scale(1.03);box-shadow:0 12px 30px rgba(44,110,107,0.18);border-color:var(--sageaccent);background:#fff; }
     .profile-card.selected { border-color:var(--oceanteal);background:linear-gradient(135deg,rgba(44,110,107,0.1),rgba(244,168,150,0.12));box-shadow:0 8px 28px rgba(44,110,107,0.22); }
@@ -91,7 +87,6 @@
     .profile-card .card-icon { transition:transform 0.28s; }
     .profile-card:hover .card-icon { transform:scale(1.12) rotate(-3deg); }
 
-    /* Floating hero badges */
     .hero-badge {
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -104,19 +99,16 @@
       box-shadow: 0 16px 32px -4px rgba(44,110,107,0.22);
     }
 
-    /* CTA & Magnetic Buttons */
     .btn-magnetic { position:relative; overflow:hidden; transition:transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s; }
     .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.45); transform:scale(0); animation:rippleEffect 0.6s linear; pointer-events:none; }
     @keyframes rippleEffect { to{transform:scale(4);opacity:0;} }
 
-    /* 3D Tilt Card */
     .tilt-card { transform-style:preserve-3d; transition:transform 0.15s ease-out; will-change:transform; }
 
     #cta-btn { transition:all 0.3s cubic-bezier(0.22,1,0.36,1); }
     #cta-btn.btn-active:hover { transform:translateY(-2px) scale(1.02);box-shadow:0 12px 30px rgba(244,168,150,0.48); }
     #cta-btn.btn-active:active { transform:scale(0.98); }
 
-    /* Welcome */
     #welcome-screen { display:none; }
     #welcome-screen.visible { display:flex; }
 
@@ -127,7 +119,6 @@
 </head>
 <body class="min-h-screen bg-creambg font-nunito relative selection:bg-softcoral selection:text-white">
 
-  <!-- ── Dynamic Interactive Background Elements ── -->
   <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
   <div id="cursor-glow" class="fixed pointer-events-none z-0 w-[550px] h-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-40 transition-opacity duration-300" style="background: radial-gradient(circle, rgba(244,168,150,0.38) 0%, rgba(44,110,107,0.22) 45%, transparent 70%); left: 50%; top: 50%;"></div>
   <div class="dot-grid-pattern" aria-hidden="true"></div>
@@ -135,28 +126,20 @@
   <div class="blob blob-2 animate-blob-2" aria-hidden="true"></div>
   <div class="blob blob-3 animate-blob-3" aria-hidden="true"></div>
 
-  <!-- ════════════════════════════════════ LANDING SCREEN ════════════════════════════════════ -->
   <main id="landing-screen" class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-10 pb-16">
 
-    <!-- Hero -->
     <section id="hero-section" class="text-center max-w-3xl w-full animate-hero-entrance" aria-labelledby="hero-heading">
       <div class="animate-fade-up inline-flex items-center gap-2 bg-white/85 backdrop-blur-md border border-sageaccent/60 rounded-full px-4 py-1.5 mb-6 shadow-sm" style="animation-delay:0.05s">
         <span class="text-base">🐾</span>
         <span class="text-xs tracking-widest text-oceanteal uppercase font-extrabold">Est. 2025 · The Modern Pet Platform</span>
       </div>
 
-      <!-- Hero Illustration Banner with Floating Micro-Badges -->
       <div class="animate-fade-up relative max-w-md sm:max-w-lg mx-auto mb-8" style="animation-delay:0.12s">
-        
-        <!-- Ambient Back Glow -->
         <div class="absolute -inset-3 bg-gradient-to-r from-softcoral/40 via-sageaccent/30 to-oceanteal/40 rounded-3xl blur-xl opacity-80"></div>
-        
-        <!-- Hero Card Frame -->
         <div class="relative bg-white/95 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-white/90 transform transition-transform duration-300 hover:scale-[1.01]">
           <img src="assets/hero-pets.jpg" alt="FurEver Care Happy Golden Retriever and Tabby Cat" class="w-full h-auto rounded-2xl object-cover shadow-inner" />
         </div>
 
-        <!-- Floating Badge 1: Top Left -->
         <div class="hero-badge animate-float-1 absolute -top-4 -left-4 sm:-left-8 bg-white/90 rounded-2xl px-3.5 py-2 flex items-center gap-2.5 z-20">
           <span class="text-lg">✨</span>
           <div class="text-left">
@@ -165,7 +148,6 @@
           </div>
         </div>
 
-        <!-- Floating Badge 2: Bottom Right -->
         <div class="hero-badge animate-float-2 absolute -bottom-4 -right-4 sm:-right-8 bg-white/90 rounded-2xl px-3.5 py-2 flex items-center gap-2.5 z-20">
           <span class="text-lg">🩺</span>
           <div class="text-left">
@@ -174,7 +156,6 @@
           </div>
         </div>
 
-        <!-- Floating Badge 3: Bottom Left -->
         <div class="hero-badge animate-float-3 absolute -bottom-5 left-6 bg-white/90 rounded-2xl px-3 py-1.5 hidden sm:flex items-center gap-2 z-20">
           <span class="text-base">🏠</span>
           <p class="text-[10px] font-bold text-slate-700">500+ Shelter Pets Ready</p>
@@ -196,13 +177,11 @@
       </p>
     </section>
 
-    <!-- Onboarding Card -->
     <section id="onboarding-card" class="animate-fade-up relative w-full max-w-lg mt-8 bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/80 px-6 sm:px-10 py-8" style="animation-delay:0.42s" aria-label="Onboarding form">
       <div class="absolute top-0 left-8 right-8 h-1 rounded-b-full bg-gradient-to-r from-softcoral via-sageaccent to-oceanteal opacity-80"></div>
 
       <p class="text-center text-slate-600 font-extrabold text-sm mb-6 tracking-wide uppercase">Let's get you started ✨</p>
 
-      <!-- Floating Label Input -->
       <div class="animate-fade-up mb-7" style="animation-delay:0.5s">
         <div class="float-label-wrapper">
           <input type="text" id="user-name-input" name="user-name" placeholder=" " autocomplete="given-name" aria-label="Your first name" maxlength="40" />
@@ -210,12 +189,10 @@
         </div>
       </div>
 
-      <!-- Profile Cards -->
       <div class="animate-fade-up mb-8" style="animation-delay:0.6s">
         <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">I am a…</p>
         <div class="grid grid-cols-3 gap-3" role="radiogroup" aria-label="Select your profile type">
 
-          <!-- Pet Owner -->
           <div class="profile-card" id="card-pet-owner" role="radio" aria-checked="false" aria-label="Pet Owner" tabindex="0" data-category="Pet Owner">
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -225,7 +202,6 @@
             <span class="text-[11px] text-slate-400 text-center hidden sm:block">Manage your pets</span>
           </div>
 
-          <!-- Veterinarian -->
           <div class="profile-card" id="card-vet" role="radio" aria-checked="false" aria-label="Veterinarian" tabindex="0" data-category="Veterinarian">
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -235,7 +211,6 @@
             <span class="text-[11px] text-slate-400 text-center hidden sm:block">Manage slots</span>
           </div>
 
-          <!-- Animal Shelter -->
           <div class="profile-card" id="card-shelter" role="radio" aria-checked="false" aria-label="Animal Shelter / Rescue Volunteer" tabindex="0" data-category="Animal Shelter">
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -248,7 +223,6 @@
         </div>
       </div>
 
-      <!-- CTA Button -->
       <div class="animate-fade-up" style="animation-delay:0.78s">
         <button id="cta-btn" class="w-full py-3.5 rounded-2xl font-bold text-base tracking-wide bg-slate-200 text-slate-400 cursor-not-allowed shadow-none" disabled aria-disabled="true" aria-label="Get Started — complete the form to activate">
           <span id="btn-label">Get Started →</span>
@@ -263,13 +237,11 @@
       </div>
     </section>
 
-    <!-- Footer -->
     <footer class="animate-fade-up mt-8 text-center text-xs text-slate-400" style="animation-delay:0.9s">
       <p>© 2025 FurEver Care · Built with 💛 for pets everywhere</p>
     </footer>
   </main>
 
-  <!--WELCOME SCREEN-->
   <div id="welcome-screen" class="fixed inset-0 z-50 flex-col items-center justify-center bg-creambg px-6" aria-live="polite" role="status">
     <div class="blob blob-1 animate-blob-1" aria-hidden="true"></div>
     <div class="blob blob-2 animate-blob-2" aria-hidden="true"></div>

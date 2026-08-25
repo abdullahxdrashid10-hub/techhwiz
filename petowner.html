@@ -44,21 +44,18 @@
     .animate-hero{animation:heroEntrance 0.8s cubic-bezier(0.22,1,0.36,1) both}
     .animate-card-in{animation:cardIn 0.45s cubic-bezier(0.22,1,0.36,1) both}
 
-    /* Sliding pill navigation */
     .nav-pill-track { position:relative; background:#f1f5f9; padding:0.25rem; border-radius:9999px; display:flex; align-items:center; }
     #nav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:var(--oceanteal); transition:transform 0.32s cubic-bezier(0.22,1,0.36,1), width 0.32s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; }
     .nav-tab { position:relative; z-index:10; padding:0.45rem 1.1rem; border-radius:9999px; font-weight:700; font-size:0.85rem; transition:color 0.25s; color:#64748b; background:transparent; border:none; outline:none; }
     .nav-tab:hover { color:var(--oceanteal); }
     .nav-tab.active { color:#fff; }
 
-    /* Sub-nav sliding pill */
     .sub-pill-track { position:relative; background:#f8fafc; padding:0.25rem; border-radius:9999px; border:1.5px solid #e2e8f0; display:inline-flex; align-items:center; }
     #subnav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:var(--softcoral); transition:transform 0.28s cubic-bezier(0.22,1,0.36,1), width 0.28s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; }
     .sub-tab { position:relative; z-index:10; padding:0.35rem 0.95rem; border-radius:9999px; font-weight:600; font-size:0.8rem; transition:color 0.22s; color:#64748b; background:transparent; border:none; outline:none; }
     .sub-tab:hover { color:var(--softcoral); }
     .sub-tab.active { color:#fff; }
 
-    /* Tab cross-fade and stagger */
     .tab-panel { display:none; opacity:0; transform:translateY(12px); transition:opacity 0.35s ease, transform 0.35s ease; }
     .tab-panel.active { display:block; opacity:1; transform:translateY(0); animation:tabFadeIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
     .tab-panel.active > * { animation:fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both; }
@@ -71,7 +68,6 @@
     .cat-btn:hover { border-color:var(--softcoral); color:var(--softcoral); }
     .cat-btn.active { background:var(--softcoral); border-color:var(--softcoral); color:#fff; }
 
-    /* 3D Tilt Card & Shimmer */
     .tilt-card { transform-style:preserve-3d; transition:transform 0.15s ease-out; will-change:transform; }
     .product-card { border-radius:1.25rem; background:#fff; border:2px solid #f1f5f9; overflow:hidden; transition:box-shadow 0.28s, border-color 0.28s; box-shadow:0 4px 14px rgba(0,0,0,0.05); }
     .product-card:hover { box-shadow:0 14px 30px rgba(44,110,107,0.16); border-color:var(--sageaccent); }
@@ -80,7 +76,6 @@
     .badge-shimmer::after { content:''; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent); transition:transform 0.65s ease; }
     .product-card:hover .badge-shimmer::after, .badge-shimmer:hover::after { transform:translateX(100%); }
 
-    /* Magnetic Buttons & Ripple */
     .btn-magnetic { position:relative; overflow:hidden; transition:transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s; }
     .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.45); transform:scale(0); animation:rippleEffect 0.6s linear; pointer-events:none; }
     @keyframes rippleEffect { to{transform:scale(4);opacity:0;} }
@@ -121,7 +116,6 @@
   <div class="paw-deco" style="top:60%;right:3%;font-size:2.2rem;animation-delay:1.5s" aria-hidden="true">🐾</div>
   <div class="paw-deco" style="top:35%;left:92%;font-size:1.3rem;animation-delay:2.8s" aria-hidden="true">🐾</div>
 
-  <!-- ═══ PET INFO FORM ═══ -->
   <section id="pet-form-section" class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
     <div class="text-center mb-8 animate-hero">
       <h1 class="text-5xl sm:text-6xl font-black tracking-tight mb-2">
@@ -168,17 +162,14 @@
     </form>
   </section>
 
-  <!-- ═══ DASHBOARD ═══ -->
   <div id="dashboard" class="hidden relative z-10">
 
-    <!-- Ticker -->
     <div id="ticker" class="bg-oceanteal text-white py-2">
       <div class="ticker-wrap">
         <div class="ticker-track text-sm font-medium" id="ticker-track"></div>
       </div>
     </div>
 
-    <!-- Header -->
     <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-lg border-b border-slate-100 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <div class="flex items-center justify-between h-16">
@@ -193,7 +184,6 @@
             </div>
           </div>
 
-          <!-- Desktop nav with sliding pill -->
           <nav class="hidden md:flex items-center nav-pill-track" id="desktop-nav">
             <div id="nav-pill"></div>
             <button class="nav-tab active" data-tab="about">About Us</button>
@@ -204,7 +194,6 @@
             <button class="nav-tab" data-tab="contact">Contact Us</button>
           </nav>
 
-          <!-- Mobile hamburger -->
           <button id="hamburger" class="md:hidden w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-100 transition-colors">
             <svg id="hamburger-icon" class="w-6 h-6 text-slate-600 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
@@ -213,7 +202,6 @@
         </div>
       </div>
 
-      <!-- Mobile nav drawer -->
       <div id="mobile-menu" class="md:hidden bg-white border-t border-slate-100 px-4">
         <div class="py-3 flex flex-col gap-1.5">
           <button class="mobile-tab nav-tab active text-left" data-tab="about">About Us</button>
@@ -226,10 +214,8 @@
       </div>
     </header>
 
-    <!-- Content area -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
 
-      <!-- ─── ABOUT US ─── -->
       <div id="tab-about" class="tab-panel active">
         <h2 class="text-3xl font-black text-slate-800 mb-6">About <span class="text-oceanteal">FurEver Care</span></h2>
         <div class="grid md:grid-cols-3 gap-5">
@@ -251,7 +237,6 @@
         </div>
       </div>
 
-      <!-- ─── PET CARE ─── -->
       <div id="tab-petcare" class="tab-panel">
         <h2 class="text-3xl font-black text-slate-800 mb-5">Pet Care <span class="text-softcoral">Center</span></h2>
 
@@ -264,7 +249,6 @@
           <button class="sub-tab" data-sub="training">Training Tips</button>
         </div>
 
-        <!-- Pet Profile -->
         <div id="sub-profile" class="sub-panel active">
           <div class="bg-white rounded-2xl shadow-md border border-slate-50 p-6 sm:p-8 max-w-xl">
             <div class="flex items-center gap-4 mb-5">
@@ -304,7 +288,6 @@
           </div>
         </div>
 
-        <!-- Feeding Guide -->
         <div id="sub-feeding" class="sub-panel">
           <div class="grid md:grid-cols-3 gap-5">
             <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-50 hover:shadow-lg transition-shadow">
@@ -340,7 +323,6 @@
           </div>
         </div>
 
-        <!-- Grooming Videos -->
         <div id="sub-grooming" class="sub-panel">
           <div class="grid md:grid-cols-3 gap-5">
             <div class="vid-card group relative rounded-2xl overflow-hidden shadow-md border border-slate-100 bg-white">
@@ -384,7 +366,6 @@
           </div>
         </div>
 
-        <!-- Health Tips -->
         <div id="sub-health" class="sub-panel">
           <div class="space-y-5">
             <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-50 flex items-center gap-4">
@@ -425,7 +406,6 @@
           </div>
         </div>
 
-        <!-- Training Tips -->
         <div id="sub-training" class="sub-panel">
           <div class="space-y-5">
             <div class="bg-white rounded-2xl p-5 shadow-md border border-slate-50 flex items-center gap-4">
@@ -462,7 +442,6 @@
         </div>
       </div>
 
-      <!-- ─── PRODUCTS ─── -->
       <div id="tab-products" class="tab-panel">
         <h2 class="text-3xl font-black text-slate-800 mb-5">Pet Product <span class="text-softcoral">Showcase</span></h2>
         <div class="flex flex-col sm:flex-row gap-3 mb-6">
@@ -483,7 +462,6 @@
         <p id="no-products" class="hidden text-center text-slate-400 py-12 text-sm font-medium">No products match your search.</p>
       </div>
 
-      <!-- ─── EMERGENCY ─── -->
       <div id="tab-emergency" class="tab-panel">
         <h2 class="text-3xl font-black text-slate-800 mb-5">Emergency & <span class="text-softcoral">Vet Help</span></h2>
         <div class="grid lg:grid-cols-2 gap-6">
@@ -546,7 +524,6 @@
         </div>
       </div>
 
-      <!-- ─── FEEDBACK ─── -->
       <div id="tab-feedback" class="tab-panel">
         <h2 class="text-3xl font-black text-slate-800 mb-5">Share Your <span class="text-softcoral">Feedback</span></h2>
         <form id="feedback-form" class="max-w-lg bg-white rounded-2xl shadow-md border border-slate-50 p-6 sm:p-8 space-y-5">
@@ -572,7 +549,6 @@
         </form>
       </div>
 
-      <!-- ─── CONTACT US ─── -->
       <div id="tab-contact" class="tab-panel">
         <h2 class="text-3xl font-black text-slate-800 mb-5">Contact <span class="text-oceanteal">Us</span></h2>
         <div class="grid lg:grid-cols-2 gap-6">
@@ -605,7 +581,6 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-slate-100 bg-white/60 backdrop-blur-sm py-6 mt-8">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
         <p class="text-xs text-slate-400">© 2025 FurEver Care · Built with 💛 for pets everywhere</p>
@@ -618,7 +593,6 @@
 
   </div>
 
-  <!-- Toast container -->
   <div id="toast-container"></div>
 
   <script src="petowner.js"></script>
