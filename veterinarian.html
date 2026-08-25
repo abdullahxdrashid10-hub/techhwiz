@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>FurEver Care — Veterinary Specialists & Clinic Hub</title>
+  <meta name="description" content="Meet certified veterinary specialists at FurEver Care. Explore dynamic doctor profiles, book real-time appointments, and access clinical case studies."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { oceanteal:'#2C6E6B', softcoral:'#F4A896', creambg:'#FBF3E8', sageaccent:'#A8C3A0' },
+          fontFamily: { nunito:['Nunito','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family:'Nunito',sans-serif; background:#FBF3E8; overflow-x:hidden; }
+    :root { --oceanteal:#2C6E6B; --softcoral:#F4A896; --creambg:#FBF3E8; --sageaccent:#A8C3A0; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes floatSlow { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.85)} }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes toastIn { from{opacity:0;transform:translateY(16px) scale(0.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+    @keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateY(-8px)} }
+    @keyframes blobDrift1 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-30px) scale(1.06)} 66%{transform:translate(-20px,20px) scale(0.96)} 100%{transform:translate(0,0) scale(1)} }
+    @keyframes blobDrift2 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(-50px,30px) scale(1.08)} 66%{transform:translate(30px,-25px) scale(0.94)} 100%{transform:translate(0,0) scale(1)} }
+    @keyframes pawFloat { 0%{transform:translateY(0) rotate(0deg);opacity:0.06} 50%{transform:translateY(-12px) rotate(5deg);opacity:0.11} 100%{transform:translateY(0) rotate(0deg);opacity:0.06} }
+
+    .blob{position:fixed;border-radius:9999px;filter:blur(80px);pointer-events:none;z-index:0}
+    .blob-1{width:500px;height:500px;background:radial-gradient(circle,rgba(44,110,107,0.18),transparent 70%);top:-120px;left:-100px;animation:blobDrift1 18s ease-in-out infinite}
+    .blob-2{width:420px;height:420px;background:radial-gradient(circle,rgba(244,168,150,0.22),transparent 70%);bottom:-80px;right:-60px;animation:blobDrift2 22s ease-in-out infinite}
+    .paw-deco{position:fixed;opacity:0.06;pointer-events:none;z-index:0;user-select:none;animation:pawFloat 6s ease-in-out infinite}
+
+    .pattern-bg {
+      background-color: #FBF3E8;
+      background-image: radial-gradient(rgba(44,110,107,0.06) 1.5px, transparent 1.5px), radial-gradient(rgba(244,168,150,0.06) 1.5px, #FBF3E8 1.5px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+    }
+
+    .animate-float{animation:floatSlow 4.5s ease-in-out infinite}
+    .pulse-indicator{animation:pulseDot 1.8s infinite ease-in-out}
+
+    .nav-pill-track { position:relative; background:#f1f5f9; padding:0.25rem; border-radius:9999px; display:flex; align-items:center; }
+    #nav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:var(--oceanteal); transition:transform 0.32s cubic-bezier(0.22,1,0.36,1), width 0.32s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; }
+    .nav-tab { position:relative; z-index:10; padding:0.45rem 1.15rem; border-radius:9999px; font-weight:700; font-size:0.85rem; transition:color 0.25s; color:#64748b; background:transparent; border:none; outline:none; }
+    .nav-tab:hover { color:var(--oceanteal); }
+    .nav-tab.active { color:#fff; }
+
+    .tab-panel { display:none; opacity:0; transform:translateY(12px); transition:opacity 0.35s ease, transform 0.35s ease; }
+    .tab-panel.active { display:block; opacity:1; transform:translateY(0); animation:tabFadeIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes tabFadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+    .spec-card {
+      position:relative;
+      background:#fff;
+      border:2px solid #f1f5f9;
+      border-radius:1.5rem;
+      padding:1.5rem;
+      transition:all 0.3s cubic-bezier(0.22,1,0.36,1);
+      cursor:pointer;
+      overflow:hidden;
+    }
+    .spec-card:hover {
+      transform:translateY(-6px);
+      border-color:var(--softcoral);
+      box-shadow:0 14px 28px rgba(244,168,150,0.18);
+    }
+    .spec-card .spec-desc {
+      max-height:0;
+      opacity:0;
+      transform:translateY(8px);
+      transition:all 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .spec-card:hover .spec-desc {
+      max-height:80px;
+      opacity:1;
+      transform:translateY(0);
+      margin-top:0.6rem;
+    }
+
+    .journey-step {
+      position:relative;
+      background:#fff;
+      border-radius:1.5rem;
+      border:2px solid #f8fafc;
+      padding:1.5rem;
+      transition:all 0.28s ease;
+    }
+    .journey-step:hover {
+      border-color:var(--sageaccent);
+      box-shadow:0 12px 24px rgba(44,110,107,0.08);
+      transform:translateY(-4px);
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    .doc-selector-btn {
+      display:inline-flex;
+      align-items:center;
+      gap:0.5rem;
+      padding:0.45rem 0.9rem;
+      border-radius:9999px;
+      background:#fff;
+      border:1.5px solid #e2e8f0;
+      font-weight:700;
+      font-size:0.78rem;
+      color:#64748b;
+      transition:all 0.22s ease;
+      cursor:pointer;
+      white-space:nowrap;
+      flex-shrink:0;
+    }
+    @media (min-width: 640px) {
+      .doc-selector-btn { padding:0.55rem 1.15rem; font-size:0.83rem; gap:0.65rem; }
+    }
+    .doc-selector-btn:hover { border-color:var(--softcoral); color:var(--softcoral); }
+    .doc-selector-btn.active {
+      background:linear-gradient(90deg, var(--softcoral), var(--oceanteal));
+      border-color:transparent;
+      color:#fff;
+      box-shadow:0 4px 14px rgba(44,110,107,0.22);
+    }
+
+    .float-label-wrapper{position:relative}
+    .float-label-wrapper input,.float-label-wrapper select,.float-label-wrapper textarea{display:block;width:100%;padding:1rem 1.15rem 0.4rem;border-radius:0.85rem;border:2px solid #d1d5db;background:#fff;font-family:'Nunito',sans-serif;font-size:0.95rem;color:#1e293b;outline:none;transition:border-color 0.25s,box-shadow 0.25s}
+    .float-label-wrapper input:focus,.float-label-wrapper select:focus,.float-label-wrapper textarea:focus{border-color:var(--softcoral);box-shadow:0 0 0 4px rgba(244,168,150,0.18)}
+    .float-label-wrapper label{position:absolute;left:1.15rem;top:50%;transform:translateY(-50%);font-size:0.95rem;color:#94a3b8;pointer-events:none;transition:all 0.22s cubic-bezier(0.22,1,0.36,1);padding:0 0.1rem}
+    .float-label-wrapper input:focus+label,.float-label-wrapper input:not(:placeholder-shown)+label,.float-label-wrapper select:focus+label,.float-label-wrapper select.has-value+label{top:0.55rem;transform:translateY(0);font-size:0.65rem;font-weight:700;color:var(--oceanteal);letter-spacing:0.04em;text-transform:uppercase}
+
+    .ticker-wrap{overflow:hidden;white-space:nowrap}
+    .ticker-track{display:inline-flex;animation:ticker 35s linear infinite}
+    .ticker-track:hover{animation-play-state:paused}
+
+    .toast{position:fixed;bottom:2rem;right:2rem;z-index:999;animation:toastIn 0.35s ease forwards}
+    .toast.leaving{animation:toastOut 0.3s ease forwards}
+    #mobile-menu{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.22,1,0.36,1)}
+    #mobile-menu.open{max-height:400px}
+  </style>
+</head>
+<body class="min-h-screen font-nunito pattern-bg">
+
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="paw-deco" style="top:6%;left:3%;font-size:1.8rem" aria-hidden="true">🩺</div>
+  <div class="paw-deco" style="top:55%;right:3%;font-size:2.2rem;animation-delay:1.5s" aria-hidden="true">🐾</div>
+  <div class="paw-deco" style="top:85%;left:5%;font-size:1.4rem;animation-delay:2.5s" aria-hidden="true">🩹</div>
+
+  <div id="dashboard" class="relative z-10">
+
+    <!-- TICKER -->
+    <div id="ticker" class="bg-oceanteal text-white py-2">
+      <div class="ticker-wrap">
+        <div class="ticker-track text-sm font-medium" id="ticker-track"></div>
+      </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white/85 backdrop-blur-lg border-b border-slate-100 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex items-center justify-between h-16">
+          
+          <div class="flex items-center gap-2 sm:gap-3">
+            <a href="index.html" class="flex items-center gap-1.5">
+              <span class="text-xl font-black"><span class="text-oceanteal">Fur</span><span class="text-softcoral">Ever</span></span>
+            </a>
+            <div class="flex items-center gap-1.5 bg-sageaccent/15 border border-sageaccent/30 rounded-full px-2.5 sm:px-3 py-1">
+              <span class="text-xs sm:text-sm">🩺</span>
+              <span class="text-[11px] sm:text-xs font-bold text-oceanteal truncate max-w-[120px] sm:max-w-none" id="header-vet-name">Dr. Sarah Ahmed</span>
+            </div>
+          </div>
+
+          <!-- SUB-PAGES NAVIGATION (SRS Compliant) -->
+          <nav class="hidden md:flex items-center nav-pill-track" id="desktop-nav">
+            <div id="nav-pill"></div>
+            <button class="nav-tab active" data-tab="profile">Vet Profile</button>
+            <button class="nav-tab" data-tab="slots">Time Slots</button>
+            <button class="nav-tab" data-tab="cases">Case Studies</button>
+            <button class="nav-tab" data-tab="join">Join Team</button>
+          </nav>
+
+          <div class="flex items-center gap-2">
+            <!-- DOCTOR STAFF ACCESS MODAL TRIGGER -->
+            <button id="doctor-portal-btn" class="flex items-center gap-1.5 text-xs font-bold bg-gradient-to-r from-softcoral to-oceanteal text-white px-3.5 py-1.5 rounded-full shadow-sm hover:scale-105 active:scale-95 transition-all">
+              <span id="doc-btn-label">Doctor Login 🔐</span>
+            </button>
+
+            <button id="hamburger" class="md:hidden w-9 h-9 rounded-xl flex items-center justify-center hover:bg-slate-100 transition-colors">
+              <svg id="hamburger-icon" class="w-5 h-5 text-slate-600 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="mobile-menu" class="md:hidden bg-white border-t border-slate-100 px-4">
+        <div class="py-3 flex flex-col gap-1.5">
+          <button class="mobile-tab nav-tab active text-left" data-tab="profile">Vet Profile</button>
+          <button class="mobile-tab nav-tab text-left" data-tab="slots">Time Slots</button>
+          <button class="mobile-tab nav-tab text-left" data-tab="cases">Case Studies</button>
+          <button class="mobile-tab nav-tab text-left" data-tab="join">Join Team</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+      <!-- ==============================================================
+           SUB-PAGE 1: VETERINARIAN PROFILE
+      =============================================================== -->
+      <div id="tab-profile" class="tab-panel active space-y-10 sm:space-y-14">
+
+        <!-- Responsive Doctor Selector Bar -->
+        <section class="space-y-2.5">
+          <div class="flex items-center justify-between px-1">
+            <span class="text-[11px] font-black tracking-widest text-slate-400 uppercase">Select Specialist Doctor</span>
+            <span class="text-[10px] font-bold text-oceanteal bg-white px-2.5 py-0.5 rounded-full border border-slate-200 shadow-sm">5 Active Specialists</span>
+          </div>
+          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 px-1" id="doc-selector-container"></div>
+        </section>
+
+        <!-- Hero Section -->
+        <section class="relative rounded-3xl overflow-hidden bg-white/90 backdrop-blur-md border border-white p-6 sm:p-12 shadow-xl transition-all duration-300">
+          <div class="grid lg:grid-cols-12 gap-8 items-center">
+            <div class="lg:col-span-7 space-y-4">
+              <div class="inline-flex items-center gap-2 bg-softcoral/15 border border-softcoral/30 px-3.5 py-1 rounded-full">
+                <span class="text-xs font-black uppercase tracking-wider text-softcoral">Meet Your Pet's Doctor</span>
+              </div>
+              <h1 class="text-3xl sm:text-5xl font-black text-slate-800 leading-tight">
+                “A Healthier Life Starts With <span class="text-oceanteal">The Right Care</span>.”
+              </h1>
+              <div class="pt-1 space-y-1">
+                <h2 class="text-2xl font-black text-slate-800" id="hero-vet-name">Dr. Sarah Ahmed</h2>
+                <div class="flex flex-wrap items-center gap-2 text-sm font-bold">
+                  <span class="text-softcoral" id="hero-vet-spec">Small Animal Specialist</span>
+                  <span class="text-slate-300">•</span>
+                  <span class="text-sageaccent bg-sageaccent/15 px-2.5 py-0.5 rounded-full text-xs" id="hero-vet-exp">8+ Years Experience</span>
+                </div>
+              </div>
+              <p class="text-slate-500 text-sm sm:text-base leading-relaxed max-w-xl" id="hero-vet-bio"></p>
+              
+              <!-- Real Clinic Timings Badge -->
+              <div class="bg-creambg/80 border border-slate-200/60 rounded-2xl p-3 inline-block">
+                <p class="text-xs font-bold text-slate-700">🕒 Official Clinic OPD Hours:</p>
+                <p class="text-xs text-oceanteal font-black mt-0.5" id="hero-vet-timing"></p>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-3 pt-2">
+                <button id="hero-cta-slots" class="px-6 py-3 rounded-2xl font-bold text-xs sm:text-sm tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all">
+                  Book Consultation Slot 📅
+                </button>
+                <div class="flex items-center gap-2 text-xs font-bold text-slate-600 bg-creambg px-3.5 py-2.5 rounded-xl border border-slate-100">
+                  <span>📞</span>
+                  <span id="hero-vet-contact"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-5 relative flex justify-center">
+              <div class="relative w-56 h-56 sm:w-80 sm:h-80">
+                <div class="w-full h-full rounded-full overflow-hidden border-4 border-white shadow-2xl p-1 bg-gradient-to-tr from-softcoral via-sageaccent to-oceanteal">
+                  <img id="hero-vet-img" src="" alt="Doctor" class="w-full h-full object-cover rounded-full transition-opacity duration-300"/>
+                </div>
+                
+                <!-- REAL TIME AVAILABLE TODAY STATUS -->
+                <div class="absolute -bottom-2 -left-2 sm:bottom-4 sm:left-0 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-2 animate-float" id="hero-realtime-badge">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-indicator" id="hero-status-dot"></span>
+                  <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase">Status</p>
+                    <p class="text-xs font-black text-slate-800" id="hero-vet-status">Available Today</p>
+                  </div>
+                </div>
+
+                <div class="absolute -top-1 -right-1 bg-white rounded-2xl p-2 sm:p-2.5 shadow-lg border border-slate-100 text-lg sm:text-xl animate-float" style="animation-delay: 1.5s;">🐾</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vet at a Glance -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <div class="bg-white rounded-2xl p-4 sm:p-5 text-center shadow-md border border-slate-50">
+            <span class="text-2xl sm:text-3xl font-black text-oceanteal block" id="stat-exp">8+</span>
+            <span class="text-[11px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider block">Years Experience</span>
+          </div>
+          <div class="bg-white rounded-2xl p-4 sm:p-5 text-center shadow-md border border-slate-50">
+            <span class="text-2xl sm:text-3xl font-black text-softcoral block" id="stat-pets">1.2K+</span>
+            <span class="text-[11px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider block">Pets Treated</span>
+          </div>
+          <div class="bg-white rounded-2xl p-4 sm:p-5 text-center shadow-md border border-slate-50">
+            <span class="text-2xl sm:text-3xl font-black text-sageaccent block" id="stat-rating">4.9/5</span>
+            <span class="text-[11px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider block">Parent Rating</span>
+          </div>
+          <div class="bg-white rounded-2xl p-4 sm:p-5 text-center shadow-md border border-slate-50">
+            <span class="text-2xl sm:text-3xl font-black text-slate-800 block" id="stat-support">24/7</span>
+            <span class="text-[11px] sm:text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider block">Emergency Support</span>
+          </div>
+        </section>
+
+        <!-- Specialized In -->
+        <section class="space-y-6">
+          <div class="text-center max-w-xl mx-auto">
+            <span class="text-xs font-black tracking-widest text-softcoral uppercase">Clinical Competencies</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800">Specialized In…</h2>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5" id="specs-container"></div>
+        </section>
+
+        <!-- How I Care (4 Steps) -->
+        <section class="bg-white rounded-3xl p-6 sm:p-10 shadow-lg border border-slate-50 space-y-6">
+          <div class="text-center max-w-xl mx-auto">
+            <span class="text-xs font-black tracking-widest text-sageaccent uppercase">Consultation Workflow</span>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800">How I Care For Your Pet</h2>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="journey-step">
+              <span class="text-xs font-black text-softcoral block mb-1">STEP 01</span>
+              <h3 class="font-black text-slate-800 text-base sm:text-lg mb-2">Listen</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Deeply understand your pet's behavioral changes and your specific concerns.</p>
+            </div>
+            <div class="journey-step">
+              <span class="text-xs font-black text-oceanteal block mb-1">STEP 02</span>
+              <h3 class="font-black text-slate-800 text-base sm:text-lg mb-2">Examine</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Gentle head-to-tail physical exam, vitals, temperature, and joint mobility checks.</p>
+            </div>
+            <div class="journey-step">
+              <span class="text-xs font-black text-sageaccent block mb-1">STEP 03</span>
+              <h3 class="font-black text-slate-800 text-base sm:text-lg mb-2">Plan</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Develop a clear, personalized care or treatment plan tailored to your budget & pet.</p>
+            </div>
+            <div class="journey-step">
+              <span class="text-xs font-black text-slate-800 block mb-1">STEP 04</span>
+              <h3 class="font-black text-slate-800 text-base sm:text-lg mb-2">Follow Up</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">Monitor recovery milestones and ensure long-term comfort and vitality.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- A Note From Your Vet -->
+        <section class="rounded-3xl p-6 sm:p-12 text-center bg-gradient-to-r from-softcoral/20 via-creambg to-sageaccent/20 border border-white shadow-md space-y-4">
+          <p class="text-xl sm:text-3xl font-black text-slate-800 italic max-w-2xl mx-auto leading-snug" id="note-quote"></p>
+          <div>
+            <h4 class="text-base sm:text-lg font-black text-oceanteal" id="note-author"></h4>
+            <p class="text-xs font-bold text-slate-500">Your pet's health partner</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==============================================================
+           SUB-PAGE 2: TIME SLOTS & DATE-SPECIFIC REAL-TIME BOOKINGS
+      =============================================================== -->
+      <div id="tab-slots" class="tab-panel space-y-8">
+        
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-black text-slate-800">Appointment <span class="text-softcoral">Schedule</span></h2>
+              <p class="text-slate-400 text-xs sm:text-sm">Select any slot to book for your chosen calendar date</p>
+            </div>
+            <span class="text-xs font-bold text-slate-600 bg-white px-3.5 py-1.5 rounded-full border shadow-sm" id="slots-active-doc-tag"></span>
+          </div>
+
+          <!-- Dynamic Slots Grid -->
+          <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-50">
+            <div id="full-slots-grid" class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4"></div>
+          </div>
+        </div>
+
+        <!-- PATIENT'S PERSONAL BOOKINGS & UPCOMING PASS (Device Specific) -->
+        <div class="space-y-6">
+          <div class="border-t border-slate-200/80 pt-6">
+            <h3 class="text-xl sm:text-2xl font-black text-slate-800 mb-1">My Bookings & <span class="text-oceanteal">Passes</span></h3>
+            <p class="text-xs text-slate-400">Your personal active consultation passes and session history</p>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-6">
+            <!-- Upcoming Consultations -->
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-50 space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <span class="text-sm font-black text-slate-800 flex items-center gap-2">🟢 Upcoming Consultations</span>
+                <span class="text-xs font-bold text-oceanteal bg-oceanteal/10 px-2.5 py-0.5 rounded-full" id="upcoming-count">0 Scheduled</span>
+              </div>
+              <div id="upcoming-list" class="space-y-3"></div>
+            </div>
+
+            <!-- Past Consultations -->
+            <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-50 space-y-4">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <span class="text-sm font-black text-slate-800 flex items-center gap-2">📁 Past Consultations History</span>
+                <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full" id="past-count">0 Past</span>
+              </div>
+              <div id="past-list" class="space-y-3"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOCTOR-ONLY SECURE PATIENT ROSTER (Filtered Strictly by Doctor's Login) -->
+        <div id="doctor-secure-panel" class="hidden bg-white rounded-3xl p-6 sm:p-8 shadow-xl border-2 border-oceanteal/30 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-black uppercase tracking-wider text-rose-500 bg-rose-50 px-2.5 py-0.5 rounded-full">🔐 Doctor Confidential Access</span>
+              </div>
+              <h3 class="text-xl font-black text-slate-800 mt-1">My Patient Appointment Roster</h3>
+            </div>
+            <span class="text-xs font-bold text-oceanteal bg-creambg px-3 py-1.5 rounded-full self-start sm:self-auto" id="doctor-logged-tag">Logged In as Doctor</span>
+          </div>
+
+          <p class="text-xs text-slate-500">Below are the confidential patient appointments booked specifically under your schedule.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 text-slate-500 uppercase font-black">
+                <tr>
+                  <th class="p-3">Token #</th>
+                  <th class="p-3">Owner Name</th>
+                  <th class="p-3">Phone Number</th>
+                  <th class="p-3">Pet Name</th>
+                  <th class="p-3">Date & Slot</th>
+                  <th class="p-3">Reason</th>
+                </tr>
+              </thead>
+              <tbody id="doctor-patient-roster-body" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==============================================================
+           SUB-PAGE 3: ENHANCED CLINICAL CASE STUDIES & MEDICAL HUB
+      =============================================================== -->
+      <div id="tab-cases" class="tab-panel space-y-12">
+
+        <!-- Case Studies Hero Banner -->
+        <div class="bg-gradient-to-r from-oceanteal to-[#3b8c87] rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+          <div class="relative z-10 max-w-2xl space-y-2">
+            <span class="text-xs font-bold text-softcoral uppercase tracking-widest bg-white/15 px-3 py-1 rounded-full">Clinical Excellence Archives</span>
+            <h2 class="text-3xl sm:text-4xl font-black">Evidence-Based <span class="text-softcoral">Pet Recoveries</span></h2>
+            <p class="text-xs sm:text-sm text-slate-100 leading-relaxed">
+              Explore documented surgical recoveries, specialized orthopedic alignments, feline renal protocols, and dermatology interventions treated by our certified team.
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive Case Studies Category Filter -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-2xl font-black text-slate-800">Verified Clinical Cases</h3>
+            <p class="text-xs text-slate-400">Filter through cases managed across different veterinary departments</p>
+          </div>
+          <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="case-category-filters">
+            <button class="case-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-softcoral text-white shadow-sm" data-category="All">All Departments</button>
+            <button class="case-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border hover:border-softcoral" data-category="Orthopedics">Orthopedics</button>
+            <button class="case-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border hover:border-softcoral" data-category="Cardiology">Cardiology</button>
+            <button class="case-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border hover:border-softcoral" data-category="Feline Medicine">Feline Medicine</button>
+            <button class="case-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border hover:border-softcoral" data-category="Emergency">Emergency ICU</button>
+            <button class="case-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-slate-600 border hover:border-softcoral" data-category="Dermatology">Dermatology</button>
+          </div>
+        </div>
+
+        <!-- Multi-Doctor Case Studies Grid with High-Res Images -->
+        <div id="cases-detailed-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <!-- Interactive Pet Health Snapshot Section -->
+        <section class="bg-white rounded-3xl p-6 sm:p-10 shadow-lg border border-slate-50 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-xs font-black tracking-widest text-oceanteal uppercase">Clinical Records Snapshot</span>
+              <h3 class="text-2xl font-black text-slate-800">Pet Health Journey Records</h3>
+            </div>
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1" id="pet-snapshot-buttons"></div>
+          </div>
+
+          <div class="bg-creambg/50 rounded-2xl p-5 sm:p-6 border border-slate-100">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+              <div>
+                <h4 class="text-lg sm:text-xl font-black text-slate-800" id="snap-name"></h4>
+                <p class="text-xs text-slate-500 mt-0.5" id="snap-microchip"></p>
+              </div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white text-oceanteal shadow-sm" id="snap-condition-badge"></span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs">
+              <div class="bg-white p-3 sm:p-3.5 rounded-xl border border-slate-100">
+                <span class="text-slate-400 uppercase font-bold text-[10px] block">Last Visit</span>
+                <span class="font-black text-slate-800 text-xs sm:text-sm mt-0.5 block" id="snap-last"></span>
+              </div>
+              <div class="bg-white p-3 sm:p-3.5 rounded-xl border border-slate-100">
+                <span class="text-slate-400 uppercase font-bold text-[10px] block">Condition</span>
+                <span class="font-black text-slate-800 text-xs sm:text-sm mt-0.5 block" id="snap-cond"></span>
+              </div>
+              <div class="bg-white p-3 sm:p-3.5 rounded-xl border border-slate-100">
+                <span class="text-slate-400 uppercase font-bold text-[10px] block">Treatment</span>
+                <span class="font-black text-softcoral text-xs sm:text-sm mt-0.5 block" id="snap-treat"></span>
+              </div>
+              <div class="bg-white p-3 sm:p-3.5 rounded-xl border border-slate-100">
+                <span class="text-slate-400 uppercase font-bold text-[10px] block">Next Checkup</span>
+                <span class="font-black text-oceanteal text-xs sm:text-sm mt-0.5 block" id="snap-next"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- JOIN VET TEAM FORM -->
+      <div id="tab-join" class="tab-panel">
+        <div class="max-w-xl mx-auto">
+          <div class="text-center mb-6">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">Join Our <span class="text-softcoral">Vet Team</span></h2>
+            <p class="text-slate-400 text-xs sm:text-sm">Submit your clinical credentials to partner with FurEver Care</p>
+          </div>
+
+          <form id="join-vet-form" class="bg-white rounded-3xl shadow-md border border-slate-50 p-6 sm:p-8 space-y-5" autocomplete="off">
+            <div class="float-label-wrapper">
+              <input type="text" id="join-name" placeholder=" " required/>
+              <label for="join-name">Full Name & Degree (e.g. Dr. Ali Khan, DVM)</label>
+            </div>
+            <div class="float-label-wrapper">
+              <input type="email" id="join-email" placeholder=" " required/>
+              <label for="join-email">Email Address</label>
+            </div>
+            <div class="float-label-wrapper">
+              <input type="text" id="join-license" placeholder=" " required/>
+              <label for="join-license">Veterinary Board License #</label>
+            </div>
+            <div class="float-label-wrapper">
+              <select id="join-specialization" required>
+                <option value="" disabled selected></option>
+                <option value="Small Animal Specialist">Small Animal Specialist</option>
+                <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
+                <option value="Feline Medicine">Feline Medicine</option>
+                <option value="Emergency Care">Emergency Care</option>
+              </select>
+              <label for="join-specialization">Specialization</label>
+            </div>
+            <button type="submit" class="w-full py-3.5 rounded-2xl font-bold text-sm tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+              Submit Partnership Request ✨
+            </button>
+            <div id="join-success" class="hidden text-center py-4">
+              <p class="text-3xl mb-2">🩺🎉</p>
+              <p class="font-bold text-oceanteal text-lg">Application Submitted!</p>
+              <p class="text-xs text-slate-400 mt-1">We will review your credentials within 48 hours.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-100 bg-white/60 backdrop-blur-sm py-6 mt-8">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-xs text-slate-400">© 2025 FurEver Care · Veterinary Specialists & Hospital Wing</p>
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span>👀</span>
+          <span>Visitors: <b class="text-oceanteal" id="visitor-count">0</b></span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- PATIENT APPOINTMENT BOOKING MODAL -->
+  <div id="booking-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+      <button id="close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl bg-oceanteal/10 flex items-center justify-center text-lg">📅</div>
+        <div>
+          <h3 class="text-xl font-black text-slate-800">Book Pet Consultation</h3>
+          <p class="text-xs font-bold text-softcoral" id="modal-slot-info"></p>
+        </div>
+      </div>
+
+      <form id="booking-form" class="space-y-4">
+        <div class="float-label-wrapper">
+          <input type="text" id="book-owner" placeholder=" " required/>
+          <label for="book-owner">Owner Full Name</label>
+        </div>
+        <div class="float-label-wrapper">
+          <input type="tel" id="book-phone" placeholder=" " required maxlength="15"/>
+          <label for="book-phone">Owner Phone (e.g. +1 555-019-2834)</label>
+        </div>
+        <div class="float-label-wrapper">
+          <input type="text" id="book-pet" placeholder=" " required/>
+          <label for="book-pet">Pet Name & Breed (e.g. Leo - Beagle)</label>
+        </div>
+        <div class="float-label-wrapper">
+          <input type="date" id="book-date" placeholder=" " required/>
+          <label for="book-date">Appointment Date</label>
+        </div>
+        <div class="float-label-wrapper">
+          <input type="text" id="book-reason" placeholder=" " required/>
+          <label for="book-reason">Reason (Checkup, Vaccination, Surgery)</label>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-2xl font-bold text-sm tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+          Confirm & Generate Pass 🐾
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DOCTOR AUTHENTICATION MODAL -->
+  <div id="doctor-auth-modal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+      <button id="close-auth-modal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold">✕</button>
+      <div class="text-center mb-5">
+        <span class="text-3xl">🩺</span>
+        <h3 class="text-xl font-black text-slate-800 mt-1">Doctor Portal Access</h3>
+        <p class="text-xs text-slate-400">Enter your medical license and passcode to view patient roster</p>
+      </div>
+
+      <div class="mb-4 bg-creambg p-3 rounded-2xl border border-slate-200 text-xs">
+        <p class="font-bold text-slate-700 mb-1">⚡ Quick Test Logins:</p>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" class="demo-fill px-2 py-0.5 bg-white rounded-md border text-[10px] font-bold text-oceanteal" data-id="VET-101" data-pass="vet123">Dr. Sarah (VET-101)</button>
+          <button type="button" class="demo-fill px-2 py-0.5 bg-white rounded-md border text-[10px] font-bold text-oceanteal" data-id="VET-102" data-pass="vet123">Dr. Marcus (VET-102)</button>
+        </div>
+      </div>
+
+      <form id="vet-login-form" class="space-y-4" autocomplete="off">
+        <div class="float-label-wrapper">
+          <input type="text" id="auth-license" placeholder=" " required/>
+          <label for="auth-license">Medical License ID (e.g. VET-101)</label>
+        </div>
+        <div class="float-label-wrapper">
+          <input type="password" id="auth-password" placeholder=" " required/>
+          <label for="auth-password">Portal Passcode (vet123)</label>
+        </div>
+        
+        <p id="auth-error" class="hidden text-xs text-rose-500 font-bold text-center">⚠️ Invalid Medical License or Passcode</p>
+
+        <button type="submit" class="w-full py-3.5 rounded-2xl font-bold text-sm tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all">
+          Unlock Confidential Panel 🔓
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="vet.js"></script>
+</body>
+</html>

@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         welcomeScreen.classList.add('visible');
         requestAnimationFrame(() => {
           setTimeout(() => { progressBar.style.width = '100%'; }, 80);
-          const pages = { 'Pet Owner': 'petowner.html', 'Veterinarian': 'vet.html', 'Animal Shelter': 'shelter.html' };
+          const pages = { 'Pet Owner': 'petowner.html', 'Veterinarian': 'veterinarian.html', 'Animal Shelter': 'shelter.html' };
           setTimeout(() => { window.location.href = pages[state.category] ?? 'index.html'; }, 2200);
         });
       }, 500);
@@ -292,3 +292,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
