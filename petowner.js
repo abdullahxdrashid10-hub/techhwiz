@@ -13,16 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
     Other: 'assets/avatar-dog.jpg'
   };
 
-  // ── Product data (Studio Photography) ──
+  // ── Product data (Cohesive & Accurate Product Visuals) ──
   const products = [
-    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, img:'assets/product-real-kibble.jpg',  desc:'High-protein formula with real roasted chicken and brown rice for adult dogs.' },
-    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, img:'assets/product-real-salmon.jpg',  desc:'Grain-free wild salmon recipe packed with omega-3 fatty acids for healthy coats.' },
-    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, img:'assets/product-real-dental.jpg',  desc:'Vet-recommended dental sticks that reduce tartar, plaque and freshen breath.' },
-    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, img:'assets/product-real-puzzle.jpg',  desc:'Treat-dispensing interactive puzzle ball that keeps pets mentally stimulated.' },
-    { name:'Feather Teaser Wand',        cat:'Toys',                price:8.99,  img:'assets/product-real-wand.jpg',    desc:'Irresistible feather teaser wand with bell for active indoor feline play.' },
-    { name:'Tough Braided Chew Rope',    cat:'Toys',                price:11.99, img:'assets/product-real-rope.jpg',    desc:'Durable cotton braided rope toy perfect for tug-of-war and gentle chewing.' },
-    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, img:'assets/product-real-brush.jpg',   desc:'Eco-friendly bamboo brush that removes loose undercoat fur without skin irritation.' },
-    { name:'Oatmeal Soothing Shampoo',   cat:'Grooming Essentials', price:14.99, img:'assets/product-real-shampoo.jpg', desc:'Gentle pH-balanced shampoo with natural colloidal oatmeal for sensitive skin.' },
+    { name:'Premium Chicken Kibble',     cat:'Dog/Cat Food',        price:29.99, img:'assets/product-kibble.jpg',     desc:'High-protein formula with real roasted chicken and brown rice for adult dogs.' },
+    { name:'Organic Salmon Cat Food',    cat:'Dog/Cat Food',        price:24.99, img:'assets/product-kibble.jpg',     desc:'Grain-free wild salmon recipe packed with omega-3 fatty acids for healthy coats.' },
+    { name:'Crunchy Dental Treats',      cat:'Dog/Cat Food',        price:12.99, img:'assets/product-supplement.jpg', desc:'Vet-recommended dental sticks that reduce tartar, plaque and freshen breath.' },
+    { name:'Interactive Puzzle Ball',    cat:'Toys',                price:15.99, img:'assets/product-toy.jpg',        desc:'Treat-dispensing interactive puzzle ball that keeps pets mentally stimulated.' },
+    { name:'Tough Braided Chew Rope',    cat:'Toys',                price:11.99, img:'assets/product-toy.jpg',        desc:'Durable cotton braided rope toy perfect for tug-of-war and gentle chewing.' },
+    { name:'Bamboo Deshedding Brush',    cat:'Grooming Essentials', price:18.99, img:'assets/product-brush.jpg',      desc:'Eco-friendly bamboo brush that removes loose undercoat fur without skin irritation.' },
+    { name:'Orthopedic Memory Foam Bed', cat:'Bedding and Apparel', price:49.99, img:'assets/product-bed.jpg',        desc:'Premium memory foam donut bed with ultra-soft cushion for joint support.' },
+    { name:'Daily Multivitamin Chews',   cat:'Health Supplements',  price:22.99, img:'assets/product-supplement.jpg', desc:'Vet-formulated daily wellness drops and chewables with vitamins A, D, and E.' },
   ];
 
   // ── DOM refs ──
