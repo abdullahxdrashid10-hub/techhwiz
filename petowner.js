@@ -1,13 +1,17 @@
 /**
  * FurEver Care — Pet Owner Portal Controller
  */
+const DATA_CACHE = new Map();
 async function loadData(path, fallbackData) {
+  if (DATA_CACHE.has(path)) return DATA_CACHE.get(path);
   try {
     const res = await fetch(path);
     if (!res.ok) throw new Error('fetch failed');
-    return await res.json();
+    const data = await res.json();
+    DATA_CACHE.set(path, data);
+    return data;
   } catch (err) {
-    console.warn(`Could not fetch ${path}, using embedded fallback data (likely running via file:// protocol).`);
+    DATA_CACHE.set(path, fallbackData);
     return fallbackData;
   }
 }
@@ -231,39 +235,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
   } catch (_) { pets = []; }
-
-  if (!pets || pets.length === 0) {
-    const defaultPets = await loadData('data/pets.json', [
-      {
-        id: 101,
-        name: "Buddy",
-        species: "Dog",
-        breed: "Golden Retriever",
-        age: 3,
-        ageUnit: "years",
-        vaccines: [
-          { id: 1, name: "Rabies Immunization", date: "2025", status: "Completed", clinic: "FurEver Care Clinic" },
-          { id: 2, name: "Core DHPP Booster", date: "2025", status: "Completed", clinic: "Community Wellness" },
-          { id: 3, name: "Bordetella Booster", date: "Due in 2 months", status: "Due Soon", clinic: "Scheduled" },
-          { id: 4, name: "Parasite & Tick Check", date: "2024", status: "Completed", clinic: "Dr. Wilson" }
-        ]
-      },
-      {
-        id: 102,
-        name: "Milo",
-        species: "Cat",
-        breed: "British Shorthair",
-        age: 2,
-        ageUnit: "years",
-        vaccines: [
-          { id: 1, name: "FVRCP Core Vaccine", date: "2025", status: "Completed", clinic: "Metro Paws Care" },
-          { id: 2, name: "Rabies Protection", date: "2025", status: "Completed", clinic: "Metro Paws Care" }
-        ]
-      }
-    ]);
-    pets = defaultPets && defaultPets.length ? defaultPets : [];
-    try { localStorage.setItem('fureverPets', JSON.stringify(pets)); } catch (_) {}
-  }
 
   let activePetIndex = 0;
   try {
@@ -490,54 +461,75 @@ document.addEventListener('DOMContentLoaded', async () => {
       }`;
     }
 
-    document.getElementById('profile-name').textContent = pet.name;
-    document.getElementById('profile-sub').textContent = `${pet.breed} · ${ageStr} old`;
-    document.getElementById('profile-species').textContent = pet.species;
-    document.getElementById('profile-breed').textContent = pet.breed;
-    document.getElementById('profile-age').textContent = ageStr;
+    const profName = document.getElementById('profile-name');
+    if (profName) profName.textContent = pet.name;
+    const profSub = document.getElementById('profile-sub');
+    if (profSub) profSub.textContent = `${pet.breed} · ${ageStr} old`;
+    const profSpecies = document.getElementById('profile-species');
+    if (profSpecies) profSpecies.textContent = pet.species;
+    const profBreed = document.getElementById('profile-breed');
+    if (profBreed) profBreed.textContent = pet.breed;
+    const profAge = document.getElementById('profile-age');
+    if (profAge) profAge.textContent = ageStr;
 
     const feedbackPetName = document.getElementById('feedback-pet-name');
     if (feedbackPetName) feedbackPetName.textContent = pet.name || 'your companion';
 
-    renderPetSwitcher();
-    renderVaccineRecords(pet);
-    initTicker();
-    renderProducts();
+    try { renderPetSwitcher(); } catch (_) {}
+    try { renderVaccineRecords(pet); } catch (_) {}
+    try { initTicker(); } catch (_) {}
+    try { renderProducts(); } catch (_) {}
 
     requestAnimationFrame(() => {
-      const activeNav = desktopNav.querySelector('.nav-tab.active');
-      if (activeNav) updateNavPill(activeNav);
-      const activeSub = document.querySelector('.sub-tab.active');
-      if (activeSub) updateSubNavPill(activeSub);
-      initTilt();
-      initMagnetic();
+      try {
+        const activeNav = desktopNav?.querySelector('.nav-tab.active');
+        if (activeNav) updateNavPill(activeNav);
+        const activeSub = document.querySelector('.sub-tab.active');
+        if (activeSub) updateSubNavPill(activeSub);
+        initTilt();
+        initMagnetic();
+      } catch (_) {}
     });
   }
 
   if (pets.length > 0) {
     showDashboard(getActivePet());
+  } else {
+    petFormSection.style.display = 'flex';
+    dashboard.classList.add('hidden');
   }
 
-  petForm.addEventListener('submit', e => {
+  petForm?.addEventListener('submit', e => {
     e.preventDefault();
     const submitBtn = document.getElementById('pet-form-btn');
-    const rect = submitBtn.getBoundingClientRect();
-    spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    if (submitBtn) {
+      const rect = submitBtn.getBoundingClientRect();
+      spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    }
+
+    const nameVal = document.getElementById('pet-name')?.value?.trim();
+    const speciesVal = speciesSelect?.value || 'Dog';
+    const breedVal = document.getElementById('pet-breed')?.value?.trim() || 'Companion';
+    const ageVal = parseInt(document.getElementById('pet-age')?.value, 10) || 1;
+    const ageUnitVal = document.getElementById('pet-age-unit')?.value || 'years';
+
+    if (!nameVal) return;
 
     const initialPet = {
       id: Date.now(),
-      name:    document.getElementById('pet-name').value.trim(),
-      species: speciesSelect.value,
-      breed:   document.getElementById('pet-breed').value.trim(),
-      age:     parseInt(document.getElementById('pet-age').value, 10),
-      ageUnit: document.getElementById('pet-age-unit')?.value || 'years',
+      name: nameVal,
+      species: speciesVal,
+      breed: breedVal,
+      age: ageVal,
+      ageUnit: ageUnitVal,
       vaccines: JSON.parse(JSON.stringify(defaultVaccines))
     };
 
     pets = [initialPet];
     activePetIndex = 0;
     savePets();
-    setTimeout(() => showDashboard(initialPet), 400);
+    showDashboard(initialPet);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   });
 
   /* -------------------------------------------------------------
@@ -1294,13 +1286,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     cartEmptyView.classList.add('hidden');
     cartFooter.classList.remove('hidden');
 
-    cartItemsContainer.innerHTML = '';
-
-    cart.forEach(item => {
-      const row = document.createElement('div');
-      row.className = 'pt-3 pb-1 flex items-center gap-3 group';
-      row.innerHTML = `
-        <img src="${item.img}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover border border-slate-100 bg-creambg/40 shrink-0"/>
+    cartItemsContainer.innerHTML = cart.map(item => `
+      <div class="pt-3 pb-1 flex items-center gap-3 group">
+        <img src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" class="w-16 h-16 rounded-xl object-cover border border-slate-100 bg-creambg/40 shrink-0"/>
         <div class="flex-1 min-w-0">
           <div class="flex items-start justify-between gap-1">
             <h4 class="text-xs font-bold text-slate-800 truncate">${item.name}</h4>
@@ -1316,22 +1304,21 @@ document.addEventListener('DOMContentLoaded', async () => {
             <span class="text-xs font-black text-oceanteal">$${(item.price * item.qty).toFixed(2)}</span>
           </div>
         </div>
-      `;
-      cartItemsContainer.appendChild(row);
-    });
-
-    cartItemsContainer.querySelectorAll('.qty-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        updateQty(btn.dataset.name, parseInt(btn.dataset.delta, 10));
-      });
-    });
-
-    cartItemsContainer.querySelectorAll('.remove-item-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        removeItem(btn.dataset.name);
-      });
-    });
+      </div>
+    `).join('');
   }
+
+  cartItemsContainer?.addEventListener('click', e => {
+    const qtyBtn = e.target.closest('.qty-btn');
+    if (qtyBtn) {
+      updateQty(qtyBtn.dataset.name, parseInt(qtyBtn.dataset.delta, 10));
+      return;
+    }
+    const removeBtn = e.target.closest('.remove-item-btn');
+    if (removeBtn) {
+      removeItem(removeBtn.dataset.name);
+    }
+  });
 
   /* -------------------------------------------------------------
      🛍️ PRODUCTS CATALOG RENDERING & BUY ACTIONS
@@ -1350,7 +1337,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="product-card tilt-card animate-card-in flex flex-col justify-between" style="animation-delay: ${i * 0.05}s">
         <div>
           <div class="h-44 bg-creambg/40 overflow-hidden relative group">
-            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+            <img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             <span class="badge-shimmer absolute top-2.5 right-2.5 text-xs font-bold text-softcoral bg-white/95 backdrop-blur-sm px-2.5 py-0.5 rounded-full shadow-sm">${p.cat}</span>
             ${p.badge ? `<span class="badge-shimmer absolute top-2.5 left-2.5 text-[10px] font-black tracking-wide uppercase bg-oceanteal text-white px-2 py-0.5 rounded-md shadow-sm">${p.badge}</span>` : ''}
           </div>
@@ -1501,55 +1488,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   /* -------------------------------------------------------------
-     ✨ INTERACTIVE BACKGROUND CONTROLLER (CURSOR GLOW & PARALLAX)
+     ✨ INTERACTIVE BACKGROUND CONTROLLER (GPU COMPOSITED)
   ------------------------------------------------------------- */
   const cursorGlow = document.getElementById('interactive-cursor-glow');
   const parallaxElements = document.querySelectorAll('.parallax-element');
+  let glowRaf = null;
 
   window.addEventListener('pointermove', e => {
-    targetMouseX = e.clientX;
-    targetMouseY = e.clientY;
-    if (!isMoving && cursorGlow) {
+    const x = e.clientX;
+    const y = e.clientY;
+    if (cursorGlow && cursorGlow.style.opacity !== '0.75') {
       cursorGlow.style.opacity = '0.75';
-      isMoving = true;
     }
+    if (glowRaf) return;
+    glowRaf = requestAnimationFrame(() => {
+      glowRaf = null;
+      if (cursorGlow) {
+        cursorGlow.style.transform = `translate3d(${x - 230}px, ${y - 230}px, 0)`;
+      }
+      const offsetX = x - window.innerWidth / 2;
+      const offsetY = y - window.innerHeight / 2;
+      parallaxElements.forEach(el => {
+        const speed = parseFloat(el.dataset.speed || '0.03');
+        el.style.transform = `translate3d(${(offsetX * speed).toFixed(1)}px, ${(offsetY * speed).toFixed(1)}px, 0)`;
+      });
+    });
   });
 
   window.addEventListener('pointerleave', () => {
     if (cursorGlow) cursorGlow.style.opacity = '0';
-    isMoving = false;
   });
-
-  function renderInteractiveBg() {
-    currentMouseX += (targetMouseX - currentMouseX) * 0.1;
-    currentMouseY += (targetMouseY - currentMouseY) * 0.1;
-
-    const dx = Math.abs(currentMouseX - lastDrawnX);
-    const dy = Math.abs(currentMouseY - lastDrawnY);
-
-    if (dx > 0.05 || dy > 0.05) {
-      lastDrawnX = currentMouseX;
-      lastDrawnY = currentMouseY;
-
-      if (cursorGlow) {
-        cursorGlow.style.left = `${currentMouseX.toFixed(1)}px`;
-        cursorGlow.style.top = `${currentMouseY.toFixed(1)}px`;
-      }
-
-      const offsetX = (currentMouseX - window.innerWidth / 2);
-      const offsetY = (currentMouseY - window.innerHeight / 2);
-
-      parallaxElements.forEach(el => {
-        const speed = parseFloat(el.dataset.speed || '0.04');
-        const x = offsetX * speed;
-        const y = offsetY * speed;
-        el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
-      });
-    }
-
-    requestAnimationFrame(renderInteractiveBg);
-  }
-  requestAnimationFrame(renderInteractiveBg);
 
   initVisitorCounter();
   updateCartUI();

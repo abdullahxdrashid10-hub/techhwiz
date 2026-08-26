@@ -215,7 +215,7 @@
 <body class="min-h-screen bg-creambg font-nunito">
 
   <!-- INTERACTIVE CURSOR & AMBIENT GLOW -->
-  <div id="interactive-cursor-glow" class="fixed pointer-events-none z-0 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 opacity-60" style="width: 460px; height: 460px; background: radial-gradient(circle, rgba(244,168,150,0.22) 0%, rgba(44,110,107,0.12) 40%, transparent 70%); filter: blur(40px); will-change: transform, left, top;"></div>
+  <div id="interactive-cursor-glow" class="fixed top-0 left-0 pointer-events-none z-0 transition-opacity duration-300 opacity-0" style="width: 460px; height: 460px; background: radial-gradient(circle, rgba(244,168,150,0.22) 0%, rgba(44,110,107,0.12) 40%, transparent 70%); filter: blur(40px); will-change: transform;"></div>
 
   <!-- MULTI-LAYERED AMBIENT BLOBS -->
   <div class="blob blob-1" aria-hidden="true"></div>
@@ -250,9 +250,8 @@
         </div>
 
         <div class="float-label-wrapper">
-          <select id="pet-species" required>
-            <option value="" disabled selected></option>
-            <option value="Dog">🐶 Dog</option>
+          <select id="pet-species" required class="has-value">
+            <option value="Dog" selected>🐶 Dog</option>
             <option value="Cat">🐱 Cat</option>
             <option value="Bird">🐦 Bird</option>
             <option value="Other">🐾 Other</option>
@@ -318,6 +317,10 @@
         </nav>
 
         <div class="flex items-center gap-2.5">
+          <a href="index.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold text-slate-600 hover:text-oceanteal bg-white hover:bg-slate-50 border border-slate-200/80 shadow-sm transition-all" title="Switch User Role / Portal">
+            <span>⇄ Switch Role</span>
+          </a>
+
           <button id="cart-btn" class="relative p-2.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-700 hover:border-softcoral shadow-sm hover:shadow transition-all duration-200" title="View Shopping Cart">
             <span class="text-lg">🛒</span>
             <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 min-w-[20px] h-5 bg-gradient-to-r from-softcoral to-red-500 text-white font-black text-[11px] rounded-full flex items-center justify-center px-1 shadow-md border-2 border-white">0</span>
@@ -334,9 +337,10 @@
         <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="about">✦ Home & About Us</button>
         <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="petcare">✦ Pet Care Center</button>
         <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="products">✦ Pet Products & Supplies</button>
-        <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="emergency">✦ Emergency Helplines</button>
-        <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="feedback">✦ User Feedback</button>
-        <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="contact">✦ Contact Information</button>
+        <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="emergency">✦ Emergency Contacts</button>
+        <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="feedback">✦ Guardian Feedback</button>
+        <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="contact">✦ Clinic Contact</button>
+        <a href="index.html" class="block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50 text-xs font-bold text-slate-600 border-t border-slate-100 mt-2">⇄ Switch User Role</a>
       </div>
     </header>
 
@@ -416,7 +420,7 @@
             <div class="tilt-card bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden hover:shadow-xl hover:border-sageaccent/40 transition-all flex flex-col justify-between group">
               <div>
                 <div class="h-44 overflow-hidden relative">
-                  <img src="assets/gallery-play.jpg" alt="Our Mission" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <img src="assets/gallery-play.jpg" alt="Our Mission" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-oceanteal font-black text-[11px] px-2.5 py-1 rounded-full shadow-sm">💛 Lifelong Love</span>
                 </div>
                 <div class="p-6">
@@ -437,7 +441,7 @@
             <div class="tilt-card bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden hover:shadow-xl hover:border-softcoral/40 transition-all flex flex-col justify-between group">
               <div>
                 <div class="h-44 overflow-hidden relative">
-                  <img src="assets/feeding-fresh.jpg" alt="Why We Exist" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <img src="assets/feeding-fresh.jpg" alt="Why We Exist" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-softcoral font-black text-[11px] px-2.5 py-1 rounded-full shadow-sm">🥗 Nutrition & Health</span>
                 </div>
                 <div class="p-6">
@@ -458,7 +462,7 @@
             <div class="tilt-card bg-white rounded-3xl shadow-md border border-slate-100 overflow-hidden hover:shadow-xl hover:border-oceanteal/40 transition-all flex flex-col justify-between group">
               <div>
                 <div class="h-44 overflow-hidden relative">
-                  <img src="assets/vet-clinic.jpg" alt="Compassionate Team" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <img src="assets/vet-clinic.jpg" alt="Compassionate Team" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
                   <span class="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-emerald-700 font-black text-[11px] px-2.5 py-1 rounded-full shadow-sm">🩺 Certified Vets</span>
                 </div>
                 <div class="p-6">
@@ -494,7 +498,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <!-- Gallery Item 1 -->
             <div class="relative rounded-2xl overflow-hidden group shadow-md border border-slate-100 bg-white">
-              <img src="assets/gallery-play.jpg" alt="Playtime Bonding" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <img src="assets/gallery-play.jpg" alt="Playtime Bonding" loading="lazy" decoding="async" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex flex-col justify-end p-3.5 text-white">
                 <div class="flex items-center justify-between">
                   <div>
@@ -511,7 +515,7 @@
 
             <!-- Gallery Item 2 -->
             <div class="relative rounded-2xl overflow-hidden group shadow-md border border-slate-100 bg-white">
-              <img src="assets/feeding-fresh.jpg" alt="Healthy Daily Meals" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <img src="assets/feeding-fresh.jpg" alt="Healthy Daily Meals" loading="lazy" decoding="async" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex flex-col justify-end p-3.5 text-white">
                 <div class="flex items-center justify-between">
                   <div>
@@ -528,7 +532,7 @@
 
             <!-- Gallery Item 3 -->
             <div class="relative rounded-2xl overflow-hidden group shadow-md border border-slate-100 bg-white">
-              <img src="assets/training-coach.jpg" alt="Positive K9 Training" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <img src="assets/training-coach.jpg" alt="Positive K9 Training" loading="lazy" decoding="async" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex flex-col justify-end p-3.5 text-white">
                 <div class="flex items-center justify-between">
                   <div>
@@ -545,7 +549,7 @@
 
             <!-- Gallery Item 4 -->
             <div class="relative rounded-2xl overflow-hidden group shadow-md border border-slate-100 bg-white">
-              <img src="assets/vet-clinic.jpg" alt="Veterinary Wellness" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
+              <img src="assets/vet-clinic.jpg" alt="Veterinary Wellness" loading="lazy" decoding="async" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"/>
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent flex flex-col justify-end p-3.5 text-white">
                 <div class="flex items-center justify-between">
                   <div>
@@ -1813,8 +1817,8 @@
 
   <div id="toast-container"></div>
 
-  <script src="chatbot-engine.js"></script>
-  <script src="chat-widget.js"></script>
-  <script src="petowner.js"></script>
+  <script src="chatbot-engine.js" defer></script>
+  <script src="chat-widget.js" defer></script>
+  <script src="petowner.js" defer></script>
 </body>
 </html>

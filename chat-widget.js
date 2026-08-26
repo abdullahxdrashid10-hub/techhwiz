@@ -4,24 +4,55 @@
 document.addEventListener('DOMContentLoaded', () => {
   const triggerBtn = document.getElementById('chat-trigger-btn');
   const chatPanel = document.getElementById('chat-widget-panel');
-  const closeBtn = document.getElementById('close-chat-btn');
-  const clearBtn = document.getElementById('clear-chat-btn');
-  const messagesContainer = document.getElementById('chat-messages-container');
-  const typingIndicator = document.getElementById('chat-typing-indicator');
-  const chipsContainer = document.getElementById('chat-chips-container');
-  const inputForm = document.getElementById('chat-input-form');
-  const userInput = document.getElementById('chat-user-input');
-
-  if (!triggerBtn || !chatPanel || !inputForm) return;
+  if (!triggerBtn || !chatPanel) return;
 
   const STORAGE_KEY = 'fureverChatHistory';
   let chatHistory = [];
+  let isInitialized = false;
 
   const DEFAULT_WELCOME = {
     sender: 'bot',
     text: "Hello! I'm your **FurEver Assistant** 🐾\nAsk me about nutrition, grooming guides, training tips, symptom triage, products, or 24/7 emergency contacts!",
     chips: ['Feeding tips', 'Find a product', 'Emergency contacts', 'Grooming help']
   };
+
+  let closeBtn, clearBtn, messagesContainer, typingIndicator, chipsContainer, inputForm, userInput;
+
+  function ensureInitialized() {
+    if (isInitialized) return;
+    isInitialized = true;
+
+    closeBtn = document.getElementById('close-chat-btn');
+    clearBtn = document.getElementById('clear-chat-btn');
+    messagesContainer = document.getElementById('chat-messages-container');
+    typingIndicator = document.getElementById('chat-typing-indicator');
+    chipsContainer = document.getElementById('chat-chips-container');
+    inputForm = document.getElementById('chat-input-form');
+    userInput = document.getElementById('chat-user-input');
+
+    if (!inputForm || !messagesContainer) return;
+
+    closeBtn?.addEventListener('click', () => toggleChat(false));
+
+    clearBtn?.addEventListener('click', () => {
+      chatHistory = [DEFAULT_WELCOME];
+      saveHistory();
+      renderAllMessages();
+    });
+
+    inputForm.addEventListener('submit', e => {
+      e.preventDefault();
+      handleUserSend();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && chatPanel.classList.contains('open')) {
+        toggleChat(false);
+      }
+    });
+
+    loadHistory();
+  }
 
   function loadHistory() {
     try {
@@ -33,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       chatHistory = [];
     }
 
-    if (chatHistory.length === 0) {
+    if (!chatHistory || chatHistory.length === 0) {
       chatHistory = [DEFAULT_WELCOME];
     }
     renderAllMessages();
@@ -47,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderAllMessages() {
+    if (!messagesContainer) return;
     messagesContainer.innerHTML = '';
     chatHistory.forEach(msg => appendMessageUI(msg, false));
     scrollToBottom();
@@ -55,12 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function scrollToBottom() {
+    if (!messagesContainer) return;
     requestAnimationFrame(() => {
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     });
   }
 
   function renderChips(chips) {
+    if (!chipsContainer) return;
     chipsContainer.innerHTML = '';
     if (!chips || chips.length === 0) {
       chipsContainer.classList.add('hidden');
@@ -81,14 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function formatMessageText(text) {
     if (!text) return '';
-    let formatted = text
+    return text
       .replace(/\*\*(.*?)\*\*/g, '<b class="font-bold text-slate-900">$1</b>')
       .replace(/\n\n/g, '<br/><br/>')
       .replace(/\n/g, '<br/>');
-    return formatted;
   }
 
   function appendMessageUI(msg, animate = true) {
+    if (!messagesContainer) return;
     const wrapper = document.createElement('div');
     wrapper.className = `flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} gap-1.5`;
 
@@ -194,18 +228,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function handleUserSend(rawText) {
-    const text = (rawText || userInput.value || '').trim();
+    if (!isInitialized) ensureInitialized();
+    const text = (rawText || userInput?.value || '').trim();
     if (!text) return;
 
-    userInput.value = '';
-    userInput.focus();
+    if (userInput) {
+      userInput.value = '';
+      userInput.focus();
+    }
 
     const userMsg = { sender: 'user', text };
     chatHistory.push(userMsg);
     appendMessageUI(userMsg, true);
     saveHistory();
 
-    typingIndicator.classList.remove('hidden');
+    if (typingIndicator) {
+      typingIndicator.classList.remove('hidden');
+    }
     scrollToBottom();
 
     let botResponse;
@@ -226,7 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setTimeout(() => {
-      typingIndicator.classList.add('hidden');
+      if (typingIndicator) {
+        typingIndicator.classList.add('hidden');
+      }
       const botMsg = {
         sender: 'bot',
         text: botResponse.text,
@@ -245,10 +286,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function toggleChat(forceOpen) {
     const isOpen = typeof forceOpen === 'boolean' ? forceOpen : !chatPanel.classList.contains('open');
     if (isOpen) {
+      ensureInitialized();
       chatPanel.classList.add('open');
       chatPanel.setAttribute('aria-hidden', 'false');
       triggerBtn.classList.remove('chat-idle-pulse');
-      setTimeout(() => userInput.focus(), 150);
+      setTimeout(() => userInput?.focus(), 150);
       scrollToBottom();
     } else {
       chatPanel.classList.remove('open');
@@ -258,24 +300,4 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   triggerBtn.addEventListener('click', () => toggleChat());
-  closeBtn.addEventListener('click', () => toggleChat(false));
-
-  clearBtn.addEventListener('click', () => {
-    chatHistory = [DEFAULT_WELCOME];
-    saveHistory();
-    renderAllMessages();
-  });
-
-  inputForm.addEventListener('submit', e => {
-    e.preventDefault();
-    handleUserSend();
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && chatPanel.classList.contains('open')) {
-      toggleChat(false);
-    }
-  });
-
-  loadHistory();
 });

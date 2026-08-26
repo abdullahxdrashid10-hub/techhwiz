@@ -120,7 +120,7 @@
 <body class="min-h-screen bg-creambg font-nunito relative selection:bg-softcoral selection:text-white">
 
   <canvas id="bg-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
-  <div id="cursor-glow" class="fixed pointer-events-none z-0 w-[550px] h-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl opacity-40 transition-opacity duration-300" style="background: radial-gradient(circle, rgba(244,168,150,0.38) 0%, rgba(44,110,107,0.22) 45%, transparent 70%); left: 50%; top: 50%;"></div>
+  <div id="cursor-glow" class="fixed top-0 left-0 pointer-events-none z-0 w-[400px] h-[400px] rounded-full blur-3xl opacity-40 transition-opacity duration-300" style="background: radial-gradient(circle, rgba(244,168,150,0.38) 0%, rgba(44,110,107,0.22) 45%, transparent 70%); will-change: transform;"></div>
   <div class="dot-grid-pattern" aria-hidden="true"></div>
   <div class="blob blob-1 animate-blob-1" aria-hidden="true"></div>
   <div class="blob blob-2 animate-blob-2" aria-hidden="true"></div>
@@ -137,7 +137,7 @@
       <div class="animate-fade-up relative max-w-md sm:max-w-lg mx-auto mb-8" style="animation-delay:0.12s">
         <div class="absolute -inset-3 bg-gradient-to-r from-softcoral/40 via-sageaccent/30 to-oceanteal/40 rounded-3xl blur-xl opacity-80"></div>
         <div class="relative bg-white/95 backdrop-blur-xl rounded-3xl p-3 shadow-2xl border border-white/90 transform transition-transform duration-300 hover:scale-[1.01]">
-          <img src="assets/hero-pets.jpg" alt="FurEver Care Happy Golden Retriever and Tabby Cat" class="w-full h-auto rounded-2xl object-cover shadow-inner" />
+          <img src="assets/hero-pets.jpg" alt="FurEver Care Happy Golden Retriever and Tabby Cat" loading="lazy" decoding="async" class="w-full h-auto rounded-2xl object-cover shadow-inner" />
         </div>
 
         <div class="hero-badge animate-float-1 absolute -top-4 -left-4 sm:-left-8 bg-white/90 rounded-2xl px-3.5 py-2 flex items-center gap-2.5 z-20">
@@ -197,7 +197,7 @@
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <img src="assets/avatar-dog.jpg" alt="Pet Owner" class="w-12 h-12 rounded-full object-cover shadow-sm card-icon border-2 border-sageaccent/30" />
+            <img src="assets/avatar-dog.jpg" alt="Pet Owner" loading="lazy" decoding="async" class="w-12 h-12 rounded-full object-cover shadow-sm card-icon border-2 border-sageaccent/30" />
             <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Pet Owner</span>
             <span class="text-[11px] text-slate-400 text-center hidden sm:block">Manage your pets</span>
           </div>
@@ -215,7 +215,7 @@
             <div class="check-badge" aria-hidden="true">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 5L4 7.5L8.5 2.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <img src="assets/avatar-cat.jpg" alt="Animal Shelter" class="w-12 h-12 rounded-full object-cover shadow-sm card-icon border-2 border-softcoral/30" />
+            <img src="assets/avatar-cat.jpg" alt="Animal Shelter" loading="lazy" decoding="async" class="w-12 h-12 rounded-full object-cover shadow-sm card-icon border-2 border-softcoral/30" />
             <span class="text-xs sm:text-sm font-bold text-slate-700 text-center leading-tight">Shelter</span>
             <span class="text-[11px] text-slate-400 text-center hidden sm:block">Rescue volunteer</span>
           </div>
@@ -279,12 +279,13 @@
       </p>
 
       <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-        <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-softcoral to-oceanteal" style="width:0%;transition:width 1.8s ease-out;"></div>
+        <div id="progress-bar" class="h-full rounded-full bg-gradient-to-r from-softcoral to-oceanteal" style="width:0%;transition:width 0.4s ease-out;"></div>
       </div>
       <p class="text-xs text-slate-400 mt-2 font-medium">Loading your dashboard…</p>
+      <a id="welcome-redirect-btn" href="petowner.html" class="inline-block mt-3 text-xs font-bold text-oceanteal hover:text-softcoral underline transition-colors">Click here if not redirected automatically →</a>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
