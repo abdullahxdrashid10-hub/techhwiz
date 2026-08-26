@@ -653,6 +653,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderStories();
   renderEvents();
 
+  document.querySelectorAll('.footer-nav-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      if (tabId) {
+        switchTab(tabId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
+
+  const shelterNewsletterForm = document.getElementById('shelter-newsletter-form');
+  const shelterNewsletterSuccess = document.getElementById('shelter-newsletter-success');
+  shelterNewsletterForm?.addEventListener('submit', e => {
+    e.preventDefault();
+    if (shelterNewsletterSuccess) {
+      shelterNewsletterSuccess.classList.remove('hidden');
+      shelterNewsletterForm.reset();
+      setTimeout(() => {
+        shelterNewsletterSuccess.classList.add('hidden');
+      }, 4000);
+    }
+  });
+
   const mapFrame = document.getElementById('shelter-map-frame');
   const mapFallback = document.getElementById('map-fallback-card');
   if (mapFrame && mapFallback) {

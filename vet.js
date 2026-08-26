@@ -838,6 +838,30 @@ document.addEventListener('DOMContentLoaded', () => {
     if (visitorCount) visitorCount.textContent = count.toLocaleString();
   }
 
+  document.querySelectorAll('.footer-nav-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      if (tabId) {
+        switchTab(tabId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
+
+  const vetNewsletterForm = document.getElementById('vet-newsletter-form');
+  const vetNewsletterSuccess = document.getElementById('vet-newsletter-success');
+  vetNewsletterForm?.addEventListener('submit', e => {
+    e.preventDefault();
+    if (vetNewsletterSuccess) {
+      vetNewsletterSuccess.classList.remove('hidden');
+      vetNewsletterForm.reset();
+      showToast('💌 Subscribed to Clinical Bulletin!');
+      setTimeout(() => {
+        vetNewsletterSuccess.classList.add('hidden');
+      }, 4000);
+    }
+  });
+
   setDoctorProfile(doctorsData[0]);
   renderPersonalBookingHistory();
   initTicker();
