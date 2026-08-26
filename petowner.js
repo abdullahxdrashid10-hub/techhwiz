@@ -1522,5 +1522,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   initVisitorCounter();
   updateCartUI();
 
+  // Handle cross-page / chatbot routing via URL search parameters
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetTab = urlParams.get('tab');
+    const targetSubtab = urlParams.get('subtab');
+    const openCartParam = urlParams.get('openCart');
+
+    if (openCartParam === 'true') {
+      setTimeout(() => {
+        const cartBtn = document.getElementById('cart-btn');
+        if (cartBtn) cartBtn.click();
+      }, 350);
+    }
+
+    if (targetTab) {
+      setTimeout(() => {
+        switchTab(targetTab);
+        if (targetSubtab) {
+          setTimeout(() => {
+            const subBtn = document.querySelector(`.sub-tab[data-sub="${targetSubtab}"]`) ||
+                           document.querySelector(`.sub-nav-btn[data-sub="${targetSubtab}"]`) ||
+                           document.querySelector(`button[data-sub="${targetSubtab}"]`);
+            if (subBtn) {
+              subBtn.click();
+              subBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 200);
+        }
+      }, 150);
+    }
+  } catch (_) {}
+
 });
 

@@ -922,4 +922,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch (_) {}
 
+  // Handle cross-page / chatbot routing via URL search parameters
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetTab = urlParams.get('tab');
+    if (targetTab) {
+      setTimeout(() => {
+        switchTab(targetTab);
+      }, 150);
+    }
+  } catch (_) {}
+
 });

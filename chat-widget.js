@@ -185,21 +185,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (msg.action) {
         const actBtn = document.createElement('button');
         actBtn.type = 'button';
-        actBtn.className = 'w-full mt-2 py-2 px-3 bg-gradient-to-r from-softcoral to-oceanteal text-white text-xs font-bold rounded-xl shadow-sm hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-1.5';
+        actBtn.className = 'w-full mt-2 py-2.5 px-3 bg-gradient-to-r from-softcoral to-oceanteal text-white text-xs font-bold rounded-xl shadow-md hover:shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-1.5 cursor-pointer';
         actBtn.textContent = msg.action.text;
         actBtn.addEventListener('click', () => {
-          if (msg.action.isCart) {
-            if (typeof window.furEverOpenCart === 'function') {
-              window.furEverOpenCart();
-            } else {
-              const openCartLink = document.getElementById('view-cart-link') || document.getElementById('header-cart-btn');
-              if (openCartLink) openCartLink.click();
-            }
-            toggleChat(false);
-          } else if (msg.action.tab) {
-            switchAppTab(msg.action.tab, msg.action.subtab);
-            toggleChat(false);
-          }
+          switchAppTab(msg.action.tab, msg.action.subtab, msg.action.isCart);
         });
         bubble.appendChild(actBtn);
       }
@@ -212,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const tab = b.dataset.tab;
         if (tab) {
           switchAppTab(tab);
-          toggleChat(false);
         }
       });
     });
@@ -221,16 +209,85 @@ document.addEventListener('DOMContentLoaded', () => {
     if (animate) scrollToBottom();
   }
 
-  function switchAppTab(tabName, subtabName) {
-    const targetNav = document.querySelector(`.nav-item[data-tab="${tabName}"]`) || document.querySelector(`.footer-nav-link[data-tab="${tabName}"]`);
-    if (targetNav) {
-      targetNav.click();
+  function switchAppTab(tabName, subtabName, isCart = false) {
+    let currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    if (!currentPage || currentPage === '/') currentPage = 'index.html';
+
+    const TAB_PAGE_MAP = {
+      // Pet Owner portal tabs:
+      'about': 'petowner.html',
+      'petcare': 'petowner.html',
+      'nutrition': 'petowner.html',
+      'feeding': 'petowner.html',
+      'grooming': 'petowner.html',
+      'health': 'petowner.html',
+      'training': 'petowner.html',
+      'products': 'petowner.html',
+      'emergency': 'petowner.html',
+      'feedback': 'petowner.html',
+      'contact': 'petowner.html',
+      'vaccines': 'petowner.html',
+
+      // Shelter portal tabs:
+      'gallery': 'shelter.html',
+      'stories': 'shelter.html',
+      'events': 'shelter.html',
+
+      // Vet portal tabs:
+      'profile': 'veterinarian.html',
+      'slots': 'veterinarian.html',
+      'cases': 'veterinarian.html',
+      'join': 'veterinarian.html'
+    };
+
+    if (isCart) {
+      if (currentPage === 'petowner.html') {
+        const cartBtn = document.getElementById('cart-btn');
+        if (cartBtn) cartBtn.click();
+        toggleChat(false);
+        return;
+      } else {
+        window.location.href = 'petowner.html?openCart=true';
+        return;
+      }
     }
-    if (subtabName) {
-      setTimeout(() => {
-        const targetSub = document.querySelector(`.sub-tab[data-sub="${subtabName}"]`);
-        if (targetSub) targetSub.click();
-      }, 150);
+
+    if (tabName === 'feeding' || tabName === 'nutrition') {
+      tabName = 'petcare';
+      subtabName = 'nutrition';
+    } else if (tabName === 'grooming' || tabName === 'health' || tabName === 'training') {
+      subtabName = tabName;
+      tabName = 'petcare';
+    }
+
+    const targetPage = TAB_PAGE_MAP[tabName] || 'petowner.html';
+
+    // If already on the target page:
+    if (currentPage === targetPage || (currentPage === 'vet.html' && targetPage === 'veterinarian.html')) {
+      const targetNav = document.querySelector(`.nav-tab[data-tab="${tabName}"]`) ||
+                        document.querySelector(`button[data-tab="${tabName}"]`) ||
+                        document.querySelector(`.footer-nav-link[data-tab="${tabName}"]`);
+      if (targetNav) {
+        targetNav.click();
+      }
+      if (subtabName) {
+        setTimeout(() => {
+          const targetSub = document.querySelector(`.sub-nav-btn[data-sub="${subtabName}"]`) ||
+                            document.querySelector(`.sub-tab[data-sub="${subtabName}"]`) ||
+                            document.querySelector(`button[data-sub="${subtabName}"]`) ||
+                            document.querySelector(`[data-subtab="${subtabName}"]`);
+          if (targetSub) {
+            targetSub.click();
+            targetSub.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 150);
+      }
+      toggleChat(false);
+    } else {
+      // Cross-page redirect with parameters
+      let url = `${targetPage}?tab=${encodeURIComponent(tabName)}`;
+      if (subtabName) url += `&subtab=${encodeURIComponent(subtabName)}`;
+      window.location.href = url;
     }
   }
 

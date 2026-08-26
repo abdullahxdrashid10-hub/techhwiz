@@ -167,13 +167,19 @@ function classifyIntent(rawText) {
   }
 
   if (text.includes('vaccin') || text.includes('shot') || text.includes('immuniz')) {
-    return { intent: 'navigation-help', target: 'vaccines', label: 'Vaccination Records' };
+    return { intent: 'navigation-help', target: 'petcare', label: 'Vaccination & Health Center' };
   }
   if (text.includes('cart') || text.includes('checkout') || text.includes('basket')) {
     return { intent: 'navigation-help', target: 'cart', label: 'Shopping Cart' };
   }
-  if (text.includes('emergency') || text.includes('vet number') || text.includes('hospital') || text.includes('doctor')) {
-    return { intent: 'navigation-help', target: 'emergency', label: 'Emergency Directory' };
+  if (text.includes('adopt') || text.includes('shelter') || text.includes('rescue') || text.includes('foster')) {
+    return { intent: 'navigation-help', target: 'gallery', label: 'Pet Adoption Gallery' };
+  }
+  if (text.includes('consultation') || text.includes('appointment') || text.includes('book vet') || text.includes('time slot') || text.includes('opd')) {
+    return { intent: 'navigation-help', target: 'slots', label: 'Doctor Consultation Booking' };
+  }
+  if (text.includes('emergency') || text.includes('poison') || text.includes('hotline') || text.includes('vet number') || text.includes('hospital')) {
+    return { intent: 'navigation-help', target: 'emergency', label: '24/7 Emergency Directory' };
   }
   if (text.includes('add pet') || text.includes('new pet') || text.includes('switch pet') || text.includes('profile')) {
     return { intent: 'navigation-help', target: 'petcare', label: 'Pet Profile Center' };
@@ -298,7 +304,7 @@ function buildLocalResponse(classified, rawText) {
       }
       return {
         text: answer,
-        action: { text: `📘 View Complete ${classified.topic.toUpperCase()} Guide`, tab: 'petcare', subtab: classified.topic },
+        action: { text: `📘 View Complete ${classified.topic.toUpperCase()} Guide`, tab: 'petcare', subtab: classified.topic === 'feeding' ? 'nutrition' : classified.topic },
         chips: ['Feeding Schedule', 'Grooming Tips', 'Health Advice', 'Training Guide']
       };
     }
