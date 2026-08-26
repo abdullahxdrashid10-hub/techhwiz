@@ -1,13 +1,17 @@
 /**
  * FurEver Care — Animal Shelter & Adoption Portal Controller
  */
+const DATA_CACHE = new Map();
 async function loadData(path, fallbackData) {
+  if (DATA_CACHE.has(path)) return DATA_CACHE.get(path);
   try {
     const res = await fetch(path);
     if (!res.ok) throw new Error('fetch failed');
-    return await res.json();
+    const data = await res.json();
+    DATA_CACHE.set(path, data);
+    return data;
   } catch (err) {
-    console.warn(`Could not fetch ${path}, using embedded fallback data (likely running via file:// protocol).`);
+    DATA_CACHE.set(path, fallbackData);
     return fallbackData;
   }
 }
@@ -470,7 +474,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="pet-card tilt-card animate-card-in bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-lg transition-all flex flex-col justify-between group" style="animation-delay: ${index * 0.04}s;">
           <div>
             <div class="h-48 w-full relative overflow-hidden bg-slate-100">
-              <img src="${pet.img}" alt="${pet.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              <img src="${pet.img}" alt="${pet.name}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               <span class="absolute top-3 left-3 bg-white/95 text-oceanteal text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-sm">
                 ${pet.badge}
               </span>
@@ -531,7 +535,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div class="story-card-reveal bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm flex flex-col justify-between">
         <div>
           <div class="h-44 w-full relative overflow-hidden bg-slate-100">
-            <img src="${story.img}" alt="${story.petName}" class="w-full h-full object-cover" />
+            <img src="${story.img}" alt="${story.petName}" loading="lazy" decoding="async" class="w-full h-full object-cover" />
             <span class="absolute bottom-3 left-3 bg-white/95 text-slate-700 text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-sm">
               Adopted: ${story.date}
             </span>
@@ -548,6 +552,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     observeStoryCards();
   }
 
+  let storyObserver = null;
   function observeStoryCards() {
     const cards = document.querySelectorAll('.story-card-reveal');
     if (!cards.length) return;
@@ -557,16 +562,18 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    const observer = new IntersectionObserver((entries, obs) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
+    if (!storyObserver) {
+      storyObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+    }
 
-    cards.forEach(c => observer.observe(c));
+    cards.forEach(c => storyObserver.observe(c));
   }
 
   function parseEventDate(dateStr) {

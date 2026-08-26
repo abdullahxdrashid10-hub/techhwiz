@@ -197,27 +197,20 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch (_) {}
 
   const cursorGlow = document.getElementById('cursor-glow');
-  let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, targetX: window.innerWidth / 2, targetY: window.innerHeight / 2 };
-  let lastGlowX = -999;
-  let lastGlowY = -999;
+  let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  let glowRaf = null;
 
   window.addEventListener('mousemove', e => {
-    mouse.targetX = e.clientX;
-    mouse.targetY = e.clientY;
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    if (glowRaf) return;
+    glowRaf = requestAnimationFrame(() => {
+      glowRaf = null;
+      if (cursorGlow) {
+        cursorGlow.style.transform = `translate3d(${mouse.x - 200}px, ${mouse.y - 200}px, 0)`;
+      }
+    });
   });
-
-  function updateCursorGlow() {
-    mouse.x += (mouse.targetX - mouse.x) * 0.08;
-    mouse.y += (mouse.targetY - mouse.y) * 0.08;
-    if (cursorGlow && (Math.abs(mouse.x - lastGlowX) > 0.05 || Math.abs(mouse.y - lastGlowY) > 0.05)) {
-      lastGlowX = mouse.x;
-      lastGlowY = mouse.y;
-      cursorGlow.style.left = `${mouse.x.toFixed(1)}px`;
-      cursorGlow.style.top = `${mouse.y.toFixed(1)}px`;
-    }
-    requestAnimationFrame(updateCursorGlow);
-  }
-  requestAnimationFrame(updateCursorGlow);
 
   const canvas = document.getElementById('bg-canvas');
   if (canvas) {
