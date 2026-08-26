@@ -461,27 +461,34 @@ document.addEventListener('DOMContentLoaded', async () => {
       }`;
     }
 
-    document.getElementById('profile-name').textContent = pet.name;
-    document.getElementById('profile-sub').textContent = `${pet.breed} · ${ageStr} old`;
-    document.getElementById('profile-species').textContent = pet.species;
-    document.getElementById('profile-breed').textContent = pet.breed;
-    document.getElementById('profile-age').textContent = ageStr;
+    const profName = document.getElementById('profile-name');
+    if (profName) profName.textContent = pet.name;
+    const profSub = document.getElementById('profile-sub');
+    if (profSub) profSub.textContent = `${pet.breed} · ${ageStr} old`;
+    const profSpecies = document.getElementById('profile-species');
+    if (profSpecies) profSpecies.textContent = pet.species;
+    const profBreed = document.getElementById('profile-breed');
+    if (profBreed) profBreed.textContent = pet.breed;
+    const profAge = document.getElementById('profile-age');
+    if (profAge) profAge.textContent = ageStr;
 
     const feedbackPetName = document.getElementById('feedback-pet-name');
     if (feedbackPetName) feedbackPetName.textContent = pet.name || 'your companion';
 
-    renderPetSwitcher();
-    renderVaccineRecords(pet);
-    initTicker();
-    renderProducts();
+    try { renderPetSwitcher(); } catch (_) {}
+    try { renderVaccineRecords(pet); } catch (_) {}
+    try { initTicker(); } catch (_) {}
+    try { renderProducts(); } catch (_) {}
 
     requestAnimationFrame(() => {
-      const activeNav = desktopNav.querySelector('.nav-tab.active');
-      if (activeNav) updateNavPill(activeNav);
-      const activeSub = document.querySelector('.sub-tab.active');
-      if (activeSub) updateSubNavPill(activeSub);
-      initTilt();
-      initMagnetic();
+      try {
+        const activeNav = desktopNav?.querySelector('.nav-tab.active');
+        if (activeNav) updateNavPill(activeNav);
+        const activeSub = document.querySelector('.sub-tab.active');
+        if (activeSub) updateSubNavPill(activeSub);
+        initTilt();
+        initMagnetic();
+      } catch (_) {}
     });
   }
 
@@ -492,7 +499,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     dashboard.classList.add('hidden');
   }
 
-  petForm.addEventListener('submit', e => {
+  petForm?.addEventListener('submit', e => {
     e.preventDefault();
     const submitBtn = document.getElementById('pet-form-btn');
     if (submitBtn) {
@@ -522,6 +529,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     activePetIndex = 0;
     savePets();
     showDashboard(initialPet);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   });
 
   /* -------------------------------------------------------------
