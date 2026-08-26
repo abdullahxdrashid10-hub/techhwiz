@@ -124,23 +124,30 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSpinner.classList.add('flex');
     ctaBtn.disabled = true;
 
-    localStorage.setItem('fureverUser', JSON.stringify({ name: state.name, category: state.category }));
+    try {
+      localStorage.setItem('fureverUser', JSON.stringify({ name: state.name, category: state.category }));
+    } catch (_) {}
+
+    const pages = { 'Pet Owner': 'petowner.html', 'Veterinarian': 'vet.html', 'Animal Shelter': 'shelter.html' };
+    const targetPage = pages[state.category] || 'petowner.html';
+
+    const redirectBtn = document.getElementById('welcome-redirect-btn');
+    if (redirectBtn) redirectBtn.href = targetPage;
+
+    if (landingScreen) {
+      landingScreen.classList.add('animate-page-out');
+      landingScreen.style.display = 'none';
+    }
+
+    if (welcomeName) welcomeName.textContent = state.name;
+    if (welcomeIcon) welcomeIcon.textContent = categoryIcons[state.category] ?? '🐾';
+    if (welcomeCategory) welcomeCategory.textContent = state.category;
+    if (welcomeScreen) welcomeScreen.classList.add('visible');
+    if (progressBar) progressBar.style.width = '100%';
 
     setTimeout(() => {
-      landingScreen.classList.add('animate-page-out');
-      setTimeout(() => {
-        landingScreen.style.display = 'none';
-        welcomeName.textContent     = state.name;
-        welcomeIcon.textContent     = categoryIcons[state.category] ?? '🐾';
-        welcomeCategory.textContent = state.category;
-        welcomeScreen.classList.add('visible');
-        requestAnimationFrame(() => {
-          setTimeout(() => { progressBar.style.width = '100%'; }, 80);
-          const pages = { 'Pet Owner': 'petowner.html', 'Veterinarian': 'vet.html', 'Animal Shelter': 'shelter.html' };
-          setTimeout(() => { window.location.href = pages[state.category] ?? 'index.html'; }, 2200);
-        });
-      }, 500);
-    }, 900);
+      window.location.assign(targetPage);
+    }, 450);
   });
 
   const canHover = window.matchMedia('(hover: hover)').matches;
