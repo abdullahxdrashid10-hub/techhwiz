@@ -393,21 +393,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     switchTab('contact');
   });
 
+  function debounce(fn, ms = 250) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => fn.apply(this, args), ms);
+    };
+  }
+
   function initTilt() {
     const canHover = window.matchMedia('(hover: hover)').matches;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!canHover || reducedMotion) return;
 
     document.querySelectorAll('.pet-card').forEach(card => {
+      if (card.dataset.tiltInit) return;
+      card.dataset.tiltInit = 'true';
+
+      let rAF = null;
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -5;
-        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 5;
-        card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
+        if (rAF) cancelAnimationFrame(rAF);
+        rAF = requestAnimationFrame(() => {
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -5;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 5;
+          card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
+        });
       });
       card.addEventListener('mouseleave', () => {
+        if (rAF) cancelAnimationFrame(rAF);
         card.style.transform = '';
       });
     });
@@ -619,10 +635,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   if (petSearch) {
-    petSearch.addEventListener('input', e => {
+    petSearch.addEventListener('input', debounce(e => {
       searchQuery = e.target.value.trim().toLowerCase();
       renderPets();
-    });
+    }, 250));
   }
 
   updateFavoritesBadge();

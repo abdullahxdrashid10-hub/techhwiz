@@ -105,18 +105,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => ripple.remove(), 600);
   }
 
+  function debounce(fn, ms = 250) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn.apply(this, args), ms);
+    };
+  }
+
   function initTilt() {
     if (!window.matchMedia('(hover: hover)').matches) return;
     document.querySelectorAll('.product-card, .tilt-card, .vid-card').forEach(card => {
+      if (card.dataset.tiltInit) return;
+      card.dataset.tiltInit = 'true';
+
+      let rAF = null;
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
-        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-        card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        if (rAF) cancelAnimationFrame(rAF);
+        rAF = requestAnimationFrame(() => {
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
       });
       card.addEventListener('mouseleave', () => {
+        if (rAF) cancelAnimationFrame(rAF);
         card.style.transform = '';
       });
     });
@@ -125,14 +141,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   function initMagnetic() {
     if (!window.matchMedia('(hover: hover)').matches) return;
     document.querySelectorAll('.buy-btn, #pet-form-btn, #feedback-form button').forEach(btn => {
+      if (btn.dataset.magneticInit) return;
+      btn.dataset.magneticInit = 'true';
       btn.classList.add('btn-magnetic');
+
+      let rAF = null;
       btn.addEventListener('mousemove', e => {
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+        if (rAF) cancelAnimationFrame(rAF);
+        rAF = requestAnimationFrame(() => {
+          btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+        });
       });
       btn.addEventListener('mouseleave', () => {
+        if (rAF) cancelAnimationFrame(rAF);
         btn.style.transform = '';
       });
     });
@@ -294,17 +318,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  const vaccineRecordsList = document.getElementById('vaccine-records-list');
+  vaccineRecordsList?.addEventListener('click', e => {
+    const toggleBtn = e.target.closest('.toggle-vaccine-status');
+    const deleteBtn = e.target.closest('.delete-vaccine-btn');
+    const current = getActivePet();
+    if (!current) return;
+
+    if (toggleBtn) {
+      const idx = parseInt(toggleBtn.dataset.index, 10);
+      const v = current.vaccines[idx];
+      if (v) {
+        const rect = toggleBtn.getBoundingClientRect();
+        spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+        if (v.status === 'Completed') v.status = 'Due Soon';
+        else if (v.status === 'Due Soon') v.status = 'Scheduled';
+        else v.status = 'Completed';
+        savePets();
+        renderVaccineRecords(current);
+        showToast(`💉 Updated <b>${v.name}</b> status to <b>${v.status}</b>`);
+      }
+    } else if (deleteBtn) {
+      const idx = parseInt(deleteBtn.dataset.index, 10);
+      current.vaccines.splice(idx, 1);
+      savePets();
+      renderVaccineRecords(current);
+      showToast(`🗑️ Removed vaccine record`);
+    }
+  });
+
   function renderVaccineRecords(pet) {
     ensurePetVaccines(pet);
-    const list = document.getElementById('vaccine-records-list');
     const badge = document.getElementById('vaccine-count-badge');
-    if (!list) return;
+    if (!vaccineRecordsList) return;
 
     if (badge) badge.textContent = `${pet.vaccines.length} Logged`;
-    list.innerHTML = '';
 
     if (pet.vaccines.length === 0) {
-      list.innerHTML = `
+      vaccineRecordsList.innerHTML = `
         <div class="text-center py-6 bg-white/60 rounded-xl border border-dashed border-slate-200">
           <p class="text-xs text-slate-400 font-medium">No vaccination records logged yet.</p>
           <button onclick="window.furEverOpenVaccineModal()" class="mt-2 text-xs font-bold text-oceanteal hover:underline">+ Log your pet's first vaccine</button>
@@ -313,10 +364,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
 
-    pet.vaccines.forEach((v, vIdx) => {
-      const row = document.createElement('div');
-      row.className = 'flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-white/85 hover:bg-white border border-slate-100 hover:border-slate-200 shadow-sm transition-all group';
-
+    vaccineRecordsList.innerHTML = pet.vaccines.map((v, vIdx) => {
       let statusStyle = 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100';
       let statusIcon = '✓';
       if (v.status === 'Due Soon') {
@@ -327,46 +375,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         statusIcon = '📅';
       }
 
-      row.innerHTML = `
-        <div class="flex items-center gap-2.5 min-w-0">
-          <span class="w-7 h-7 rounded-lg bg-sageaccent/15 text-oceanteal flex items-center justify-center text-xs shrink-0">💉</span>
-          <div class="min-w-0">
-            <p class="font-bold text-slate-800 truncate">${v.name}</p>
-            <p class="text-[11px] text-slate-400 truncate">${v.date} ${v.clinic ? `· ${v.clinic}` : ''}</p>
+      return `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 rounded-xl bg-white/85 hover:bg-white border border-slate-100 hover:border-slate-200 shadow-sm transition-all group">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="w-7 h-7 rounded-lg bg-sageaccent/15 text-oceanteal flex items-center justify-center text-xs shrink-0">💉</span>
+            <div class="min-w-0">
+              <p class="font-bold text-slate-800 truncate">${v.name}</p>
+              <p class="text-[11px] text-slate-400 truncate">${v.date} ${v.clinic ? `· ${v.clinic}` : ''}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+            <button class="toggle-vaccine-status px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1 ${statusStyle}" data-index="${vIdx}" title="Click to cycle status (Completed → Due Soon → Scheduled)">
+              <span>${statusIcon}</span>
+              <span>${v.status}</span>
+            </button>
+            <button class="delete-vaccine-btn text-slate-300 hover:text-red-500 text-xs p-1 transition-colors" data-index="${vIdx}" title="Remove record">✕</button>
           </div>
         </div>
-        <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
-          <button class="toggle-vaccine-status px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors flex items-center gap-1 ${statusStyle}" data-index="${vIdx}" title="Click to cycle status (Completed → Due Soon → Scheduled)">
-            <span>${statusIcon}</span>
-            <span>${v.status}</span>
-          </button>
-          <button class="delete-vaccine-btn text-slate-300 hover:text-red-500 text-xs p-1 transition-colors" data-index="${vIdx}" title="Remove record">✕</button>
-        </div>
       `;
-
-      row.querySelector('.toggle-vaccine-status').addEventListener('click', e => {
-        const btn = e.currentTarget;
-        const rect = btn.getBoundingClientRect();
-        spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
-
-        if (v.status === 'Completed') v.status = 'Due Soon';
-        else if (v.status === 'Due Soon') v.status = 'Scheduled';
-        else v.status = 'Completed';
-
-        savePets();
-        renderVaccineRecords(pet);
-        showToast(`💉 Updated <b>${v.name}</b> status to <b>${v.status}</b>`);
-      });
-
-      row.querySelector('.delete-vaccine-btn').addEventListener('click', () => {
-        pet.vaccines.splice(vIdx, 1);
-        savePets();
-        renderVaccineRecords(pet);
-        showToast(`🗑️ Removed vaccine record`);
-      });
-
-      list.appendChild(row);
-    });
+    }).join('');
   }
 
   function showDashboard(pet) {
@@ -421,7 +448,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderVaccineRecords(pet);
     initTicker();
     renderProducts();
-    initVisitorCounter();
 
     requestAnimationFrame(() => {
       const activeNav = desktopNav.querySelector('.nav-tab.active');
@@ -640,6 +666,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         requestAnimationFrame(() => updateSubNavPill(activeSub));
         setTimeout(() => updateSubNavPill(activeSub), 60);
       }
+    } else {
+      stopCurrentAudio();
     }
 
     mobileMenu.classList.remove('open');
@@ -1271,14 +1299,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       return matchCat && matchSearch;
     });
 
-    productGrid.innerHTML = '';
     noProducts.classList.toggle('hidden', filtered.length > 0);
 
-    filtered.forEach((p, i) => {
-      const card = document.createElement('div');
-      card.className = 'product-card tilt-card animate-card-in flex flex-col justify-between';
-      card.style.animationDelay = `${i * 0.05}s`;
-      card.innerHTML = `
+    productGrid.innerHTML = filtered.map((p, i) => `
+      <div class="product-card tilt-card animate-card-in flex flex-col justify-between" style="animation-delay: ${i * 0.05}s">
         <div>
           <div class="h-44 bg-creambg/40 overflow-hidden relative group">
             <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -1298,15 +1322,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             <span>Add to Cart</span>
             <span>🛒</span>
           </button>
-        </div>`;
-      productGrid.appendChild(card);
-    });
+        </div>
+      </div>
+    `).join('');
 
     initTilt();
     initMagnetic();
   }
 
-  productSearch?.addEventListener('input', renderProducts);
+  productSearch?.addEventListener('input', debounce(renderProducts, 250));
 
   catFilters?.addEventListener('click', e => {
     const btn = e.target.closest('[data-cat]');
@@ -1359,7 +1383,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 300); }, 3200);
   }
 
+  let tickerTimer = null;
   function initTicker() {
+    if (tickerTimer) clearInterval(tickerTimer);
     let locationText = '📍 Detecting location…';
     const announcements = [
       '🐾 New grooming products just arrived!',
@@ -1376,7 +1402,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     buildTicker();
-    setInterval(buildTicker, 1000);
+    tickerTimer = setInterval(buildTicker, 1000);
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -1439,6 +1465,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   let targetMouseY = window.innerHeight / 2;
   let currentMouseX = targetMouseX;
   let currentMouseY = targetMouseY;
+  let lastDrawnX = -999;
+  let lastDrawnY = -999;
   let isMoving = false;
 
   window.addEventListener('pointermove', e => {
@@ -1459,25 +1487,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentMouseX += (targetMouseX - currentMouseX) * 0.1;
     currentMouseY += (targetMouseY - currentMouseY) * 0.1;
 
-    if (cursorGlow) {
-      cursorGlow.style.left = `${currentMouseX}px`;
-      cursorGlow.style.top = `${currentMouseY}px`;
+    const dx = Math.abs(currentMouseX - lastDrawnX);
+    const dy = Math.abs(currentMouseY - lastDrawnY);
+
+    if (dx > 0.05 || dy > 0.05) {
+      lastDrawnX = currentMouseX;
+      lastDrawnY = currentMouseY;
+
+      if (cursorGlow) {
+        cursorGlow.style.left = `${currentMouseX.toFixed(1)}px`;
+        cursorGlow.style.top = `${currentMouseY.toFixed(1)}px`;
+      }
+
+      const offsetX = (currentMouseX - window.innerWidth / 2);
+      const offsetY = (currentMouseY - window.innerHeight / 2);
+
+      parallaxElements.forEach(el => {
+        const speed = parseFloat(el.dataset.speed || '0.04');
+        const x = offsetX * speed;
+        const y = offsetY * speed;
+        el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+      });
     }
-
-    const offsetX = (currentMouseX - window.innerWidth / 2);
-    const offsetY = (currentMouseY - window.innerHeight / 2);
-
-    parallaxElements.forEach(el => {
-      const speed = parseFloat(el.dataset.speed || '0.04');
-      const x = offsetX * speed;
-      const y = offsetY * speed;
-      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-    });
 
     requestAnimationFrame(renderInteractiveBg);
   }
   requestAnimationFrame(renderInteractiveBg);
 
+  initVisitorCounter();
   updateCartUI();
 
 });
