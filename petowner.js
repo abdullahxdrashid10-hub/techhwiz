@@ -65,8 +65,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const fbSuccess      = document.getElementById('fb-success');
   const tickerTrack    = document.getElementById('ticker-track');
   const visitorCount   = document.getElementById('visitor-count');
-
   let activeCat = 'All';
+  let tickerTimer = null;
+  let currentActiveAudio = null;
+  let cart = [];
+  try {
+    const savedCart = localStorage.getItem('fureverCart');
+    if (savedCart) cart = JSON.parse(savedCart);
+  } catch (_) { cart = []; }
+  let appliedDiscount = 0;
+  let tipIndex = 0;
+  let targetMouseX = window.innerWidth / 2;
+  let targetMouseY = window.innerHeight / 2;
+  let currentMouseX = targetMouseX;
+  let currentMouseY = targetMouseY;
+  let lastDrawnX = -999;
+  let lastDrawnY = -999;
+  let isMoving = false;
 
   function spawnParticles(x, y) {
     const symbols = ['🐾', '✨', '💛', '🌸'];
@@ -768,7 +783,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     "Mental stimulation through puzzle toys reduces anxious behavior and boosts canine cognitive health.",
     "Consistent daily walking routines help maintain joint flexibility and prevent pet obesity."
   ];
-  let tipIndex = 0;
   const refreshTipBtn = document.getElementById('refresh-tip-btn');
   const dailyTipText = document.getElementById('daily-tip-text');
 
@@ -784,14 +798,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       }, 150);
     }
   });
-
-  let cart = [];
-  try {
-    const savedCart = localStorage.getItem('fureverCart');
-    if (savedCart) cart = JSON.parse(savedCart);
-  } catch (_) { cart = []; }
-
-  let appliedDiscount = 0;
 
   const cartOverlay        = document.getElementById('cart-overlay');
   const cartDrawer         = document.getElementById('cart-drawer');
@@ -914,7 +920,6 @@ document.addEventListener('DOMContentLoaded', async () => {
      🎧 INTERACTIVE PET CARE & TRAINING AUDIO PLAYERS
   ------------------------------------------------------------- */
   const audioCards = document.querySelectorAll('.audio-card-container');
-  let currentActiveAudio = null;
 
   function formatAudioTime(seconds) {
     const mins = Math.floor(seconds / 60);
@@ -1423,7 +1428,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => { el.classList.add('leaving'); setTimeout(() => el.remove(), 300); }, 3200);
   }
 
-  let tickerTimer = null;
   function initTicker() {
     if (tickerTimer) clearInterval(tickerTimer);
     let locationText = '📍 Detecting location…';
@@ -1501,13 +1505,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   ------------------------------------------------------------- */
   const cursorGlow = document.getElementById('interactive-cursor-glow');
   const parallaxElements = document.querySelectorAll('.parallax-element');
-  let targetMouseX = window.innerWidth / 2;
-  let targetMouseY = window.innerHeight / 2;
-  let currentMouseX = targetMouseX;
-  let currentMouseY = targetMouseY;
-  let lastDrawnX = -999;
-  let lastDrawnY = -999;
-  let isMoving = false;
 
   window.addEventListener('pointermove', e => {
     targetMouseX = e.clientX;
