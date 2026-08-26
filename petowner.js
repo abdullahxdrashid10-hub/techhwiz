@@ -712,18 +712,22 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   function switchTab(tabId) {
+    if (!tabId) return;
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('tab-' + tabId)?.classList.add('active');
+    const targetPanel = document.getElementById('tab-' + tabId);
+    if (targetPanel) {
+      targetPanel.classList.add('active');
+    }
 
     document.querySelectorAll('.nav-tab').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tab === tabId);
     });
 
-    const activeDesktopBtn = desktopNav.querySelector(`[data-tab="${tabId}"]`);
+    const activeDesktopBtn = desktopNav?.querySelector(`[data-tab="${tabId}"]`);
     if (activeDesktopBtn) updateNavPill(activeDesktopBtn);
 
     if (tabId === 'petcare') {
-      const activeSub = document.querySelector('#petcare-sub-nav .sub-tab.active');
+      const activeSub = document.querySelector('#petcare-sub-nav .sub-tab.active') || document.querySelector('.sub-tab');
       if (activeSub) {
         requestAnimationFrame(() => updateSubNavPill(activeSub));
         setTimeout(() => updateSubNavPill(activeSub), 60);
@@ -732,8 +736,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       stopCurrentAudio();
     }
 
-    mobileMenu.classList.remove('open');
-    hamburgerIcon.style.transform = '';
+    if (mobileMenu) mobileMenu.classList.remove('open');
+    if (hamburgerIcon) hamburgerIcon.style.transform = '';
 
     requestAnimationFrame(() => {
       initTilt();
@@ -741,14 +745,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  desktopNav.addEventListener('click', e => {
-    const tab = e.target.closest('[data-tab]');
-    if (tab) switchTab(tab.dataset.tab);
+  document.querySelectorAll('.nav-tab').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const tabId = btn.dataset.tab;
+      if (tabId) switchTab(tabId);
+    });
   });
 
-  mobileMenu.addEventListener('click', e => {
+  desktopNav?.addEventListener('click', e => {
     const tab = e.target.closest('[data-tab]');
-    if (tab) switchTab(tab.dataset.tab);
+    if (tab && tab.dataset.tab) switchTab(tab.dataset.tab);
+  });
+
+  mobileMenu?.addEventListener('click', e => {
+    const tab = e.target.closest('[data-tab]');
+    if (tab && tab.dataset.tab) switchTab(tab.dataset.tab);
+  });
+
+  document.querySelectorAll('.nav-redirect-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.targetTab;
+      if (target) switchTab(target);
+    });
   });
 
   document.querySelectorAll('.footer-nav-link').forEach(btn => {

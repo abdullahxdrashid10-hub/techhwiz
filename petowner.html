@@ -62,16 +62,16 @@
     .animate-card-in{animation:cardIn 0.45s cubic-bezier(0.22,1,0.36,1) both}
 
     .nav-pill-track { position:relative; background:#f1f5f9; padding:0.25rem; border-radius:9999px; display:flex; align-items:center; }
-    #nav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:var(--oceanteal); transition:transform 0.32s cubic-bezier(0.22,1,0.36,1), width 0.32s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; }
-    .nav-tab { position:relative; z-index:10; padding:0.45rem 1.1rem; border-radius:9999px; font-weight:700; font-size:0.85rem; transition:color 0.25s; color:#64748b; background:transparent; border:none; outline:none; }
+    #nav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:#2C6E6B !important; box-shadow:0 2px 8px rgba(44,110,107,0.28); transition:transform 0.32s cubic-bezier(0.22,1,0.36,1), width 0.32s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; }
+    .nav-tab { position:relative; z-index:10; padding:0.45rem 1.1rem; border-radius:9999px; font-weight:700; font-size:0.85rem; transition:color 0.25s; color:#64748b; background:transparent; border:none; outline:none; cursor:pointer; }
     .nav-tab:hover { color:var(--oceanteal); }
-    .nav-tab.active { color:#fff; }
+    .nav-tab.active { color:#fff !important; font-weight:800; }
 
     .sub-pill-track { position:relative; background:#f1f5f9; padding:0.25rem; border-radius:9999px; border:1.5px solid #e2e8f0; display:inline-flex; align-items:center; }
     #subnav-pill { position:absolute; top:0.25rem; bottom:0.25rem; border-radius:9999px; background:var(--softcoral); transition:transform 0.28s cubic-bezier(0.22,1,0.36,1), width 0.28s cubic-bezier(0.22,1,0.36,1); pointer-events:none; z-index:0; box-shadow:0 2px 8px rgba(244,168,150,0.35); }
     .sub-tab { position:relative; z-index:10; padding:0.4rem 1.05rem; border-radius:9999px; font-weight:700; font-size:0.82rem; transition:color 0.22s; color:#64748b; background:transparent; border:none; outline:none; cursor:pointer; }
     .sub-tab:hover { color:var(--softcoral); }
-    .sub-tab.active { color:#fff; }
+    .sub-tab.active { color:#fff !important; font-weight:800; }
 
     .tab-panel { display:none; opacity:0; transform:translateY(12px); transition:opacity 0.35s ease, transform 0.35s ease; }
     .tab-panel.active { display:block; opacity:1; transform:translateY(0); animation:tabFadeIn 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
