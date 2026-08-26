@@ -1,3 +1,6 @@
+/**
+ * FurEver Care — Role Selection & Onboarding Controller
+ */
 document.addEventListener('DOMContentLoaded', () => {
 
   const nameInput       = document.getElementById('user-name-input');

@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "petName": "Bella the Retriever",
+    "adopter": "The Miller Family",
+    "date": "March 2026",
+    "img": "assets/story_bella.jpg",
+    "story": "Bella was brought in scared after being found lost during a storm. After two weeks of medical care and socialization, she was adopted by the Millers and is now their devoted trail hiking companion."
+  },
+  {
+    "id": 2,
+    "petName": "Milo the Cat",
+    "adopter": "Eleanor Vance",
+    "date": "January 2026",
+    "img": "assets/story_milo.jpg",
+    "story": "Milo spent three months rehabilitating from an injured leg at our shelter clinic. Today, he lives peacefully in a sunlit apartment, spending his days purring beside Eleanor while she reads."
+  },
+  {
+    "id": 3,
+    "petName": "Daisy the Bunny",
+    "adopter": "Sarah & Liam",
+    "date": "April 2026",
+    "img": "assets/story_daisy.jpg",
+    "story": "Rescued from an overcrowded pen, Daisy found her dream home with experienced rabbit caregivers. She has her own free-roam play area and enjoys organic apple treats daily."
+  },
+  {
+    "id": 4,
+    "petName": "Rocky the Shepherd Mix",
+    "adopter": "Kevin Zhang",
+    "date": "May 2026",
+    "img": "assets/training-coach.jpg",
+    "story": "Rocky had severe kennel anxiety when he first arrived. Thanks to dedicated foster rehabilitation, he gained confidence and is now Kevin’s certified emotional support dog."
+  },
+  {
+    "id": 5,
+    "petName": "Simba & Nala (Bonded Pair)",
+    "adopter": "The Davis Family",
+    "date": "February 2026",
+    "img": "assets/avatar-cat.jpg",
+    "story": "These inseparable sibling cats were adopted together into a spacious home. They love racing up cat towers and curling into a single purring bundle during evenings."
+  }
+]

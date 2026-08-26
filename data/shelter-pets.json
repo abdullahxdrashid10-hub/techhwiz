@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Barnaby",
+    "species": "Dog",
+    "breed": "Golden Retriever Mix",
+    "age": "2 Years",
+    "img": "assets/pet_barnaby.jpg",
+    "badge": "Gentle & Social",
+    "desc": "A cheerful and affectionate companion who loves chasing tennis balls and offering warm paw shakes. He is fully leash trained, gentle with children, and gets along well with other pets."
+  },
+  {
+    "id": 2,
+    "name": "Mochi",
+    "species": "Cat",
+    "breed": "Calico Shorthair",
+    "age": "8 Months",
+    "img": "assets/pet_mochi.jpg",
+    "badge": "Playful Kitten",
+    "desc": "An inquisitive little kitten with striking tricolor markings. Mochi loves batting at feather wands and curling up for cozy afternoon naps on warm laps."
+  },
+  {
+    "id": 3,
+    "name": "Luna",
+    "species": "Dog",
+    "breed": "Border Collie",
+    "age": "1.5 Years",
+    "img": "assets/pet_luna.jpg",
+    "badge": "Active & Clever",
+    "desc": "Smart, athletic, and eager to learn new agility tricks. Luna thrives in active outdoor households that enjoy hiking and interactive problem-solving toys."
+  },
+  {
+    "id": 4,
+    "name": "Oliver",
+    "species": "Cat",
+    "breed": "Domestic Tabby",
+    "age": "3 Years",
+    "img": "assets/pet_oliver.jpg",
+    "badge": "Calm & Affectionate",
+    "desc": "A quiet, observant cat who enjoys watching birds from high window perches. He enjoys chin scratches and makes a low-stress, soothing household companion."
+  },
+  {
+    "id": 5,
+    "name": "Thumper",
+    "species": "Rabbit",
+    "breed": "Holland Lop",
+    "age": "1 Year",
+    "img": "assets/pet_thumper.jpg",
+    "badge": "Litter-Box Trained",
+    "desc": "A sweet floppy-eared rabbit with a curious personality. Thumper loves fresh organic romaine lettuce, timothy hay, and doing joyful binkies around carpeted playpens."
+  },
+  {
+    "id": 6,
+    "name": "Buster",
+    "species": "Dog",
+    "breed": "Beagle",
+    "age": "4 Years",
+    "img": "assets/pet_buster.jpg",
+    "badge": "Friendly & Food-Motivated",
+    "desc": "A soulful hound with gentle eyes and a friendly demeanor. Buster enjoys leisurely neighborhood scent walks followed by long naps on orthopedic dog beds."
+  },
+  {
+    "id": 7,
+    "name": "Cocoa",
+    "species": "Rabbit",
+    "breed": "Mini Rex",
+    "age": "2 Years",
+    "img": "assets/pet_cocoa.jpg",
+    "badge": "Velvety Soft",
+    "desc": "Incredibly soft and well-behaved rabbit with a quiet temperament. Cocoa is comfortable with gentle handling and enjoys exploring bunny-safe play tunnels."
+  },
+  {
+    "id": 8,
+    "name": "Cleo",
+    "species": "Cat",
+    "breed": "Russian Blue Mix",
+    "age": "2 Years",
+    "img": "assets/pet_cleo.jpg",
+    "badge": "Quiet Companion",
+    "desc": "Elegant and graceful feline who prefers calm environments. Once she bonds with her guardian, she is devoted, talkative, and extremely affectionate."
+  },
+  {
+    "id": 9,
+    "name": "Sunny",
+    "species": "Other",
+    "breed": "Cockatiel",
+    "age": "2 Years",
+    "img": "assets/pet_sunny.jpg",
+    "badge": "Musical & Friendly",
+    "desc": "A bright cockatiel who whistles cheerful melodies and enjoys shoulder perching. Sunny is hand-tamed and loves nibbling fresh millet sprays."
+  },
+  {
+    "id": 10,
+    "name": "Pip & Peanut",
+    "species": "Other",
+    "breed": "Bonded Guinea Pigs",
+    "age": "1 Year",
+    "img": "assets/pet_pip_peanut.jpg",
+    "badge": "Bonded Pair",
+    "desc": "A delightful bonded brother pair looking to be adopted together. They squeak with excitement at bell pepper slices and enjoy cozy fleece hideouts."
+  }
+]

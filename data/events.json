@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Paws & Hearts Weekend Adoption Fair",
+    "date": "Saturday, Sep 12, 2026 · 10:00 AM – 4:00 PM",
+    "location": "FurEver Shelter Courtyard · 108 Rescue Way",
+    "desc": "Meet over 30 rescue dogs, cats, and small animals ready for immediate adoption. Adoption fees are 50% sponsored by community partners with free starter kits provided."
+  },
+  {
+    "id": 2,
+    "name": "Free Community Microchip & Rabies Clinic",
+    "date": "Sunday, Sep 27, 2026 · 9:00 AM – 1:00 PM",
+    "location": "Green Valley Community Pavilion",
+    "desc": "Protect your companion animals with complimentary microchipping and low-cost core vaccinations administered by licensed volunteer veterinarians."
+  },
+  {
+    "id": 3,
+    "name": "Foster Guardian & Volunteer Orientation",
+    "date": "Saturday, Oct 10, 2026 · 11:00 AM – 1:00 PM",
+    "location": "Shelter Training Hall (Room B)",
+    "desc": "Discover how temporary fostering saves lives. Learn basic neonatal kitten feeding, rescue dog handling, and shelter event volunteer roles."
+  },
+  {
+    "id": 4,
+    "name": "Bark in the Park Charity 5K Walkathon",
+    "date": "Sunday, Oct 25, 2026 · 8:30 AM – 12:00 PM",
+    "location": "Riverside Park Trailhead",
+    "desc": "Bring your dogs for a scenic 5K morning walk to raise critical funds for the shelter medical recovery fund. Includes sponsor booths and pet photo booths."
+  }
+]
