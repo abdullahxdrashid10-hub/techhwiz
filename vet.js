@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. COMPREHENSIVE DOCTORS DATABASE
   const doctorsData = [
     {
       id: 'sarah',
@@ -184,7 +183,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  // 2. DETAILED CASE STUDIES
   const allCaseStudies = [
     {
       id: 'cs1',
@@ -258,7 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeSelectedSlot = null;
   let loggedInDoctor = null;
 
-  // 3. DOM ELEMENTS
   const desktopNav             = document.getElementById('desktop-nav');
   const navPill                = document.getElementById('nav-pill');
   const mobileMenu             = document.getElementById('mobile-menu');
@@ -295,6 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const visitorCount           = document.getElementById('visitor-count');
   const heroStatusDot          = document.getElementById('hero-status-dot');
   const heroVetStatus          = document.getElementById('hero-vet-status');
+  const backToTopBtn           = document.getElementById('back-to-top');
 
   document.querySelectorAll('.demo-fill').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -303,14 +301,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 4. NAVIGATION
   function updateNavPill(activeBtn) {
     if (!navPill || !activeBtn || window.innerWidth < 768) return;
     navPill.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
     navPill.style.width = `${activeBtn.offsetWidth}px`;
   }
 
-  function switchTab(tabId, clickedBtn) {
+  function switchTab(tabId) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.getElementById('tab-' + tabId)?.classList.add('active');
 
@@ -327,12 +324,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   desktopNav.addEventListener('click', e => {
     const tab = e.target.closest('[data-tab]');
-    if (tab) switchTab(tab.dataset.tab, tab);
+    if (tab) switchTab(tab.dataset.tab);
   });
 
   mobileMenu.addEventListener('click', e => {
     const tab = e.target.closest('[data-tab]');
-    if (tab) switchTab(tab.dataset.tab, tab);
+    if (tab) switchTab(tab.dataset.tab);
+  });
+
+  document.querySelectorAll('.footer-nav-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tabId = btn.dataset.tab;
+      if (tabId) {
+        switchTab(tabId);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
+
+  backToTopBtn?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   hamburger.addEventListener('click', () => {
@@ -341,11 +352,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   heroCtaSlots?.addEventListener('click', () => {
-    const slotsTabBtn = desktopNav.querySelector('[data-tab="slots"]');
-    if (slotsTabBtn) switchTab('slots', slotsTabBtn);
+    switchTab('slots');
   });
 
-  // 5. DOCTOR PROFILE REFRESH & REAL-TIME AVAILABILITY
   function renderDoctorSelector() {
     docSelectorContainer.innerHTML = '';
     doctorsData.forEach(doc => {
@@ -427,7 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 6. TIME SLOTS & DYNAMIC BOOKINGS
   function renderFullSlots() {
     fullSlotsGrid.innerHTML = '';
     currentDoctor.slots.forEach(slot => {
@@ -474,7 +482,6 @@ document.addEventListener('DOMContentLoaded', () => {
     bookingForm.reset();
   });
 
-  // 7. REAL-TIME BOOKING WITH DUPLICATE & DAY CHECKS
   bookingForm.addEventListener('submit', e => {
     e.preventDefault();
     const owner = document.getElementById('book-owner').value.trim();
@@ -581,7 +588,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 8. STRICT ACCESS CONTROL: ONLY DOCTOR CAN CANCEL THEIR OWN PATIENT
   upcomingList.addEventListener('click', e => {
     const btn = e.target.closest('.cancel-booking-btn');
     if (!btn) return;
@@ -589,7 +595,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = btn.dataset.token;
     const appointmentDoctorId = btn.dataset.docid;
 
-    // Security Verification Check
     if (loggedInDoctor && loggedInDoctor.id !== appointmentDoctorId) {
       showToast(`⛔ Access Denied: You cannot cancel Dr. ${doctorsData.find(d => d.id === appointmentDoctorId)?.name.split(' ')[1]}'s patient appointment.`);
       return;
@@ -604,7 +609,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Appointment cancelled successfully.');
   });
 
-  // Doctor Panel Table Roster Action Listener
   doctorPatientRosterBody.addEventListener('click', e => {
     const btn = e.target.closest('.doc-cancel-btn');
     if (!btn || !loggedInDoctor) return;
@@ -626,7 +630,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast(`Patient consultation (${token}) discharged / cancelled.`);
   });
 
-  // 9. DOCTOR AUTHENTICATION & PRIVATE PATIENT FILTERING
   doctorPortalBtn.addEventListener('click', () => {
     if (loggedInDoctor) {
       loggedInDoctor = null;
@@ -667,7 +670,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Renders ONLY Logged-in Doctor's Patients with Dedicated Cancel Actions
   function renderDoctorRoster() {
     if (!loggedInDoctor) {
       doctorSecurePanel.classList.add('hidden');
@@ -705,7 +707,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 10. ENHANCED CASE STUDIES FILTERING & RENDERING
   function renderCaseStudiesGrid(selectedCategory) {
     casesDetailedGrid.innerHTML = '';
     const filtered = selectedCategory === 'All' 
@@ -750,7 +751,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCaseStudiesGrid(btn.dataset.category);
   });
 
-  // 11. PET HEALTH SNAPSHOT
   function renderDoctorSnapshots(doc) {
     petSnapshotButtons.innerHTML = '';
     const keys = Object.keys(doc.snapshots);
@@ -789,7 +789,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateSnapshotDetails(data);
   });
 
-  // 12. JOIN TEAM FORM & TICKER
   joinVetForm?.addEventListener('submit', e => {
     e.preventDefault();
     const submitBtn = joinVetForm.querySelector('button[type="submit"]');
@@ -836,16 +835,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initVisitorCounter() {
     let count = parseInt(localStorage.getItem('fureverVisitors') ?? '0', 10);
-    visitorCount.textContent = count.toLocaleString();
+    if (visitorCount) visitorCount.textContent = count.toLocaleString();
   }
 
-  // Boot Engine
   setDoctorProfile(doctorsData[0]);
   renderPersonalBookingHistory();
   initTicker();
   initVisitorCounter();
 
-  // Restore Doctor Login Session
   try {
     const savedDocSession = JSON.parse(localStorage.getItem('fureverVetDoctorAuth') ?? 'null');
     if (savedDocSession?.docId) {

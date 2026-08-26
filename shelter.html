@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FurEver Care — Animal Shelter & Adoption Portal</title>
+  <meta name="description" content="Meet adoptable pets, read rescue success stories, and support community animal adoption drives." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            oceanteal:  '#2C6E6B',
+            softcoral:  '#F4A896',
+            creambg:    '#FBF3E8',
+            sageaccent: '#A8C3A0'
+          },
+          fontFamily: { nunito: ['Nunito', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Nunito', sans-serif; background: #FBF3E8; overflow-x: hidden; }
+    :root { --oceanteal:#2C6E6B; --softcoral:#F4A896; --creambg:#FBF3E8; --sageaccent:#A8C3A0; }
+
+    .nav-pill-track { position: relative; background: #f1f5f9; padding: 0.25rem; border-radius: 9999px; display: flex; align-items: center; }
+    #nav-pill { position: absolute; top: 0.25rem; bottom: 0.25rem; border-radius: 9999px; background: var(--oceanteal); transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), width 0.28s cubic-bezier(0.22, 1, 0.36, 1); pointer-events: none; z-index: 0; }
+    .nav-tab { position: relative; z-index: 10; padding: 0.45rem 1.1rem; border-radius: 9999px; font-weight: 700; font-size: 0.85rem; transition: color 0.25s; color: #64748b; background: transparent; border: none; outline: none; cursor: pointer; }
+    .nav-tab:hover { color: var(--oceanteal); }
+    .nav-tab.active { color: #ffffff; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .filter-btn { padding: 0.4rem 1.1rem; border-radius: 9999px; font-weight: 700; font-size: 0.8rem; border: 2px solid #e2e8f0; color: #64748b; transition: all 0.2s; cursor: pointer; background: #fff; }
+    .filter-btn:hover { border-color: var(--softcoral); color: var(--softcoral); }
+    .filter-btn.active { background: var(--softcoral); border-color: var(--softcoral); color: #fff; }
+
+    #mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    #mobile-menu.open { max-height: 300px; }
+
+    .tilt-card { transform-style: preserve-3d; transition: transform 0.15s ease-out; will-change: transform; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-card-in {
+      animation: cardIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .fav-btn {
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s;
+    }
+    .fav-btn:active {
+      transform: scale(1.3) rotate(8deg);
+    }
+
+    @keyframes pulseBadge {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .pulse-soon {
+      animation: pulseBadge 2.2s ease-in-out infinite;
+    }
+
+    .story-card-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .story-card-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-card-in, .story-card-reveal, .pulse-soon, .tilt-card {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+      .story-card-reveal {
+        opacity: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-creambg font-nunito text-slate-800">
+
+  <!-- STICKY GLOBAL HEADER -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🏠</span>
+        <div>
+          <span class="text-xl font-black tracking-tight text-slate-800">
+            <span class="text-oceanteal">Fur</span><span class="text-softcoral">Ever</span> Care
+          </span>
+          <p class="text-xs text-slate-400 font-bold">Animal Shelter & Adoption Portal</p>
+        </div>
+      </div>
+
+      <!-- Desktop Nav Tabs -->
+      <nav class="hidden md:flex items-center" id="desktop-nav" aria-label="Shelter Navigation">
+        <div class="nav-pill-track">
+          <div id="nav-pill"></div>
+          <button class="nav-tab active" data-tab="gallery">Adoption Gallery</button>
+          <button class="nav-tab" data-tab="stories">Success Stories</button>
+          <button class="nav-tab" data-tab="events">Events & Drives</button>
+          <button class="nav-tab" data-tab="contact">Shelter Contact</button>
+        </div>
+      </nav>
+
+      <!-- Role Return / Action -->
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:text-oceanteal bg-slate-100 hover:bg-slate-200 transition-colors">
+          <span>⇄ Switch Role</span>
+        </a>
+        <button id="hamburger" class="md:hidden p-2 rounded-xl bg-white border border-slate-200 text-slate-700 shadow-sm" aria-label="Toggle Navigation">
+          <span id="hamburger-icon" class="text-lg block">☰</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-menu" class="md:hidden border-t border-slate-100 bg-white px-4 py-2 space-y-1">
+      <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="gallery">🐾 Adoption Gallery</button>
+      <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="stories">📖 Success Stories</button>
+      <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="events">📅 Events & Drives</button>
+      <button class="nav-tab block w-full text-left py-2 px-3 rounded-xl hover:bg-slate-50" data-tab="contact">📍 Shelter Contact</button>
+    </div>
+  </header>
+
+  <!-- MAIN TAB PANELS CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- 1. ADOPTION GALLERY TAB -->
+    <section id="tab-gallery" class="tab-panel active space-y-6">
+      
+      <!-- Banner Header -->
+      <div class="rounded-3xl bg-gradient-to-r from-oceanteal/10 via-softcoral/10 to-sageaccent/10 border border-slate-200/80 p-6 sm:p-8">
+        <div class="max-w-2xl">
+          <span class="text-xs uppercase font-extrabold tracking-wider text-oceanteal bg-white/80 px-3 py-1 rounded-full border border-teal-100">Forever Homes Needed</span>
+          <h1 class="text-3xl sm:text-4xl font-black text-slate-800 mt-2 mb-2">Find Your New Best Friend 🐾</h1>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Every rescue animal here is health-checked, vaccinated, and awaiting a compassionate home. Use the filters below to search by name, species, or view your saved favorites.
+          </p>
+        </div>
+      </div>
+
+      <!-- Filter Buttons & Search Input -->
+      <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+        <div class="flex flex-wrap gap-2" id="species-filters">
+          <button class="filter-btn active" data-filter="All">All Pets</button>
+          <button class="filter-btn" data-filter="Dog">🐶 Dogs</button>
+          <button class="filter-btn" data-filter="Cat">🐱 Cats</button>
+          <button class="filter-btn" data-filter="Rabbit">🐰 Rabbits</button>
+          <button class="filter-btn" data-filter="Other">🐾 Other</button>
+          <button class="filter-btn flex items-center gap-1.5" data-filter="Favorites" id="fav-filter-btn">
+            <span>❤️</span>
+            <span>My Favorites</span>
+            <span id="fav-count-badge" class="ml-1 text-[11px] bg-red-100 text-red-600 font-extrabold px-2 py-0.5 rounded-full">0</span>
+          </button>
+        </div>
+
+        <div class="relative min-w-[260px]">
+          <input 
+            type="text" 
+            id="pet-search" 
+            placeholder="Search pets by name or breed…" 
+            class="w-full pl-9 pr-4 py-2 text-sm rounded-2xl border-2 border-slate-200 bg-white focus:border-softcoral outline-none transition-all"
+          />
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
+        </div>
+      </div>
+
+      <!-- Adoptable Pet Cards Grid -->
+      <div id="pet-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Dynamically rendered via shelter.js -->
+      </div>
+
+      <!-- No Results State -->
+      <div id="no-pets" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-100">
+        <div class="text-5xl mb-2">🐾</div>
+        <h3 class="text-lg font-bold text-slate-700" id="no-pets-title">No adoptable pets match your filter</h3>
+        <p class="text-xs text-slate-400 mt-1" id="no-pets-desc">Try clearing your search query or selecting "All Pets".</p>
+      </div>
+
+    </section>
+
+    <!-- 2. SUCCESS STORIES TAB -->
+    <section id="tab-stories" class="tab-panel space-y-6">
+      <div class="rounded-3xl bg-white border border-slate-100 p-6 sm:p-8 shadow-sm">
+        <span class="text-xs uppercase font-extrabold tracking-wider text-softcoral bg-softcoral/10 px-3 py-1 rounded-full">Lives Transformed</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mt-2 mb-2">Heartwarming Adoption Stories 💛</h2>
+        <p class="text-sm text-slate-500 max-w-2xl leading-relaxed">
+          Read real stories of rescue animals who found their loving forever families through the FurEver Care shelter network.
+        </p>
+      </div>
+
+      <div id="stories-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Dynamically rendered via shelter.js -->
+      </div>
+    </section>
+
+    <!-- 3. EVENTS TAB -->
+    <section id="tab-events" class="tab-panel space-y-6">
+      <div class="rounded-3xl bg-white border border-slate-100 p-6 sm:p-8 shadow-sm">
+        <span class="text-xs uppercase font-extrabold tracking-wider text-sageaccent text-emerald-800 bg-sageaccent/20 px-3 py-1 rounded-full">Community Engagement</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mt-2 mb-2">Upcoming Events & Adoption Drives 📅</h2>
+        <p class="text-sm text-slate-500 max-w-2xl leading-relaxed">
+          Join us for community adoption fairs, free microchip clinics, volunteer orientations, and charity walkathons.
+        </p>
+      </div>
+
+      <div id="events-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Dynamically rendered via shelter.js -->
+      </div>
+    </section>
+
+    <!-- 4. SHELTER CONTACT TAB -->
+    <section id="tab-contact" class="tab-panel space-y-6">
+      <div class="rounded-3xl bg-white border border-slate-100 p-6 sm:p-8 shadow-sm">
+        <span class="text-xs uppercase font-extrabold tracking-wider text-oceanteal bg-oceanteal/10 px-3 py-1 rounded-full">Visit Our Shelter</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mt-2 mb-2">Shelter Location & Contact Information 📍</h2>
+        <p class="text-sm text-slate-500 max-w-2xl leading-relaxed">
+          We welcome prospective adopters and volunteers during visiting hours. Walk-ins are always warmly welcomed!
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Contact Information Cards -->
+        <div class="bg-white rounded-3xl border border-slate-100 p-6 sm:p-8 shadow-sm space-y-5">
+          <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <span>📫 Shelter Contact Details</span>
+          </h3>
+
+          <div class="space-y-4 text-sm">
+            <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-creambg/50">
+              <span class="text-2xl">📍</span>
+              <div>
+                <p class="font-extrabold text-slate-800">Physical Address</p>
+                <p class="text-slate-600 text-xs mt-0.5">108 Rescue Way, Green Valley, GV 20042</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-creambg/50">
+              <span class="text-2xl">📞</span>
+              <div>
+                <p class="font-extrabold text-slate-800">Phone Lines</p>
+                <p class="text-slate-600 text-xs mt-0.5">Adoptions: (555) 444-PETS · Volunteer Desk: (555) 444-7387</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-creambg/50">
+              <span class="text-2xl">✉️</span>
+              <div>
+                <p class="font-extrabold text-slate-800">Email Address</p>
+                <p class="text-slate-600 text-xs mt-0.5">adoptions@furevercare.org · rescue@furevercare.org</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-creambg/50">
+              <span class="text-2xl">🕐</span>
+              <div>
+                <p class="font-extrabold text-slate-800">Shelter Visiting Hours</p>
+                <p class="text-slate-600 text-xs mt-0.5">Monday–Friday: 10:00 AM – 6:00 PM</p>
+                <p class="text-slate-600 text-xs">Saturday–Sunday: 10:00 AM – 4:00 PM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Map Embed Frame -->
+        <div id="map-wrapper" class="relative rounded-3xl overflow-hidden border border-slate-100 shadow-sm bg-white min-h-[350px] flex flex-col">
+          <iframe 
+            id="shelter-map-frame"
+            src="https://maps.google.com/maps?q=108+Rescue+Way,+Green+Valley,+GV+20042&t=&z=14&ie=UTF8&iwloc=&output=embed" 
+            width="100%" 
+            height="100%" 
+            class="w-full h-full min-h-[350px] flex-1 border-0"
+            allowfullscreen 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade"
+            title="FurEver Care Shelter Location Map"
+            onerror="document.getElementById('shelter-map-frame')?.classList.add('hidden'); document.getElementById('map-fallback-card')?.classList.remove('hidden');"
+          ></iframe>
+
+          <!-- Static Fallback Card (shown if map fails or offline/file://) -->
+          <div id="map-fallback-card" class="hidden absolute inset-0 bg-gradient-to-br from-white via-creambg/40 to-teal-50/50 p-6 flex flex-col justify-between items-center text-center">
+            <div class="my-auto space-y-3">
+              <div class="w-14 h-14 rounded-2xl bg-oceanteal/10 text-oceanteal text-2xl flex items-center justify-center mx-auto shadow-sm">
+                📍
+              </div>
+              <h4 class="font-extrabold text-slate-800 text-lg">FurEver Care Animal Shelter</h4>
+              <p class="text-xs font-semibold text-slate-500 max-w-xs mx-auto">
+                108 Rescue Way, Green Valley, GV 20042
+              </p>
+              <p class="text-[11px] text-slate-400">
+                Visiting Hours: Mon–Fri 10am–6pm · Sat–Sun 10am–4pm
+              </p>
+            </div>
+            <a 
+              href="https://maps.google.com/?q=108+Rescue+Way,+Green+Valley,+GV+20042" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="w-full max-w-xs py-3 px-4 bg-gradient-to-r from-softcoral to-oceanteal text-white font-bold text-xs rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <span>Open in Google Maps</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- PET DETAIL MODAL ("Meet [Name]") -->
+  <div id="pet-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-white/80 overflow-hidden transform scale-95 transition-transform duration-300">
+      
+      <!-- Top Decorative Ribbon -->
+      <div class="absolute top-0 left-8 right-8 h-1.5 rounded-b-full bg-gradient-to-r from-softcoral via-sageaccent to-oceanteal z-10"></div>
+      
+      <!-- Close Button -->
+      <button id="close-modal-btn" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-slate-600 hover:text-slate-900 shadow-md flex items-center justify-center font-black text-sm transition-transform hover:scale-110" aria-label="Close dialog">
+        ✕
+      </button>
+
+      <!-- Modal Content -->
+      <div class="max-h-[90vh] overflow-y-auto">
+        <!-- Hero Image -->
+        <div class="h-64 w-full relative bg-slate-100">
+          <img id="modal-pet-img" src="" alt="Pet Image" class="w-full h-full object-cover" />
+          <span id="modal-pet-badge" class="absolute bottom-3 left-4 bg-white/95 text-oceanteal text-xs font-black px-3 py-1 rounded-full shadow-md"></span>
+        </div>
+
+        <div class="p-6 sm:p-8 space-y-5">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <h3 id="modal-pet-name" class="text-2xl sm:text-3xl font-black text-slate-800"></h3>
+              <span id="modal-pet-age" class="text-xs font-bold text-softcoral bg-softcoral/10 px-3 py-1 rounded-full"></span>
+            </div>
+            <p id="modal-pet-sub" class="text-xs sm:text-sm font-bold text-slate-400 mt-1"></p>
+          </div>
+
+          <!-- Personality Trait Tags -->
+          <div>
+            <p class="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-2">Personality Traits</p>
+            <div id="modal-trait-tags" class="flex flex-wrap gap-1.5"></div>
+          </div>
+
+          <!-- Description -->
+          <div class="bg-creambg/60 rounded-2xl p-4 border border-slate-100">
+            <p class="text-[11px] font-black uppercase tracking-wider text-oceanteal mb-1">About This Companion</p>
+            <p id="modal-pet-desc" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
+          </div>
+
+          <!-- Modal Action CTA -->
+          <div class="pt-2 flex flex-col sm:flex-row gap-3">
+            <button id="modal-contact-btn" class="flex-1 py-3 px-4 bg-gradient-to-r from-softcoral to-oceanteal text-white font-bold text-xs sm:text-sm rounded-2xl shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+              <span>Interested in Adopting? Visit Shelter Contact</span>
+              <span>📍</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GLOBAL FOOTER -->
+  <footer class="mt-16 border-t border-slate-200 bg-white py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400 space-y-2">
+      <div class="flex items-center justify-center gap-2">
+        <span class="font-black text-slate-700 text-sm"><span class="text-oceanteal">Fur</span><span class="text-softcoral">Ever</span> Care</span>
+        <span>•</span>
+        <span>Animal Shelter & Adoption Division</span>
+      </div>
+      <p>© 2026 FurEver Care · Dedicated to compassionate animal rescue and lifetime adoption support.</p>
+    </div>
+  </footer>
+
+  <script src="shelter.js"></script>
+</body>
+</html>

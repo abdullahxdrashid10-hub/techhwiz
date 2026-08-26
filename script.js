@@ -1,3 +1,6 @@
+/**
+ * FurEver Care — Role Selection & Onboarding Controller
+ */
 document.addEventListener('DOMContentLoaded', () => {
 
   const nameInput       = document.getElementById('user-name-input');
@@ -144,29 +147,39 @@ document.addEventListener('DOMContentLoaded', () => {
   if (canHover) {
     [ctaBtn].forEach(btn => {
       if (!btn) return;
+      let btnRaf = null;
       btn.addEventListener('mousemove', e => {
         if (btn.disabled) return;
         const rect = btn.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
         const y = e.clientY - rect.top - rect.height / 2;
-        btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+        if (btnRaf) cancelAnimationFrame(btnRaf);
+        btnRaf = requestAnimationFrame(() => {
+          btn.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+        });
       });
       btn.addEventListener('mouseleave', () => {
+        if (btnRaf) cancelAnimationFrame(btnRaf);
         btn.style.transform = '';
       });
     });
 
     const tiltElements = document.querySelectorAll('.profile-card, #onboarding-card');
     tiltElements.forEach(card => {
+      let cardRaf = null;
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
-        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-        card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        if (cardRaf) cancelAnimationFrame(cardRaf);
+        cardRaf = requestAnimationFrame(() => {
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
       });
       card.addEventListener('mouseleave', () => {
+        if (cardRaf) cancelAnimationFrame(cardRaf);
         card.style.transform = '';
       });
     });
@@ -185,6 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const cursorGlow = document.getElementById('cursor-glow');
   let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, targetX: window.innerWidth / 2, targetY: window.innerHeight / 2 };
+  let lastGlowX = -999;
+  let lastGlowY = -999;
 
   window.addEventListener('mousemove', e => {
     mouse.targetX = e.clientX;
@@ -194,9 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateCursorGlow() {
     mouse.x += (mouse.targetX - mouse.x) * 0.08;
     mouse.y += (mouse.targetY - mouse.y) * 0.08;
-    if (cursorGlow) {
-      cursorGlow.style.left = `${mouse.x}px`;
-      cursorGlow.style.top = `${mouse.y}px`;
+    if (cursorGlow && (Math.abs(mouse.x - lastGlowX) > 0.05 || Math.abs(mouse.y - lastGlowY) > 0.05)) {
+      lastGlowX = mouse.x;
+      lastGlowY = mouse.y;
+      cursorGlow.style.left = `${mouse.x.toFixed(1)}px`;
+      cursorGlow.style.top = `${mouse.y.toFixed(1)}px`;
     }
     requestAnimationFrame(updateCursorGlow);
   }

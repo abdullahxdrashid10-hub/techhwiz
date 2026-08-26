@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. Sarah Mitchell",
+    "specialization": "Surgery & Emergency Critical Care",
+    "clinic": "FurEver Central Hospital",
+    "phone": "+1 (800) 555-0192",
+    "email": "dr.mitchell@furevercare.org",
+    "experience": "12 Years",
+    "img": "assets/vet-clinic.jpg",
+    "availableSlots": ["09:00 AM", "11:30 AM", "02:00 PM", "04:30 PM"],
+    "bookedSlots": ["10:00 AM", "01:00 PM", "03:30 PM"]
+  },
+  {
+    "id": 2,
+    "name": "Dr. James Wilson",
+    "specialization": "Canine Internal Medicine & Nutrition",
+    "clinic": "Westside Animal Clinic",
+    "phone": "+1 (800) 555-0144",
+    "email": "dr.wilson@furevercare.org",
+    "experience": "9 Years",
+    "img": "assets/training-coach.jpg",
+    "availableSlots": ["08:30 AM", "10:30 AM", "01:30 PM", "03:00 PM"],
+    "bookedSlots": ["09:30 AM", "11:30 AM", "02:30 PM"]
+  },
+  {
+    "id": 3,
+    "name": "Dr. Priya Kapoor",
+    "specialization": "Feline Wellness & Preventive Care",
+    "clinic": "Metro Paws Specialty Care",
+    "phone": "+1 (800) 555-0188",
+    "email": "dr.kapoor@furevercare.org",
+    "experience": "8 Years",
+    "img": "assets/feeding-fresh.jpg",
+    "availableSlots": ["09:00 AM", "10:00 AM", "02:30 PM", "04:00 PM"],
+    "bookedSlots": ["11:00 AM", "01:00 PM", "03:00 PM"]
+  },
+  {
+    "id": 4,
+    "name": "Dr. Elena Rostova",
+    "specialization": "Exotics & Small Mammals (Avian/Rabbits)",
+    "clinic": "Green Valley Exotic Pet Clinic",
+    "phone": "+1 (800) 555-0165",
+    "email": "dr.rostova@furevercare.org",
+    "experience": "10 Years",
+    "img": "assets/pet_thumper.jpg",
+    "availableSlots": ["10:00 AM", "11:30 AM", "03:00 PM"],
+    "bookedSlots": ["09:00 AM", "01:30 PM", "04:30 PM"]
+  }
+]

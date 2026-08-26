@@ -31,12 +31,14 @@
     @keyframes toastOut { from{opacity:1} to{opacity:0;transform:translateY(-8px)} }
     @keyframes blobDrift1 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(40px,-30px) scale(1.06)} 66%{transform:translate(-20px,20px) scale(0.96)} 100%{transform:translate(0,0) scale(1)} }
     @keyframes blobDrift2 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(-50px,30px) scale(1.08)} 66%{transform:translate(30px,-25px) scale(0.94)} 100%{transform:translate(0,0) scale(1)} }
-    @keyframes pawFloat { 0%{transform:translateY(0) rotate(0deg);opacity:0.06} 50%{transform:translateY(-12px) rotate(5deg);opacity:0.11} 100%{transform:translateY(0) rotate(0deg);opacity:0.06} }
+    @keyframes pawFloat { 0%{transform:translateY(0) rotate(0deg);opacity:0.12} 50%{transform:translateY(-14px) rotate(6deg);opacity:0.22} 100%{transform:translateY(0) rotate(0deg);opacity:0.12} }
 
     .blob{position:fixed;border-radius:9999px;filter:blur(80px);pointer-events:none;z-index:0}
     .blob-1{width:500px;height:500px;background:radial-gradient(circle,rgba(44,110,107,0.18),transparent 70%);top:-120px;left:-100px;animation:blobDrift1 18s ease-in-out infinite}
     .blob-2{width:420px;height:420px;background:radial-gradient(circle,rgba(244,168,150,0.22),transparent 70%);bottom:-80px;right:-60px;animation:blobDrift2 22s ease-in-out infinite}
-    .paw-deco{position:fixed;opacity:0.06;pointer-events:none;z-index:0;user-select:none;animation:pawFloat 6s ease-in-out infinite}
+    
+    /* Enhanced Background Emojis just like petowner.html */
+    .paw-deco{position:fixed;opacity:0.15;pointer-events:none;z-index:0;user-select:none;animation:pawFloat 6s ease-in-out infinite}
 
     .pattern-bg {
       background-color: #FBF3E8;
@@ -132,9 +134,10 @@
 
     .float-label-wrapper{position:relative}
     .float-label-wrapper input,.float-label-wrapper select,.float-label-wrapper textarea{display:block;width:100%;padding:1rem 1.15rem 0.4rem;border-radius:0.85rem;border:2px solid #d1d5db;background:#fff;font-family:'Nunito',sans-serif;font-size:0.95rem;color:#1e293b;outline:none;transition:border-color 0.25s,box-shadow 0.25s}
+    .float-label-wrapper select{padding-right:2rem;cursor:pointer}
     .float-label-wrapper input:focus,.float-label-wrapper select:focus,.float-label-wrapper textarea:focus{border-color:var(--softcoral);box-shadow:0 0 0 4px rgba(244,168,150,0.18)}
     .float-label-wrapper label{position:absolute;left:1.15rem;top:50%;transform:translateY(-50%);font-size:0.95rem;color:#94a3b8;pointer-events:none;transition:all 0.22s cubic-bezier(0.22,1,0.36,1);padding:0 0.1rem}
-    .float-label-wrapper input:focus+label,.float-label-wrapper input:not(:placeholder-shown)+label,.float-label-wrapper select:focus+label,.float-label-wrapper select.has-value+label{top:0.55rem;transform:translateY(0);font-size:0.65rem;font-weight:700;color:var(--oceanteal);letter-spacing:0.04em;text-transform:uppercase}
+    .float-label-wrapper input:focus+label,.float-label-wrapper input:not(:placeholder-shown)+label,.float-label-wrapper select+label{top:0.55rem;transform:translateY(0);font-size:0.65rem;font-weight:700;color:var(--oceanteal);letter-spacing:0.04em;text-transform:uppercase}
 
     .ticker-wrap{overflow:hidden;white-space:nowrap}
     .ticker-track{display:inline-flex;animation:ticker 35s linear infinite}
@@ -144,15 +147,110 @@
     .toast.leaving{animation:toastOut 0.3s ease forwards}
     #mobile-menu{max-height:0;overflow:hidden;transition:max-height 0.35s cubic-bezier(0.22,1,0.36,1)}
     #mobile-menu.open{max-height:400px}
+    
+    /* AI Chat Assistant Widget */
+    #chat-trigger-btn {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      width: 3.75rem;
+      height: 3.75rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--softcoral), var(--oceanteal));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px -4px rgba(44, 110, 107, 0.45), 0 4px 12px -2px rgba(244, 168, 150, 0.5);
+      z-index: 40;
+      cursor: pointer;
+      border: 2.5px solid rgba(255, 255, 255, 0.9);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
+    }
+    #chat-trigger-btn:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 16px 32px -4px rgba(44, 110, 107, 0.55), 0 6px 16px -2px rgba(244, 168, 150, 0.65);
+    }
+    #chat-trigger-btn:active {
+      transform: scale(0.95);
+    }
+
+    @keyframes chatPulseIdle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05) translateY(-3px); }
+    }
+    .chat-idle-pulse {
+      animation: chatPulseIdle 3.5s ease-in-out infinite;
+    }
+
+    #chat-widget-panel {
+      position: fixed;
+      bottom: 6rem;
+      right: 1.75rem;
+      width: 390px;
+      max-width: calc(100vw - 2rem);
+      height: 540px;
+      max-height: calc(100vh - 7.5rem);
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 1.75rem;
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(44, 110, 107, 0.08);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(24px) scale(0.94);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s;
+    }
+
+    #chat-widget-panel.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .chat-idle-pulse { animation: none !important; }
+      #chat-widget-panel, #chat-trigger-btn { transition: none !important; }
+      .typing-dot { animation: none !important; }
+    }
+
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-5px); opacity: 1; }
+    }
+    .typing-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 9999px;
+      background-color: var(--oceanteal);
+      animation: typingBounce 1.4s infinite ease-in-out both;
+    }
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    ::-webkit-scrollbar{width:5px}
+    ::-webkit-scrollbar-track{background:var(--creambg)}
+    ::-webkit-scrollbar-thumb{background:var(--sageaccent);border-radius:99px}
   </style>
 </head>
 <body class="min-h-screen font-nunito pattern-bg">
 
   <div class="blob blob-1" aria-hidden="true"></div>
   <div class="blob blob-2" aria-hidden="true"></div>
+  
+  <!-- Enhanced Background Emojis just like petowner.html -->
   <div class="paw-deco" style="top:6%;left:3%;font-size:1.8rem" aria-hidden="true">🩺</div>
-  <div class="paw-deco" style="top:55%;right:3%;font-size:2.2rem;animation-delay:1.5s" aria-hidden="true">🐾</div>
+  <div class="paw-deco" style="top:25%;right:5%;font-size:2rem;animation-delay:1s" aria-hidden="true">🐾</div>
+  <div class="paw-deco" style="top:45%;left:7%;font-size:1.6rem;animation-delay:2s" aria-hidden="true">💊</div>
+  <div class="paw-deco" style="top:65%;right:4%;font-size:2.2rem;animation-delay:1.5s" aria-hidden="true">🐾</div>
   <div class="paw-deco" style="top:85%;left:5%;font-size:1.4rem;animation-delay:2.5s" aria-hidden="true">🩹</div>
+  <div class="paw-deco" style="top:15%;left:50%;font-size:1.5rem;animation-delay:0.8s" aria-hidden="true">✨</div>
 
   <div id="dashboard" class="relative z-10">
 
@@ -513,61 +611,126 @@
 
       </div>
 
-      <!-- JOIN VET TEAM FORM -->
+      <!-- ==============================================================
+           SUB-PAGE 4: JOIN VET TEAM (Styled like petowner.html Feedback page)
+      =============================================================== -->
       <div id="tab-join" class="tab-panel">
-        <div class="max-w-xl mx-auto">
-          <div class="text-center mb-6">
-            <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-1">Join Our <span class="text-softcoral">Vet Team</span></h2>
-            <p class="text-slate-400 text-xs sm:text-sm">Submit your clinical credentials to partner with FurEver Care</p>
+        <div class="max-w-5xl mx-auto space-y-6">
+          <div class="text-center sm:text-left mb-6">
+            <h2 class="text-3xl font-black text-slate-800 mb-1">Join Our <span class="text-softcoral">Vet Team</span></h2>
+            <p class="text-slate-500 text-sm">Submit your clinical credentials to partner with FurEver Care and expand your clinical reach.</p>
           </div>
 
-          <form id="join-vet-form" class="bg-white rounded-3xl shadow-md border border-slate-50 p-6 sm:p-8 space-y-5" autocomplete="off">
-            <div class="float-label-wrapper">
-              <input type="text" id="join-name" placeholder=" " required/>
-              <label for="join-name">Full Name & Degree (e.g. Dr. Ali Khan, DVM)</label>
+          <div class="grid lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Column: Primary Join Form styled like Feedback form -->
+            <div class="lg:col-span-7">
+              <form id="join-vet-form" class="bg-white rounded-3xl shadow-md border border-slate-100 p-6 sm:p-8 space-y-5" autocomplete="off">
+                <div class="float-label-wrapper">
+                  <input type="text" id="join-name" placeholder=" " required maxlength="50"/>
+                  <label for="join-name">Full Name & Degree (e.g. Dr. Ali Khan, DVM)</label>
+                </div>
+                <div class="float-label-wrapper">
+                  <input type="email" id="join-email" placeholder=" " required maxlength="60"/>
+                  <label for="join-email">Email Address</label>
+                </div>
+                <div class="float-label-wrapper">
+                  <input type="text" id="join-license" placeholder=" " required maxlength="30"/>
+                  <label for="join-license">Veterinary Board License #</label>
+                </div>
+                <div class="float-label-wrapper">
+                  <select id="join-specialization" required>
+                    <option value="" disabled selected></option>
+                    <option value="Small Animal Specialist">Small Animal Specialist</option>
+                    <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
+                    <option value="Feline Medicine">Feline Medicine</option>
+                    <option value="Emergency Care">Emergency Care</option>
+                    <option value="Veterinary Dermatology">Veterinary Dermatology</option>
+                  </select>
+                  <label for="join-specialization">Specialization</label>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-2xl font-bold text-sm tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-2">
+                  <span>Submit Partnership Request</span>
+                  <span>✨</span>
+                </button>
+                <div id="join-success" class="hidden text-center py-4">
+                  <div class="text-4xl mb-2" style="animation:successPop 0.4s cubic-bezier(0.22,1,0.36,1)">🩺🎉</div>
+                  <p class="font-bold text-oceanteal text-lg">Application Submitted Successfully!</p>
+                  <p class="text-xs text-slate-400 mt-1">We will review your credentials within 48 hours and get back to you.</p>
+                </div>
+              </form>
             </div>
-            <div class="float-label-wrapper">
-              <input type="email" id="join-email" placeholder=" " required/>
-              <label for="join-email">Email Address</label>
+
+            <!-- Right Column: Supporting Info & Testimonials styled like Feedback right col -->
+            <div class="lg:col-span-5 space-y-5">
+              
+              <!-- Top Warm Card -->
+              <div class="bg-gradient-to-br from-white via-creambg/40 to-teal-50/40 rounded-3xl p-5 border border-slate-100 shadow-sm relative overflow-hidden">
+                <div class="flex items-center gap-4">
+                  <div class="w-16 h-16 rounded-2xl overflow-hidden shrink-0 border border-slate-100 shadow-sm flex items-center justify-center bg-oceanteal text-white text-2xl font-black">
+                    🩺
+                  </div>
+                  <div>
+                    <span class="text-[10px] font-black uppercase tracking-wider bg-oceanteal/10 text-oceanteal px-2.5 py-0.5 rounded-full inline-block mb-1">🐾 Medical Partnership</span>
+                    <p class="text-xs font-bold text-slate-700 leading-snug">
+                      Join over <span class="text-oceanteal font-black">120+ certified clinics</span> providing trusted digital care through FurEver Care.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- What Partner Doctors Are Saying Section -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between px-1">
+                  <h4 class="font-extrabold text-xs text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                    <span>🩺 Partner Doctor Testimonials</span>
+                  </h4>
+                  <span class="text-[11px] font-black text-amber-500">★ 5.0 / 5.0</span>
+                </div>
+
+                <!-- Testimonial 1 -->
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-3.5 border border-slate-100 shadow-sm hover:shadow-md hover:border-softcoral/40 transition-all space-y-1.5 group">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-lg bg-teal-50 text-oceanteal font-black text-xs flex items-center justify-center">SM</div>
+                      <div>
+                        <p class="text-xs font-bold text-slate-800">Dr. Sarah Mitchell</p>
+                        <p class="text-[10px] text-slate-400">Emergency Surgeon</p>
+                      </div>
+                    </div>
+                    <div class="text-[11px] text-amber-400 font-bold" title="5 out of 5 stars">★★★★★</div>
+                  </div>
+                  <p class="text-[11px] text-slate-600 leading-relaxed italic">
+                    "The case studies and appointment roster have streamlined our clinic's workflow dramatically. Highly recommended for modern clinics."
+                  </p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-3.5 border border-slate-100 shadow-sm hover:shadow-md hover:border-softcoral/40 transition-all space-y-1.5 group">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                      <div class="w-7 h-7 rounded-lg bg-softcoral/15 text-softcoral font-black text-xs flex items-center justify-center">JW</div>
+                      <div>
+                        <p class="text-xs font-bold text-slate-800">Dr. James Wilson</p>
+                        <p class="text-[10px] text-slate-400">Dermatologist</p>
+                      </div>
+                    </div>
+                    <div class="text-[11px] text-amber-400 font-bold" title="5 out of 5 stars">★★★★★</div>
+                  </div>
+                  <p class="text-[11px] text-slate-600 leading-relaxed italic">
+                    "Partnering with FurEver Care expanded our patient reach across the city while keeping records organized and paperless."
+                  </p>
+                </div>
+
+              </div>
+
             </div>
-            <div class="float-label-wrapper">
-              <input type="text" id="join-license" placeholder=" " required/>
-              <label for="join-license">Veterinary Board License #</label>
-            </div>
-            <div class="float-label-wrapper">
-              <select id="join-specialization" required>
-                <option value="" disabled selected></option>
-                <option value="Small Animal Specialist">Small Animal Specialist</option>
-                <option value="Orthopedic Surgeon">Orthopedic Surgeon</option>
-                <option value="Feline Medicine">Feline Medicine</option>
-                <option value="Emergency Care">Emergency Care</option>
-              </select>
-              <label for="join-specialization">Specialization</label>
-            </div>
-            <button type="submit" class="w-full py-3.5 rounded-2xl font-bold text-sm tracking-wide bg-gradient-to-r from-softcoral to-oceanteal text-white shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
-              Submit Partnership Request ✨
-            </button>
-            <div id="join-success" class="hidden text-center py-4">
-              <p class="text-3xl mb-2">🩺🎉</p>
-              <p class="font-bold text-oceanteal text-lg">Application Submitted!</p>
-              <p class="text-xs text-slate-400 mt-1">We will review your credentials within 48 hours.</p>
-            </div>
-          </form>
+
+          </div>
         </div>
       </div>
 
     </main>
-
-    <!-- FOOTER -->
-    <footer class="border-t border-slate-100 bg-white/60 backdrop-blur-sm py-6 mt-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p class="text-xs text-slate-400">© 2025 FurEver Care · Veterinary Specialists & Hospital Wing</p>
-        <div class="flex items-center gap-2 text-xs text-slate-400">
-          <span>👀</span>
-          <span>Visitors: <b class="text-oceanteal" id="visitor-count">0</b></span>
-        </div>
-      </div>
-    </footer>
 
   </div>
 
@@ -648,8 +811,69 @@
     </div>
   </div>
 
+  <!-- FLOATING AI CHAT ASSISTANT -->
+  <button id="chat-trigger-btn" class="chat-idle-pulse" aria-label="Open FurEver AI Pet Care Assistant" title="Chat with FurEver Assistant">
+    <span class="text-2xl select-none">🐾</span>
+    <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+  </button>
+
+  <section id="chat-widget-panel" role="region" aria-label="FurEver AI Pet Care Assistant Chat" aria-hidden="true">
+    <!-- Header -->
+    <div class="p-4 bg-gradient-to-r from-oceanteal to-softcoral text-white flex items-center justify-between shadow-sm shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg shadow-inner">🐾</div>
+        <div>
+          <h4 class="font-black text-sm tracking-tight flex items-center gap-1.5">
+            <span>FurEver Assistant</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+          </h4>
+          <p class="text-[10px] text-white/80 font-semibold">AI Pet Care & Health Navigator</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1">
+        <button id="clear-chat-btn" class="p-1.5 rounded-xl hover:bg-white/20 text-white/90 hover:text-white transition-colors" title="Clear Chat History" aria-label="Clear chat history">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+        <button id="close-chat-btn" class="p-1.5 rounded-xl hover:bg-white/20 text-white/90 hover:text-white transition-colors" title="Close Assistant (Esc)" aria-label="Close assistant">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
+      <!-- Injected messages -->
+    </div>
+
+    <!-- Typing Indicator -->
+    <div id="chat-typing-indicator" class="hidden px-4 py-2 flex items-center gap-2 bg-white text-xs text-slate-500 shrink-0 border-t border-slate-100">
+      <div class="w-5 h-5 rounded-full bg-oceanteal/10 flex items-center justify-center text-xs">🐾</div>
+      <span class="font-bold text-oceanteal text-[11px]">Assistant is typing</span>
+      <div class="flex items-center gap-1 ml-1">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </div>
+    </div>
+
+    <!-- Quick Reply Chips Track -->
+    <div id="chat-chips-container" class="px-3 py-2 bg-white border-t border-slate-100 overflow-x-auto flex gap-1.5 no-scrollbar shrink-0">
+      <!-- Injected Chips -->
+    </div>
+
+    <!-- Input Form -->
+    <form id="chat-input-form" class="p-3 bg-white border-t border-slate-100 flex items-center gap-2 shrink-0">
+      <input type="text" id="chat-user-input" placeholder="Ask about feeding, symptoms, products…" class="flex-1 px-4 py-2 rounded-2xl bg-slate-100/90 border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:border-softcoral focus:ring-2 focus:ring-softcoral/20 outline-none transition-all" autocomplete="off"/>
+      <button type="submit" id="chat-send-btn" class="w-8 h-8 rounded-xl bg-gradient-to-r from-softcoral to-oceanteal text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all shrink-0" aria-label="Send Message">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </form>
+  </section>
+
   <div id="toast-container"></div>
 
+  <script src="chatbot-engine.js"></script>
+  <script src="chat-widget.js"></script>
   <script src="vet.js"></script>
 </body>
 </html>
