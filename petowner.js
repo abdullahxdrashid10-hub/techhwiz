@@ -231,10 +231,30 @@ document.addEventListener('DOMContentLoaded', async () => {
       const legacyPet = localStorage.getItem('fureverPet');
       if (legacyPet) {
         pets = [JSON.parse(legacyPet)];
-        localStorage.setItem('fureverPets', JSON.stringify(pets));
       }
     }
   } catch (_) { pets = []; }
+
+  if (!Array.isArray(pets) || pets.length === 0) {
+    pets = [
+      {
+        id: 1,
+        name: 'Buddy',
+        species: 'Dog',
+        breed: 'Golden Retriever',
+        age: 3,
+        ageUnit: 'years',
+        vaccines: [
+          { name: 'Rabies (1-Year/3-Year Core)', date: '15 Jan 2026', nextDue: '15 Jan 2027', status: 'Completed', notes: 'Core rabies immunization.' },
+          { name: 'DHPP (Distemper, Parvo, Adeno)', date: '10 Feb 2026', nextDue: '10 Feb 2027', status: 'Completed', notes: 'Core 5-in-1 vaccine.' },
+          { name: 'Bordetella (Kennel Cough)', date: '01 Mar 2026', nextDue: '01 Sep 2026', status: 'Due Soon', notes: 'Boarding/daycare booster.' },
+          { name: 'Canine Influenza (H3N2/H3N8)', date: '20 Nov 2025', nextDue: '20 Nov 2026', status: 'Completed', notes: 'Social dog protection.' },
+          { name: 'Leptospirosis 4-Way', date: '05 Jan 2026', nextDue: '05 Jan 2027', status: 'Completed', notes: 'Wildlife water safety.' }
+        ]
+      }
+    ];
+    try { localStorage.setItem('fureverPets', JSON.stringify(pets)); } catch (_) {}
+  }
 
   let activePetIndex = 0;
   try {
@@ -492,12 +512,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  if (pets.length > 0) {
-    showDashboard(getActivePet());
-  } else {
-    petFormSection.style.display = 'flex';
-    dashboard.classList.add('hidden');
-  }
+  showDashboard(getActivePet());
 
   petForm?.addEventListener('submit', e => {
     e.preventDefault();
