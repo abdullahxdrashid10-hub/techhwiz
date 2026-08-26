@@ -79,8 +79,88 @@
       transform: translateY(0);
     }
 
+    /* AI Chat Assistant Widget */
+    #chat-trigger-btn {
+      position: fixed;
+      bottom: 1.75rem;
+      right: 1.75rem;
+      width: 3.75rem;
+      height: 3.75rem;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--softcoral), var(--oceanteal));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px -4px rgba(44, 110, 107, 0.45), 0 4px 12px -2px rgba(244, 168, 150, 0.5);
+      z-index: 40;
+      cursor: pointer;
+      border: 2.5px solid rgba(255, 255, 255, 0.9);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s;
+    }
+    #chat-trigger-btn:hover {
+      transform: scale(1.08) translateY(-2px);
+      box-shadow: 0 16px 32px -4px rgba(44, 110, 107, 0.55), 0 6px 16px -2px rgba(244, 168, 150, 0.65);
+    }
+    #chat-trigger-btn:active {
+      transform: scale(0.95);
+    }
+
+    @keyframes chatPulseIdle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05) translateY(-3px); }
+    }
+    .chat-idle-pulse {
+      animation: chatPulseIdle 3.5s ease-in-out infinite;
+    }
+
+    #chat-widget-panel {
+      position: fixed;
+      bottom: 6rem;
+      right: 1.75rem;
+      width: 390px;
+      max-width: calc(100vw - 2rem);
+      height: 540px;
+      max-height: calc(100vh - 7.5rem);
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 1.75rem;
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(44, 110, 107, 0.08);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: translateY(24px) scale(0.94);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s;
+    }
+
+    #chat-widget-panel.open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #chat-chips-container {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--softcoral) transparent;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    #chat-chips-container::-webkit-scrollbar {
+      height: 4px;
+    }
+    #chat-chips-container::-webkit-scrollbar-thumb {
+      background: var(--softcoral);
+      border-radius: 9999px;
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      .animate-card-in, .story-card-reveal, .pulse-soon, .tilt-card {
+      .animate-card-in, .story-card-reveal, .pulse-soon, .tilt-card, .chat-idle-pulse {
         animation: none !important;
         transition: none !important;
         transform: none !important;
@@ -88,6 +168,7 @@
       .story-card-reveal {
         opacity: 1 !important;
       }
+      #chat-widget-panel, #chat-trigger-btn { transition: none !important; }
     }
   </style>
 </head>
@@ -475,6 +556,67 @@
     </div>
   </footer>
 
+  <!-- FLOATING AI CHAT ASSISTANT -->
+  <button id="chat-trigger-btn" class="chat-idle-pulse fixed bottom-7 right-7 w-14 h-14 rounded-full bg-gradient-to-br from-softcoral to-oceanteal text-white flex items-center justify-center shadow-xl hover:scale-108 active:scale-95 transition-all z-40 border-2 border-white" aria-label="Open FurEver AI Pet Care Assistant" title="Chat with FurEver Assistant">
+    <span class="text-2xl select-none">🐾</span>
+    <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+  </button>
+
+  <section id="chat-widget-panel" class="fixed bottom-24 right-7 w-[390px] max-w-[calc(100vw-2rem)] h-[540px] max-h-[calc(100vh-7.5rem)] bg-white/95 backdrop-blur-md rounded-3xl border border-white/80 shadow-2xl z-40 flex flex-col overflow-hidden transform translate-y-6 scale-95 opacity-0 pointer-events-none transition-all duration-300" role="region" aria-label="FurEver AI Pet Care Assistant Chat" aria-hidden="true">
+    <!-- Header -->
+    <div class="p-4 bg-gradient-to-r from-oceanteal to-softcoral text-white flex items-center justify-between shadow-sm shrink-0">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-lg shadow-inner">🐾</div>
+        <div>
+          <h4 class="font-black text-sm tracking-tight flex items-center gap-1.5">
+            <span>FurEver Assistant</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+          </h4>
+          <p class="text-[10px] text-white/80 font-semibold">AI Pet Care & Health Navigator</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1">
+        <button id="clear-chat-btn" class="p-1.5 rounded-xl hover:bg-white/20 text-white/90 hover:text-white transition-colors" title="Clear Chat History" aria-label="Clear chat history">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        </button>
+        <button id="close-chat-btn" class="p-1.5 rounded-xl hover:bg-white/20 text-white/90 hover:text-white transition-colors" title="Close Assistant (Esc)" aria-label="Close assistant">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div id="chat-messages-container" class="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50">
+      <!-- Injected messages -->
+    </div>
+
+    <!-- Typing Indicator -->
+    <div id="chat-typing-indicator" class="hidden px-4 py-2 flex items-center gap-2 bg-white text-xs text-slate-500 shrink-0 border-t border-slate-100">
+      <div class="w-5 h-5 rounded-full bg-oceanteal/10 flex items-center justify-center text-xs">🐾</div>
+      <span class="font-bold text-oceanteal text-[11px]">Assistant is typing</span>
+      <div class="flex items-center gap-1 ml-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-oceanteal animate-bounce"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-oceanteal animate-bounce" style="animation-delay:0.2s"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-oceanteal animate-bounce" style="animation-delay:0.4s"></span>
+      </div>
+    </div>
+
+    <!-- Quick Reply Chips Track -->
+    <div id="chat-chips-container" class="px-3 py-2 bg-white border-t border-slate-100 overflow-x-auto flex gap-1.5 shrink-0">
+      <!-- Injected Chips -->
+    </div>
+
+    <!-- Input Form -->
+    <form id="chat-input-form" class="p-3 bg-white border-t border-slate-100 flex items-center gap-2 shrink-0">
+      <input type="text" id="chat-user-input" placeholder="Ask about feeding, adoptions, products…" class="flex-1 px-4 py-2 rounded-2xl bg-slate-100/90 border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:border-softcoral focus:ring-2 focus:ring-softcoral/20 outline-none transition-all" autocomplete="off"/>
+      <button type="submit" id="chat-send-btn" class="w-8 h-8 rounded-xl bg-gradient-to-r from-softcoral to-oceanteal text-white flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-all shrink-0" aria-label="Send Message">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <script src="chatbot-engine.js" defer></script>
+  <script src="chat-widget.js" defer></script>
   <script src="shelter.js" defer></script>
 </body>
 </html>

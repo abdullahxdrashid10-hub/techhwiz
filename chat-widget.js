@@ -45,6 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
       handleUserSend();
     });
 
+    chipsContainer?.addEventListener('wheel', e => {
+      if (e.deltaY !== 0 && chipsContainer.scrollWidth > chipsContainer.clientWidth) {
+        e.preventDefault();
+        chipsContainer.scrollLeft += e.deltaY * 0.8;
+      }
+    }, { passive: false });
+
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && chatPanel.classList.contains('open')) {
         toggleChat(false);

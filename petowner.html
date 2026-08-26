@@ -186,6 +186,21 @@
       pointer-events: auto;
     }
 
+    #chat-chips-container {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--softcoral) transparent;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    #chat-chips-container::-webkit-scrollbar {
+      height: 4px;
+    }
+    #chat-chips-container::-webkit-scrollbar-thumb {
+      background: var(--softcoral);
+      border-radius: 9999px;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .chat-idle-pulse { animation: none !important; }
       #chat-widget-panel, #chat-trigger-btn { transition: none !important; }

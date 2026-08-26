@@ -320,6 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mobileMenu.classList.remove('open');
     hamburgerIcon.style.transform = '';
+    setTimeout(initTilt, 50);
   }
 
   desktopNav.addEventListener('click', e => {
@@ -862,10 +863,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function initTilt() {
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!canHover || reducedMotion) return;
+
+    document.querySelectorAll('.spec-card, .journey-step, .case-card, .vet-card').forEach(card => {
+      if (card.dataset.tiltInit) return;
+      card.dataset.tiltInit = 'true';
+
+      let rAF = null;
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        if (rAF) cancelAnimationFrame(rAF);
+        rAF = requestAnimationFrame(() => {
+          const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -4;
+          const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 4;
+          card.style.transform = `perspective(800px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
+        });
+      });
+      card.addEventListener('mouseleave', () => {
+        if (rAF) cancelAnimationFrame(rAF);
+        card.style.transform = '';
+      });
+    });
+  }
+
   setDoctorProfile(doctorsData[0]);
   renderPersonalBookingHistory();
   initTicker();
   initVisitorCounter();
+  initTilt();
 
   try {
     const savedDocSession = JSON.parse(localStorage.getItem('fureverVetDoctorAuth') ?? 'null');
