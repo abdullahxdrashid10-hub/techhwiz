@@ -1,14 +1,8 @@
 /**
- * FurEver Care AI Chat Assistant Engine
- * Layer 1: Local Knowledge Engine (zero API dependency, instant matching)
- *   - Safety triage (symptom detection)
- *   - Small-talk handling (greetings, wellbeing, thanks/farewell, identity)
- *   - Site navigation & product recommendations
- *   - Dynamic pet care guides & varied fallback pool
- * Layer 2: Optional Gemini API Fallback (with strict safety prompt & 5s timeout)
+ * FurEver Care — AI Chat Assistant Engine
+ * Local intent classifier with safety triage and optional Gemini API fallback.
  */
 
-// Layer 2: Optional Gemini API Fallback (can be configured via localStorage 'furever_gemini_key')
 const GEMINI_API_KEY = localStorage.getItem('furever_gemini_key') || "";
 
 const SITE_DATA = {
@@ -70,7 +64,6 @@ const CARE_AND_TOPIC_KEYWORDS = [
   'cart', 'checkout', 'vaccin', 'vaccine', 'vaccines', 'shot', 'shots', 'immuniz', 'emergency', 'vet', 'hospital', 'doctor', 'clinic'
 ];
 
-// Response pools for variety
 const GREETING_RESPONSES = [
   "Hello there! 🐾 I'm your FurEver Care Assistant. How can I help you and your furry companion today?",
   "Hey there! 🐾 Ready to explore pet nutrition, grooming tips, training guides, or find products?",
@@ -95,7 +88,6 @@ const FALLBACK_RESPONSES = [
   "Paws for a moment — I didn't get that. Feel free to ask about health tips, nutrition portions, or emergency help!"
 ];
 
-// Track last indexes to avoid repeating the identical response twice in a row
 let lastGreetingIndex = -1;
 let lastWellbeingIndex = -1;
 let lastFarewellIndex = -1;
@@ -109,29 +101,15 @@ function getVariedResponse(pool, lastIndex = -1) {
   return { text: pool[idx], index: idx };
 }
 
-/**
- * Categorize user query and extract relevant context
- * Order of evaluation:
- * 1. Symptom Mention (Safety)
- * 2. Small-Talk (Greetings, Wellbeing, Thanks/Farewell, Identity)
- * 3. Navigation
- * 4. Product Need
- * 5. Care Guide Questions
- * 6. Unrecognized
- */
 function classifyIntent(rawText) {
   const text = (rawText || '').toLowerCase().trim();
   if (!text) return { intent: 'unrecognized' };
 
-  // 1. Symptom Mention (High Priority Safety Check)
   const matchedSymptom = SYMPTOM_KEYWORDS.find(kw => text.includes(kw));
   if (matchedSymptom) {
     return { intent: 'symptom-mention', match: matchedSymptom };
   }
 
-  // 2. Small-Talk Intent Category (Runs BEFORE Care/Product intents)
-  
-  // 2a. Identity / Capability Check
   if (
     text.includes('who are you') ||
     text.includes('what are you') ||
@@ -145,7 +123,6 @@ function classifyIntent(rawText) {
     return { intent: 'smalltalk-identity' };
   }
 
-  // 2b. Wellbeing Check
   if (
     text.includes('how are you') ||
     text.includes("how're you") ||
@@ -162,7 +139,6 @@ function classifyIntent(rawText) {
     return { intent: 'smalltalk-wellbeing' };
   }
 
-  // 2c. Thanks / Farewell Check
   if (
     text.includes('thank') ||
     text.includes('thx') ||
@@ -179,21 +155,17 @@ function classifyIntent(rawText) {
     return { intent: 'smalltalk-farewell' };
   }
 
-  // 2d. Greetings Check (Only if message is short & contains NO pet-care / question keywords)
   const greetingPattern = /^(hi|hello|hey|hiya|yo|howdy|sup|greetings|bonjour|holla|good\s*(morning|afternoon|evening))\b/i;
   if (greetingPattern.test(text)) {
     const words = text.split(/\s+/).filter(Boolean);
     const remainder = text.replace(greetingPattern, '').replace(/[^\w\s]/g, ' ').trim();
     const hasTopicKeywords = CARE_AND_TOPIC_KEYWORDS.some(kw => remainder.includes(kw)) || SYMPTOM_KEYWORDS.some(kw => remainder.includes(kw));
 
-    // If it's a short, pure greeting without substantive pet-care questions
     if (words.length <= 5 && !hasTopicKeywords) {
       return { intent: 'smalltalk-greeting' };
     }
-    // Otherwise, let it continue evaluating navigation, products, care-question below
   }
 
-  // 3. Navigation Intent
   if (text.includes('vaccin') || text.includes('shot') || text.includes('immuniz')) {
     return { intent: 'navigation-help', target: 'vaccines', label: 'Vaccination Records' };
   }
@@ -207,7 +179,6 @@ function classifyIntent(rawText) {
     return { intent: 'navigation-help', target: 'petcare', label: 'Pet Profile Center' };
   }
 
-  // 4. Product Need Intent
   if (text.includes('product') || text.includes('buy') || text.includes('shop') || text.includes('store') ||
       text.includes('food') || text.includes('kibble') || text.includes('treat') || text.includes('toy') ||
       text.includes('brush') || text.includes('bed') || text.includes('supplement') || text.includes('vitamin') ||
@@ -246,7 +217,6 @@ function classifyIntent(rawText) {
     return { intent: 'product-need', products: matchedProducts.slice(0, 2) };
   }
 
-  // 5. Care Question Intent
   if (text.includes('feed') || text.includes('meal') || text.includes('portion') || text.includes('diet') || text.includes('eat')) {
     return { intent: 'care-question', topic: 'feeding', query: text };
   }
@@ -263,9 +233,6 @@ function classifyIntent(rawText) {
   return { intent: 'unrecognized' };
 }
 
-/**
- * Build deterministic local response from classified intent
- */
 function buildLocalResponse(classified, rawText) {
   switch (classified.intent) {
     case 'symptom-mention':
@@ -396,9 +363,6 @@ async function queryGeminiApi(promptText) {
   }
 }
 
-/**
- * Main Public Engine Entry Point
- */
 async function processUserMessage(userInput) {
   const classified = classifyIntent(userInput);
 
@@ -414,9 +378,7 @@ async function processUserMessage(userInput) {
         chips: ['Feeding tips', 'Find a product', 'Emergency contacts', 'Training advice']
       };
     }
-  } catch (e) {
-    // Silently fall back to Layer 1
-  }
+  } catch (e) {}
 
   return buildLocalResponse(classified, userInput);
 }

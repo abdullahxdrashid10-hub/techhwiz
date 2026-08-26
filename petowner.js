@@ -433,12 +433,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // Initial Check on Page Load
   if (pets.length > 0) {
     showDashboard(getActivePet());
   }
 
-  // Initial Onboarding Registration
   petForm.addEventListener('submit', e => {
     e.preventDefault();
     const submitBtn = document.getElementById('pet-form-btn');
@@ -695,7 +693,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateSubNavPill(btn);
   });
 
-  // Daily Paw Wisdom cycler
   const tips = [
     "Regular gentle brushing stimulates natural coat oils and reduces digestive hairballs by up to 60%.",
     "Keep your pet hydrated! Always supply fresh, cool water in multiple accessible locations.",
@@ -720,16 +717,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  /* -------------------------------------------------------------
-     🛒 SHOPPING CART & PROMO CODE ENGINE
-  ------------------------------------------------------------- */
   let cart = [];
   try {
     const savedCart = localStorage.getItem('fureverCart');
     if (savedCart) cart = JSON.parse(savedCart);
   } catch (_) { cart = []; }
 
-  let appliedDiscount = 0; // 0 or 0.10 (10%)
+  let appliedDiscount = 0;
 
   const cartOverlay        = document.getElementById('cart-overlay');
   const cartDrawer         = document.getElementById('cart-drawer');
@@ -1418,7 +1412,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 3000);
   });
 
-  // Interactive Community Gallery Like Buttons
   document.querySelectorAll('.gallery-like-btn').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();

@@ -1,9 +1,6 @@
 /**
- * FurEver Care AI Chat Assistant Widget Controller
- * Manages chat UI, typing simulation, session persistence (fureverChatHistory),
- * keyboard controls (Enter/Esc), and seamless navigation hooks.
+ * FurEver Care — AI Chat Assistant Widget Controller
  */
-
 document.addEventListener('DOMContentLoaded', () => {
   const triggerBtn = document.getElementById('chat-trigger-btn');
   const chatPanel = document.getElementById('chat-widget-panel');
@@ -44,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function saveHistory() {
     try {
-      // Keep up to 40 recent messages to prevent storage bloat
       const trimmed = chatHistory.slice(-40);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
     } catch (e) {}
@@ -104,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
       bubble.className = 'bg-white border border-slate-100 text-slate-700 rounded-2xl rounded-tl-sm p-3.5 text-xs sm:text-sm shadow-sm max-w-[90%] leading-relaxed space-y-2';
       bubble.innerHTML = formatMessageText(msg.text);
 
-      // Render Product Recommendations
       if (msg.products && msg.products.length > 0) {
         const prodGrid = document.createElement('div');
         prodGrid.className = 'mt-2.5 space-y-2 pt-2 border-t border-slate-100';
@@ -128,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         bubble.appendChild(prodGrid);
       }
 
-      // Render Emergency Contacts Card
       if (msg.emergencyData && msg.emergencyData.length > 0) {
         const emerBox = document.createElement('div');
         emerBox.className = 'mt-2 space-y-1.5 pt-2 border-t border-red-100 bg-red-50/50 p-2.5 rounded-xl border';
@@ -147,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
         bubble.appendChild(emerBox);
       }
 
-      // Render Direct Action Button
       if (msg.action) {
         const actBtn = document.createElement('button');
         actBtn.type = 'button';
@@ -173,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     wrapper.appendChild(bubble);
 
-    // Connect any internal jump buttons
     wrapper.querySelectorAll('.chat-jump-btn').forEach(b => {
       b.addEventListener('click', () => {
         const tab = b.dataset.tab;
@@ -208,17 +200,14 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.value = '';
     userInput.focus();
 
-    // 1. Append User Message
     const userMsg = { sender: 'user', text };
     chatHistory.push(userMsg);
     appendMessageUI(userMsg, true);
     saveHistory();
 
-    // 2. Show Typing Indicator
     typingIndicator.classList.remove('hidden');
     scrollToBottom();
 
-    // 3. Process via Local / Fallback Engine
     let botResponse;
     try {
       if (window.FurEverChatEngine && typeof window.FurEverChatEngine.processUserMessage === 'function') {
@@ -236,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    // Brief realistic delay for smooth UX
     setTimeout(() => {
       typingIndicator.classList.add('hidden');
       const botMsg = {
@@ -269,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Event Listeners
   triggerBtn.addEventListener('click', () => toggleChat());
   closeBtn.addEventListener('click', () => toggleChat(false));
 
@@ -284,7 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
     handleUserSend();
   });
 
-  // Global Keyboard Navigation
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && chatPanel.classList.contains('open')) {
       toggleChat(false);
