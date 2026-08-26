@@ -222,35 +222,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   /* -------------------------------------------------------------
      🐾 MULTI-PET PROFILE STATE MANAGEMENT
   ------------------------------------------------------------- */
-  const DEFAULT_SAMPLE_PETS = [
-    {
-      id: 101,
-      name: "Buddy",
-      species: "Dog",
-      breed: "Golden Retriever",
-      age: 3,
-      ageUnit: "years",
-      vaccines: [
-        { id: 1, name: "Rabies Immunization", date: "2025", status: "Completed", clinic: "FurEver Care Clinic" },
-        { id: 2, name: "Core DHPP Booster", date: "2025", status: "Completed", clinic: "Community Wellness" },
-        { id: 3, name: "Bordetella Booster", date: "Due in 2 months", status: "Due Soon", clinic: "Scheduled" },
-        { id: 4, name: "Parasite & Tick Check", date: "2024", status: "Completed", clinic: "Dr. Wilson" }
-      ]
-    },
-    {
-      id: 102,
-      name: "Milo",
-      species: "Cat",
-      breed: "British Shorthair",
-      age: 2,
-      ageUnit: "years",
-      vaccines: [
-        { id: 1, name: "FVRCP Core Vaccine", date: "2025", status: "Completed", clinic: "Metro Paws Care" },
-        { id: 2, name: "Rabies Protection", date: "2025", status: "Completed", clinic: "Metro Paws Care" }
-      ]
-    }
-  ];
-
   let pets = [];
   try {
     const savedPets = localStorage.getItem('fureverPets');
@@ -264,11 +235,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
   } catch (_) { pets = []; }
-
-  if (!pets || pets.length === 0) {
-    pets = JSON.parse(JSON.stringify(DEFAULT_SAMPLE_PETS));
-    try { localStorage.setItem('fureverPets', JSON.stringify(pets)); } catch (_) {}
-  }
 
   let activePetIndex = 0;
   try {
@@ -519,19 +485,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  showDashboard(getActivePet());
+  if (pets.length > 0) {
+    showDashboard(getActivePet());
+  } else {
+    petFormSection.style.display = 'flex';
+    dashboard.classList.add('hidden');
+  }
 
   petForm.addEventListener('submit', e => {
     e.preventDefault();
     const submitBtn = document.getElementById('pet-form-btn');
-    const rect = submitBtn.getBoundingClientRect();
-    spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    if (submitBtn) {
+      const rect = submitBtn.getBoundingClientRect();
+      spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    }
 
-    const nameVal = document.getElementById('pet-name').value.trim();
-    const speciesVal = speciesSelect.value || 'Dog';
-    const breedVal = document.getElementById('pet-breed').value.trim() || 'Companion';
-    const ageVal = parseInt(document.getElementById('pet-age').value, 10) || 1;
+    const nameVal = document.getElementById('pet-name')?.value?.trim();
+    const speciesVal = speciesSelect?.value || 'Dog';
+    const breedVal = document.getElementById('pet-breed')?.value?.trim() || 'Companion';
+    const ageVal = parseInt(document.getElementById('pet-age')?.value, 10) || 1;
     const ageUnitVal = document.getElementById('pet-age-unit')?.value || 'years';
+
+    if (!nameVal) return;
 
     const initialPet = {
       id: Date.now(),
