@@ -388,7 +388,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function setDoctorProfile(doc) {
     currentDoctor = doc;
 
-    document.getElementById('header-vet-name').textContent = doc.name;
+    const headerVetEl = document.getElementById('header-vet-name');
+    if (headerVetEl) headerVetEl.textContent = doc.name;
     document.getElementById('hero-vet-name').textContent = doc.name;
     document.getElementById('hero-vet-spec').textContent = doc.spec;
     document.getElementById('hero-vet-exp').textContent = doc.exp;
@@ -896,6 +897,18 @@ document.addEventListener('DOMContentLoaded', () => {
   initTicker();
   initVisitorCounter();
   initTilt();
+
+  const initialNavTab = desktopNav?.querySelector('.nav-tab.active');
+  if (initialNavTab) {
+    updateNavPill(initialNavTab);
+    setTimeout(() => updateNavPill(initialNavTab), 50);
+    setTimeout(() => updateNavPill(initialNavTab), 250);
+  }
+
+  window.addEventListener('resize', () => {
+    const currentActive = desktopNav?.querySelector('.nav-tab.active');
+    if (currentActive) updateNavPill(currentActive);
+  });
 
   try {
     const savedDocSession = JSON.parse(localStorage.getItem('fureverVetDoctorAuth') ?? 'null');
